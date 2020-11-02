@@ -29,7 +29,7 @@ class _OtpVerificationState extends State<OtpVerification> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("images/screen.jpg"),fit: BoxFit.fill
+              image: AssetImage("images/logo.jpg"),fit: BoxFit.fill
           ),
         ),
         child: Container(
@@ -38,13 +38,31 @@ class _OtpVerificationState extends State<OtpVerification> {
           color:Colors.blueGrey[900].withOpacity(0.9),
           child: SafeArea(
             child: SingleChildScrollView(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height/20,),
                   Padding(
+                    padding: const EdgeInsets.only(left:18.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 150,width: 150,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                                )
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Verify your otp\n& \nhave fun.",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 30),),
+                    child: Text("Verify your OTP",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 30),),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height/20,),
 
@@ -60,11 +78,13 @@ class _OtpVerificationState extends State<OtpVerification> {
                         padding: const EdgeInsets.only(left: 5),
                         child: TextFormField(style: TextStyle(color: Colors.white),
                           keyboardType: TextInputType.number,
+
                           onChanged: (val){
                             otp=val;
                           },
                           decoration:InputDecoration(
-                              icon: Icon(Icons.edit,color: Colors.white,),
+
+                              icon: Icon(Icons.vpn_key_sharp,color: Colors.white,),
                               labelText: 'OTP',
                               labelStyle: TextStyle(color: Colors.white),
                               border: InputBorder.none
@@ -73,7 +93,17 @@ class _OtpVerificationState extends State<OtpVerification> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text("Resend OTP",style: TextStyle(color: Colors.white),),
+                      ),
+                    )
+                  ),
+                  SizedBox(height: 40,),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     child: Center(
@@ -85,7 +115,10 @@ class _OtpVerificationState extends State<OtpVerification> {
                           });
                         },
                         color: Colors.white,
-                        child: Text("Verify",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+                        child: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: Text("Verify",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+                        ),
                       ),
                     ),
                   ),
@@ -116,7 +149,7 @@ class _OtpVerificationState extends State<OtpVerification> {
       final result= await APIClient().otpVerification(widget.mobile, otp);
       if(result["status"]=="success"){
         _scaffoldkey.currentState.showSnackBar(APIClient.successToast("success"));
-        if(result["data"][0]["user_type"]=="guest"){
+        if(result["data"][0]["user_type"]=="guest" || result["data"][0]["user_type"]=="Guest"){
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Dashboard(
 

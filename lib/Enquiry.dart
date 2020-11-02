@@ -17,44 +17,45 @@ class _EnquiryState extends State<Enquiry> {
   String contact="";
   String type="";
   String user_type="";
+  int selectedAddress=0;
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(key: _scaffolkey,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        onPressed: (){
-          if(name==""){
-            _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter Name"));
-          }
-          else if(contact==""){
-            _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter Contact number"));
-          }
-          else if(lookingFor==""){
-            _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select looking for"));
-          }
-          else if(interest==""){
-            _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select your interest"));
-          }
-          else if(type==""){
-            _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select your type"));
-          }
-          else{
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry2(
-              name: name,
-              contact: contact,
-              lookingFor: lookingFor,
-              interest: interest,
-              type: type,
-              user_type: user_type,
-            )));
-          }
-        },
-        tooltip: 'Next',
-        child: Text("Next",style: TextStyle(color: Colors.black),),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.white,
+      //   onPressed: (){
+      //     if(name==""){
+      //       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter Name"));
+      //     }
+      //     else if(contact==""){
+      //       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter Contact number"));
+      //     }
+      //     else if(lookingFor==""){
+      //       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select looking for"));
+      //     }
+      //     else if(interest==""){
+      //       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select your interest"));
+      //     }
+      //     else if(type==""){
+      //       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select your type"));
+      //     }
+      //     else{
+      //       Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry2(
+      //         name: name,
+      //         contact: contact,
+      //         lookingFor: lookingFor,
+      //         interest: interest,
+      //         type: type,
+      //         user_type: user_type,
+      //       )));
+      //     }
+      //   },
+      //   tooltip: 'Next',
+      //   child: Text("Next",style: TextStyle(color: Colors.black),),
+      // ),
       appBar: AppBar(
         actions: [
           Center(
@@ -75,7 +76,7 @@ class _EnquiryState extends State<Enquiry> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/screen.jpg"),fit: BoxFit.fill
+            image: AssetImage("images/logo.jpg"),fit: BoxFit.fill
           )
         ),
         child: Container(
@@ -86,7 +87,57 @@ class _EnquiryState extends State<Enquiry> {
             child: Column(mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 40,),
+                SizedBox(height: 10,),
+                Container(
+                  height: 150,width: 150,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                      )
+                  ),
+                ),
+                Text("Send Enquiry ",style: TextStyle(fontSize: 24,color: Colors.white,fontWeight: FontWeight.bold),),
+                Padding(
+                  padding: const EdgeInsets.only(left:8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Looking for: ",style: TextStyle(color: Colors.white,fontSize: 17),),
+                      new Radio(
+                        value: 0,
+                        groupValue: selectedAddress,
+                        onChanged: (val){
+                          setState(() {
+                            selectedAddress=val;print(selectedAddress.toString());
+                            lookingFor="Sex";
+                          });
+                        },
+                        activeColor: Colors.white,
+                      ),
+                      new Text(
+                        'Sex',
+                        style: new TextStyle(
+                            fontSize: 16.0,color: Colors.white
+                        ),
+                      ),
+                      new Radio(
+                        value: 1,
+                        groupValue: selectedAddress,
+                        onChanged: (value){
+                          setState(() {
+                            selectedAddress=value;
+                            lookingFor="Work";
+                          });
+                        },
+                        activeColor: Colors.white,
+                      ),
+                      new Text(
+                        'Work',
+                        style: new TextStyle(fontSize: 16.0,color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -101,7 +152,7 @@ class _EnquiryState extends State<Enquiry> {
                         name=val;
                         },
                         decoration:InputDecoration(
-                            //icon: Icon(Icons.person,color: Colors.white,),
+                            icon: Icon(Icons.person,color: Colors.white,),
                             labelText: 'Name',
                             labelStyle: TextStyle(color: Colors.white),
                             border: InputBorder.none
@@ -124,7 +175,7 @@ class _EnquiryState extends State<Enquiry> {
                         contact=val;
                         },
                         decoration:InputDecoration(
-                          //icon: Icon(Icons.person,color: Colors.white,),
+                          icon: Icon(Icons.phone_android,color: Colors.white,),
                             labelText: 'Contact',
                             labelStyle: TextStyle(color: Colors.white),
                             border: InputBorder.none
@@ -133,106 +184,27 @@ class _EnquiryState extends State<Enquiry> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: Colors.white)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child:  Row(
-                        children: [
-                          Text("You are here for :",style: TextStyle(color: Colors.white,fontSize: 17),),
-                          SizedBox(width: 10,),
-                          Text(lookingFor,style: TextStyle(color: Colors.white,fontSize: 17),),
-                          DropdownButton<String>(dropdownColor: Colors.white,
-                            iconSize: 30,
-                            icon: Icon(Icons.arrow_drop_down,color: Colors.white,),
-                            items: <String>['Sex', 'Work', ].map((String value) {
-                              return new DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value,style: TextStyle(),),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                lookingFor= value;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                SizedBox(height: 10,),
+                Container(
+                  width: MediaQuery.of(context).size.width,
 
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: Colors.white)
-                    ),
+                  child: Align(alignment: Alignment.center,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child:  Row(
-                        children: [
-                          Text("Interest in :",style: TextStyle(color: Colors.white,fontSize: 17),),
-                          SizedBox(width: 10,),
-                          Text(interest,style: TextStyle(color: Colors.white,fontSize: 17),),
-                          DropdownButton<String>(dropdownColor: Colors.white,
-                            iconSize: 30,
-                            icon: Icon(Icons.arrow_drop_down,color: Colors.white,),
-                            items: <String>['Girl', 'Boy','Gay','Lesbo' ].map((String value) {
-                              return new DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value,style: TextStyle(),),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                interest= value;
-                              });
-                            },
-                          ),
-                        ],
+                      padding: const EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                        child: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: Text("Submit"),
+                        ),
+                        onPressed: (){
+                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry2()));
+
+                        },
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: Colors.white)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child:  Row(
-                        children: [
-                          Text("Type :",style: TextStyle(color: Colors.white,fontSize: 17),),
-                          SizedBox(width: 10,),
-                          Text(type,style: TextStyle(color: Colors.white,fontSize: 17),),
-                          DropdownButton<String>(dropdownColor: Colors.white,
-                            iconSize: 30,
-                            icon: Icon(Icons.arrow_drop_down,color: Colors.white,),
-                            items: <String>['sex shorts','Hour', 'Night','24 hours','tour','group' ].map((String value) {
-                              return new DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value,style: TextStyle(),),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                type= value;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                )
+
               ],
             ),
           ),

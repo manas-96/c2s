@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'APIClient.dart';
+import 'Enquiry.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -60,7 +61,7 @@ class _LoginState extends State<Login> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("images/screen.jpg"),fit: BoxFit.fill
+                  image: AssetImage("images/logo.jpg"),fit: BoxFit.fill
               ),
             ),
             child: SingleChildScrollView(
@@ -70,11 +71,26 @@ class _LoginState extends State<Login> {
                 color:Colors.blueGrey[900].withOpacity(0.9),
                 child: SafeArea(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      SizedBox(height: 20,),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:12.0),
+                            child: InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry()));
+                                },
+                                child: Icon(Icons.home,color: Colors.white,size: 30,))
+                          ),
+                        ),
+                      ),
                       SizedBox(height: MediaQuery.of(context).size.height/20,),
                       Container(
-                        height: 100,width: 100,
+                        height: 150,width: 150,
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image:  AssetImage("images/1.png"),fit: BoxFit.fill
@@ -82,8 +98,16 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Make a wish we will \nfulfill it for you.",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 30),),
+                        padding: const EdgeInsets.only(left:18.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Make a wish",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 30)),
+                              Text("we will fulfill it for you",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 30)),
+                            ],
+                          ),
+                        ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height/20,),
                       //Text("  Looking for a perfect night then Sign up,",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w300),)
@@ -127,7 +151,7 @@ class _LoginState extends State<Login> {
                                 password=val;
                               },
                               decoration:InputDecoration(
-                                  icon: Icon(Icons.edit,color: Colors.white,),
+                                  icon: Icon(Icons.vpn_key_rounded,color: Colors.white,),
                                   labelText: 'Password',
                                   labelStyle: TextStyle(color: Colors.white),
                                   border: InputBorder.none
@@ -147,7 +171,10 @@ class _LoginState extends State<Login> {
                               });
                             },
                             color: Colors.white,
-                            child: Text("Login",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17,),),
+                            child: Padding(
+                              padding: const EdgeInsets.all(13.0),
+                              child: Text("Login",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17,),),
+                            ),
                           ),
                         ),
                       ),
@@ -157,7 +184,7 @@ class _LoginState extends State<Login> {
                           child: Row(crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Don't have an account? ",style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.w300),),
+                              Text("Don't have an account? ",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w300),),
                               GestureDetector(
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
@@ -214,7 +241,7 @@ class _LoginState extends State<Login> {
           _scaffoldkey.currentState.showSnackBar(APIClient.successToast(result["msg"].toString()));
           print(result["msg"].toString());
 
-          if(result["data"][0]["user_type"]=="guest"){
+          if(result["data"][0]["user_type"]=="guest" || result["data"][0]["user_type"]=="Guest"){
             Future.delayed(const Duration(seconds: 1), () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Dashboard(
 

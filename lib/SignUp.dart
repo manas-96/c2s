@@ -1,3 +1,5 @@
+import 'package:call2sex/Enquiry.dart';
+import 'package:call2sex/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,7 +16,8 @@ class _SignUpState extends State<SignUp> {
   String ref_code="";
   String firstname="";
   String lastname="";
-  String user_type="";
+  String user_type="Guest";
+  int selectedAddress=1;
   bool visible=false;
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
   Future<bool> _onBackPressed() {
@@ -53,7 +56,7 @@ class _SignUpState extends State<SignUp> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("images/screen.jpg"),fit: BoxFit.fill
+              image: AssetImage("images/logo.jpg"),fit: BoxFit.fill
             ),
           ),
           child: Container(
@@ -61,41 +64,104 @@ class _SignUpState extends State<SignUp> {
             width: MediaQuery.of(context).size.width,
             color:Colors.blueGrey[900].withOpacity(0.9),
             child: SafeArea(
-              child: SingleChildScrollView(
+              child: SingleChildScrollView(physics: NeverScrollableScrollPhysics(),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height/20,),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("Make a wish \nwe will fulfill it for you.",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 30),),
+                    SizedBox(height: 15,),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                            padding: const EdgeInsets.only(left:12.0),
+                            child: InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry()));
+                                },
+                                child: Icon(Icons.home,color: Colors.white,size: 30,))
+                        ),
+                      ),
                     ),
+                    //SizedBox(height: MediaQuery.of(context).size.height/30,),
+                    Padding(
+                      padding: const EdgeInsets.only(left:18.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 150,width: 150,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                                  )
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left:18.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Make a wish",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 30)),
+                            Text("we will fulfill it for you",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 30)),
+                          ],
+                        ),
+                      ),
+                    ),
+
                    // SizedBox(height: MediaQuery.of(context).size.height/30,),
 
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left:8.0),
                       child: Row(
-                        children: [
-                          Text("joining as :",style: TextStyle(color: Colors.white,fontSize: 17),),
-                          SizedBox(width: 10,),
-                          Text(user_type,style: TextStyle(color: Colors.white,fontSize: 17),),
-                          DropdownButton<String>(dropdownColor: Colors.white,
-                            items: <String>['worker', 'guest', ].map((String value) {
-                              return new DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value,style: TextStyle(),),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Text("Register as: ",style: TextStyle(color: Colors.white,fontSize: 17),),
+                          new Radio(
+                            value: 0,
+                            groupValue: selectedAddress,
+                            onChanged: (val){
                               setState(() {
-                                user_type= value;
+                                selectedAddress=val;print(selectedAddress.toString());
+                                user_type="Worker";
                               });
-
                             },
+                            activeColor: Colors.white,
+                          ),
+                          new Text(
+                            'Worker',
+                            style: new TextStyle(
+                              fontSize: 16.0,color: Colors.white
+                            ),
+                          ),
+                          new Radio(
+                            value: 1,
+                            groupValue: selectedAddress,
+                            onChanged: (value){
+                              setState(() {
+                                selectedAddress=value;
+                                user_type="Guest";
+                              });
+                            },
+                            activeColor: Colors.white,
+                          ),
+                          new Text(
+                            'Guest',
+                            style: new TextStyle(fontSize: 16.0,color: Colors.white),
                           ),
                         ],
                       ),
                     ),
+
+
+
                     //Text("  Looking for a perfect night then Sign up,",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w300),)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -202,13 +268,29 @@ class _SignUpState extends State<SignUp> {
                             });
                           },
                           color: Colors.white,
-                          child: Text("Sign up",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text("Sign up",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+                          ),
                         ),
                       ),
                     ),
-                    Container(width: MediaQuery.of(context).size.width,
-                      alignment: Alignment.center,
-                      child: Text("By signing up you are agreed to our terms & condition",style: TextStyle(color: Colors.white,fontSize: 12),)
+                    Padding(
+                      padding: const EdgeInsets.only(top:5.0),
+                      child: Container(width: MediaQuery.of(context).size.width,
+                        alignment: Alignment.center,
+                        child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Already have an account?  ",style: TextStyle(color: Colors.white,fontSize: 14),),
+                            InkWell(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
+                              },
+                              child: Text("Login",style: TextStyle(color: Colors.white,fontSize: 16),),
+                            )
+                          ],
+                        )
+                      ),
                     ),
                     Container(width: MediaQuery.of(context).size.width,
                       alignment: Alignment.center,

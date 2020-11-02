@@ -64,9 +64,10 @@ class _GuestProfileState extends State<GuestProfile> {
           child: Column(
             children: <Widget>[
               Container(
-                //height: MediaQuery.of(context).size.height/3,
+                height: MediaQuery.of(context).size.height/3,
                 width: MediaQuery.of(context).size.width,
                 color: Colors.blueGrey[900],
+
                 child: SafeArea(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -99,7 +100,9 @@ class _GuestProfileState extends State<GuestProfile> {
                       SizedBox(height: 7,),
                       Text("$name"+" "+lastName,style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
                       SizedBox(height: 5,),
-                      Text(mobile,style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w300),),
+                      Text("Mob: $mobile",style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w300),),
+                      SizedBox(height: 5,),
+                      Text("C2S ID: $uid",style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w300),),
                       SizedBox(height: 10,),
                     ],
                   ),
