@@ -50,6 +50,7 @@ class _DashboardState extends State<Dashboard> {
         child: Scaffold(
           body: _children[_currentIndex],
           bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: Colors.white,
             currentIndex: _currentIndex,
             onTap: (int index) {
               setState(() {
@@ -57,60 +58,21 @@ class _DashboardState extends State<Dashboard> {
               });
             },
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.blueGrey[900],
+            backgroundColor: Colors.pink[900],
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                activeIcon: ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return RadialGradient(
-                      center: Alignment.topLeft,
-                      radius: 1,
-                      colors: <Color>[
-                        Colors.redAccent,
-                        Colors.orangeAccent
-                      ],
-                      tileMode: TileMode.repeated,
-                    ).createShader(bounds);
-                  },
-                  child: Icon(Icons.dashboard),
-                ),
-                icon: new Icon(Icons.home),
+               // backgroundColor: Colors.white,
+                icon: new Icon(Icons.home,),
                 title: new Text('Home',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),),
               ),
               BottomNavigationBarItem(
-                activeIcon: ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return RadialGradient(
-                      center: Alignment.topLeft,
-                      radius: 1.0,
-                      colors: <Color>[
-                        Colors.redAccent,
-                        Colors.orangeAccent
-                      ],
-                      tileMode: TileMode.mirror,
-                    ).createShader(bounds);
-                  },
-                  child: Icon(Icons.next_week),
-                ),
+
                 icon: new Icon(Icons.account_balance_wallet),
                 title: new Text('Wallet',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),),
               ),
 
               BottomNavigationBarItem(
-                  activeIcon: ShaderMask(
-                    shaderCallback: (Rect bounds) {
-                      return RadialGradient(
-                        center: Alignment.topLeft,
-                        radius: 1.0,
-                        colors: <Color>[
-                          Colors.redAccent,
-                          Colors.orangeAccent
-                        ],
-                        tileMode: TileMode.mirror,
-                      ).createShader(bounds);
-                    },
-                    child: Icon(Icons.account_circle),
-                  ),
+
                   icon: Icon(Icons.person),
                   title: Text('My Account',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),)),
             ],

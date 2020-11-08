@@ -18,10 +18,10 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      color: Colors.blueGrey[900],
+      //color: Colors.pink[900],
       child: ListView(
         children: <Widget>[
-          Container(color: Colors.blueGrey[900],
+          Container(color: Colors.pink[900],
             height: 150,
             width: MediaQuery.of(context).size.width,
             child: Padding(
@@ -101,7 +101,12 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
       future: getTransaction(),
       builder: (context,snap){
         if(trnasCheck){
-          return Text("Transaction not found");
+          return Container(
+            width: MediaQuery.of(context).size.width,
+            height: 160,
+            alignment: Alignment.center,
+            child: Text("Transaction not found",style: TextStyle(color: Colors.pink,fontSize: 17),),
+          );
         }
         if(snap.data==null){
           return Center(
@@ -110,56 +115,57 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
             ),
           );
         }
-       return ListView.builder(
-         itemCount: snap.data.length,
-         shrinkWrap: true,
-         physics: NeverScrollableScrollPhysics(),
-         itemBuilder: (context,index){
-           return Container(
-             width: MediaQuery.of(context).size.width,
-             color: Colors.white.withOpacity(0.8),
-             child: Column(
-               children: <Widget>[
-                 Padding(
-                   padding: const EdgeInsets.all(8.0),
-                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     children: <Widget>[
-                       Container(
-                         height: 60,width: 60,
-                         decoration: BoxDecoration(
-                           shape: BoxShape.circle,
-                           border: Border.all(color: Colors.teal[900].withOpacity(0.5)),
-                         ),
-                         child: Icon(Icons.transit_enterexit),
-                       ),
-                       Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Text("Send money to ABC",style: TextStyle(fontWeight: FontWeight.bold),),
-                           SizedBox(height: 10,),
-                           Text("20/10/2020"),
-                           SizedBox(height: 6,)
-                         ],
-                       ),
-                       Text(" - \$5",style: TextStyle(color: Colors.green,fontSize: 18,fontWeight: FontWeight.bold),),
-                       SizedBox(width: 1,)
-                     ],
-                   ),
-                 ),
-                 SizedBox(height: 5,),
-                 Row(
-                   children: <Widget>[
-                     SizedBox(width: 70,),
-                     Container(
-                       height: 1,width: MediaQuery.of(context).size.width-70,
-                       color: Colors.grey.withOpacity(0.5),
-                     )
-                   ],
-                 )
-               ],
-             ),
-           );
-         },
-       );
+        return ListView.builder(
+          itemCount: snap.data.length,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context,index){
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          height: 60,width: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.teal[900].withOpacity(0.5)),
+                          ),
+                          child: Icon(Icons.transit_enterexit),
+                        ),
+                        Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("Send money to ABC",style: TextStyle(fontWeight: FontWeight.bold),),
+                            SizedBox(height: 10,),
+                            Text("20/10/2020"),
+                            SizedBox(height: 6,),
+                            Text("Transaction id : ${snap.data[index]["TxnId"]}")
+                          ],
+                        ),
+                        Text("Rs ${snap.data[index]["Amount_In"]}",style: TextStyle(color: Colors.green,fontSize: 18,fontWeight: FontWeight.bold),),
+                        SizedBox(width: 1,)
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 5,),
+                  Row(
+                    children: <Widget>[
+                      SizedBox(width: 70,),
+                      Container(
+                        height: 1,width: MediaQuery.of(context).size.width-70,
+                        color: Colors.grey.withOpacity(0.5),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        );
       },
     );
   }

@@ -11,10 +11,13 @@
     <uses-permission android:name="android.permission.read_phone_state" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="C2S Mob"
         android:icon="@mipmap/ic_launcher">
+        android:requestLegacyExternalStorage="true"
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

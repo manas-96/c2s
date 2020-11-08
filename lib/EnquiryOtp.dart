@@ -1,3 +1,6 @@
+import 'package:call2sex/Enquiry2.dart';
+import 'package:flutter/material.dart';
+
 import 'package:call2sex/APIClient.dart';
 import 'package:call2sex/Dashboard.dart';
 import 'package:call2sex/WorkerList.dart';
@@ -6,18 +9,20 @@ import 'package:flutter/material.dart';
 import 'Dashboard2.dart';
 
 
-class OtpVerification extends StatefulWidget {
+class EnquiryOtp extends StatefulWidget {
   final mobile;
-  final name;
-  final fockOtp;
 
-  const OtpVerification({Key key, this.mobile, this.name, this.fockOtp}) : super(key: key);
+  const EnquiryOtp({Key key, this.mobile}) : super(key: key);
   @override
-  _OtpVerificationState createState() => _OtpVerificationState();
+  _EnquiryOtpState createState() => _EnquiryOtpState();
 }
 
-class _OtpVerificationState extends State<OtpVerification> {
-  bool resendClick=false;
+class _EnquiryOtpState extends State<EnquiryOtp> {
+
+
+  String otp="";
+
+  bool showPassword=false;
   bool checkLoader=true;
   bool loginStatus=true;
   bool visible=false;
@@ -45,9 +50,6 @@ class _OtpVerificationState extends State<OtpVerification> {
           );
         });
   }
-
-  String otp="";
-  bool showPassword=false;
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -122,26 +124,17 @@ class _OtpVerificationState extends State<OtpVerification> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap:  (){
-                            setState(() {
-                              resendClick=!resendClick;
-                            });
-                            resend();
-
-                          },
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
                           child: Text("Resend OTP",
-                            style: TextStyle(color: resendClick?Colors.yellow:Colors.white),),
+                            style: TextStyle(color: Colors.white),),
                         ),
-                      ),
-                    )
+                      )
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(height: 40,),
                   Visibility(
                       maintainSize: true,
                       maintainAnimation: true,
@@ -152,17 +145,17 @@ class _OtpVerificationState extends State<OtpVerification> {
                           child: CircularProgressIndicator()
                       )
                   ),
-                  SizedBox(height: 20,),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     child: Center(
                       child: RaisedButton(
                         onPressed:checkLoader? (){
-                          verify();
                           setState(() {
                             visible=true;
                             checkLoader=false;
                           });
+                          verify();
+
                         }:null,
                         color: Colors.white,
                         child: Padding(
@@ -196,47 +189,25 @@ class _OtpVerificationState extends State<OtpVerification> {
 
     }
     else{
-      final result= await APIClient().otpVerification(widget.mobile, otp);
+      print(widget.mobile);
+      print(otp);
+      final result= await APIClient().EnquiryOtp(widget.mobile, otp);
       setState(() {
         checkLoader=true;
         visible=false;
       });
-      if(result["status"]=="success"){
-        _scaffoldkey.currentState.showSnackBar(APIClient.successToast("success"));
-        if(result["data"][0]["user_type"]=="guest" || result["data"][0]["user_type"]=="Guest"){
-          Future.delayed(const Duration(seconds: 1), () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Dashboard(
-
-            )));
-          });
-        }
-        else{
-          Future.delayed(const Duration(seconds: 1), () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Dashboard2(
-
-            )));
-          });
-        }
+      if(result["status"]=="success") {
+        _scaffoldkey.currentState.showSnackBar(
+            APIClient.successToast("success"));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry2()));
       }
       else{
         setState(() {
-          loginStatus=false;
           checkLoader=true;
           visible=false;
         });
         _scaffoldkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));
       }
-    }
-  }
-  resend()async{
-    final result= await APIClient().resendOTP(widget.mobile, widget.fockOtp,widget.name);
-    print(result);
-      //loader(result["msg"]);
-    if(result["status"]=="success"){
-      _scaffoldkey.currentState.showSnackBar(APIClient.successToast(result["msg"]));
-    }
-    else{
-      _scaffoldkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));
     }
   }
 }

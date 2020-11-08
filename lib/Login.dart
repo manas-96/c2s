@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:call2sex/Dashboard.dart';
 import 'package:call2sex/Dashboard2.dart';
+import 'package:call2sex/ForgotPassword.dart';
 import 'package:call2sex/SignUp.dart';
 import 'package:call2sex/WorkerList.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ class _LoginState extends State<Login> {
   bool visible=false;
   String mobile="";
   String password="";
+  bool checkLoader=true;
+  bool loginStatus=true;
 
   bool showPassword=false;
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
@@ -48,6 +51,27 @@ class _LoginState extends State<Login> {
           );
         });
   }
+  Future<bool> loader(String msg) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text(msg),
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  child: Text("OK"),
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                ),
+              )
+
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(onWillPop: _onBackPressed,
@@ -68,7 +92,7 @@ class _LoginState extends State<Login> {
               child: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                color:Colors.blueGrey[900].withOpacity(0.9),
+                color:Colors.pink[900].withOpacity(0.5),
                 child: SafeArea(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -136,6 +160,7 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -160,16 +185,52 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
+                      Container(
+                        alignment: Alignment.topRight,
+                        width: MediaQuery.of(context).size.width,
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPassword()));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Forget password ?",
+                              style: TextStyle(color: Colors.yellow,fontSize: 16,fontWeight: FontWeight.bold),),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 10,),
+                      Visibility(
+                          maintainSize: true,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          visible: visible,
+                          child: Container(
+                              margin: EdgeInsets.only(top: 20, bottom: 20),
+                              child: CircularProgressIndicator()
+                          )
+                      ),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         child: Center(
                           child: RaisedButton(
-                            onPressed: (){login();
-                              setState(() {
-                                visible=true;
-                              });
-                            },
+                            onPressed: checkLoader?(){
+                              if(mobile==""){
+                                _scaffoldkey.currentState.showSnackBar(APIClient.errorToast("Enter your Mobile number"));
+                              }
+
+                              else if(password==""){
+                                _scaffoldkey.currentState.showSnackBar(APIClient.errorToast("Enter your password"));
+
+                              }else{
+                                login();
+                                setState(() {
+                                  visible=true;
+                                  checkLoader=false;
+                                });
+                              }
+
+                            }:null,
                             color: Colors.white,
                             child: Padding(
                               padding: const EdgeInsets.all(13.0),
@@ -195,16 +256,7 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
-                      Visibility(
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          visible: visible,
-                          child: Container(
-                              margin: EdgeInsets.only(top: 50, bottom: 30),
-                              child: CircularProgressIndicator()
-                          )
-                      ),
+
                     ],
                   ),
                 ),
@@ -226,46 +278,46 @@ class _LoginState extends State<Login> {
     }
     else{
       try {
-        _scaffoldkey.currentState.showSnackBar(APIClient.successToast("Please wait !"));
+        //_scaffoldkey.currentState.showSnackBar(APIClient.successToast("Please wait !"));
 
         final result = await APIClient().authRequest(mobile,password);
-        print(result);
+        //print(result);
         setState(() {
+          checkLoader=true;
           visible=false;
         });
         if( result["status"] == "failed" ){
-
-          _scaffoldkey.currentState.showSnackBar(APIClient.errorToast(result["msg"].toString()));
+          setState(() {
+            loginStatus=false;
+          });
+          print(loginStatus);
+          loader(result["msg"]);
           print(result["msg"].toString());
         } else {
-          _scaffoldkey.currentState.showSnackBar(APIClient.successToast(result["msg"].toString()));
-          print(result["msg"].toString());
 
           if(result["data"][0]["user_type"]=="guest" || result["data"][0]["user_type"]=="Guest"){
-            Future.delayed(const Duration(seconds: 1), () {
+            Future.delayed(const Duration(seconds: 0), () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Dashboard(
-
               )));
             });
           }
           else{
-            Future.delayed(const Duration(seconds: 1), () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Dashboard2(
-
-              )));
+            Future.delayed(const Duration(seconds: 0), () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Dashboard2()));
             });
           }
-
-
         }
 
       } catch (e) {
-        if(e==SocketException){ _scaffoldkey.currentState.showSnackBar(APIClient.errorToast("Turn on mobile data"));}
+        setState(() {
+          checkLoader=true;
+          visible=false;
+        });
+        if(e==SocketException){ loader("Turn on mobile data");}
         try{
           final result = await InternetAddress.lookup('google.com');
           if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-            _scaffoldkey.currentState.showSnackBar(
-                APIClient.errorToast("Email or Password is wrong"));
+            loader("User ID or Password is wrong");
           }
         }
         catch(e){

@@ -1,9 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:share/share.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart'as http;
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
+import 'APIClient.dart';
+import 'ChangePassword.dart';
 import 'KYC.dart';
 import 'Login.dart';
 
@@ -13,14 +19,31 @@ class GuestProfile extends StatefulWidget {
 }
 
 class _GuestProfileState extends State<GuestProfile> {
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   String name="";
   String email="";
   String mobile="";
   String lastName="";
   String userId="";
   String uid="";
+  String url="https://www.call2sex.com/api/GuestApi/UploadGuestSelfie";
   SharedPreferences sharedPreferences;
   File _image;
+  var path;
+  final picker = ImagePicker();
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        path=_image.path;
+        upload();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -37,12 +60,13 @@ class _GuestProfileState extends State<GuestProfile> {
 
       setState(() {});
     });
+    fetchSelfie();
     super.initState();
     
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(key: _scaffoldkey,
 //      appBar: AppBar(
 //        elevation: 0,
 //        title: Text("Profile"),
@@ -64,9 +88,9 @@ class _GuestProfileState extends State<GuestProfile> {
           child: Column(
             children: <Widget>[
               Container(
-                height: MediaQuery.of(context).size.height/3,
+              //  height: MediaQuery.of(context).size.height/3,
                 width: MediaQuery.of(context).size.width,
-                color: Colors.blueGrey[900],
+                color: Colors.pink[900],
 
                 child: SafeArea(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,12 +99,7 @@ class _GuestProfileState extends State<GuestProfile> {
                         width: MediaQuery.of(context).size.width,
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.arrow_back,color: Colors.white,),
-                              onPressed: (){
-                                Navigator.pop(context);
-                              },
-                            ),
+                            Container(),
                             IconButton(
                               icon: Icon(Icons.power_settings_new,color: Colors.white,),
                               onPressed: (){
@@ -92,10 +111,15 @@ class _GuestProfileState extends State<GuestProfile> {
                         ),
                       ),
                       SizedBox(height: 10,),
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.white,
-                        child: Icon(Icons.person),
+                      Container(
+                        height: 90,width: 90,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(img=="https://static.vecteezy.com/system/resources/previews/000/142/008/large_2x/stylish-man-s-headshot-vector.jpg"?"":"https://www.call2sex.com$img"),fit: BoxFit.fill
+                          )
+                        ),
                       ),
                       SizedBox(height: 7,),
                       Text("$name"+" "+lastName,style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
@@ -108,75 +132,75 @@ class _GuestProfileState extends State<GuestProfile> {
                   ),
                 ),
               ),
-              SizedBox(height: 10,),
-              SizedBox(height: 10,),
-
-              SizedBox(height: 10,),
+              //SizedBox(height: 10,),
+             // SizedBox(height: 10,),
               Padding(
-                padding: EdgeInsets.only(left: 5,right: 5),
-                child: Card(
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        Text("Change Password",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
-                        Divider(thickness: 1,),
-                        GestureDetector(
-                            onTap: (){
-                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePassword(
-                              //   userId: userId.toString(),
-                              // )));
-                            },
-                            child: Text("View details",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.blueGrey[900],fontSize: 16),)),
-                        SizedBox(height: 2,)
-                      ],
+                padding: const EdgeInsets.all(13.0),
+                child: GridView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing:15,childAspectRatio: 8/6),
+
+                  children: [
+
+                    InkWell(
+                      child:  box(900, "Change Password",Icon(Icons.vpn_key_rounded,size: 40,color: Colors.white,)),
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePassword()));
+                      },
                     ),
-                  ),
+                    InkWell(
+                      child: box(800, "Upload Selfie",Icon(Icons.camera_alt,size: 40,color: Colors.white,)),
+                      onTap: (){
+                        getImage();
+                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
+                      },
+                    ),
+                    InkWell(
+                      child: box(700, "Upload KYC",Icon(Icons.home_repair_service,size: 40,color: Colors.white,)),
+                      onTap: (){
+                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>Wallet()));
+                      },
+                    ),
+                    InkWell(
+                      child: box(600, "Payment Setting",Icon(Icons.payment,size: 40,color: Colors.white,)),
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
+                      },
+                    ),
+                    InkWell(
+                      child: box(500, "Earn Money",Icon(Icons.share,size: 40,color: Colors.white,)),
+                      onTap:  () {
+                        // A builder is used to retrieve the context immediately
+                        // surrounding the RaisedButton.
+                        //
+                        // The context's `findRenderObject` returns the first
+                        // RenderObject in its descendent tree when it's not
+                        // a RenderObjectWidget. The RaisedButton's RenderObject
+                        // has its position and size after it's built.
+//                      final RenderBox box = context.findRenderObject();
+                        final RenderBox box = context.findRenderObject();
+                        Share.share("https://www.call2sex.com/\n"
+                            "Refer your friend. Referral code $uid",
+                            subject: "refer your friend. Referral code $uid ",
+                            sharePositionOrigin:
+                            box.localToGlobal(Offset.zero) &
+                            box.size);
+                      },
+                    ),
+                    InkWell(
+                      child: box(400, "Support",Icon(Icons.support,size: 40,color: Colors.white,)),
+                      onTap: (){
+                        _launchURL();
+                       // Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
+                      },
+                    ),
+
+                  ],
                 ),
               ),
-              SizedBox(height: 10,),
 
-              Padding(
-                padding: EdgeInsets.only(left: 5,right: 5),
-                child: Card(
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        Text("Upload selfie",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
-                        Divider(thickness: 1,),
-                        GestureDetector(
-                            onTap: (){
-                              //getImage();
-                              //Navigator.push(context, MaterialPageRoute(builder: (context)=>Address()));
-                            },
-                            child: Text("View details",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.blueGrey[900],fontSize: 16),)),
-                        SizedBox(height: 2,)
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10,),
-              Padding(
-                padding: EdgeInsets.only(left: 5,right: 5),
-                child: Card(
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        Text("Upload KYC",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
-                        Divider(thickness: 1,),
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
 
-                          },
-                          child: Text("View details",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.blueGrey[900],fontSize: 16),),
-                        ),
-                        SizedBox(height: 2,)
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -213,4 +237,80 @@ class _GuestProfileState extends State<GuestProfile> {
     SharedPreferences pref= await SharedPreferences.getInstance();
     pref.clear();
   }
+  box(int num, String name, Icon icon){
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: Colors.pink[num].withOpacity(0.9)
+        ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            icon,
+            SizedBox(height: 10,),
+            Text(name,style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),
+          ],
+        )
+    );
+  }
+  uploadImage(filename, url) async {
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    String token= pref.getString("api_token");
+    var request = http.MultipartRequest('POST', Uri.parse(url),);
+    print(filename);
+    print(request);
+    request.files.add(await http.MultipartFile.fromPath("", filename,),);
+
+    final Map <String ,String> header= {
+
+      'Accept': 'application/json',
+      'authorization' : 'Bearer '+'$token',
+
+    };
+    request.headers.addAll(header);
+    var res = await request.send();
+    var response= await http.Response.fromStream(res);
+    print('printing...');
+    var img=await json.decode(response.body)["imgurl"];
+    print(img);
+    print(response.body);
+
+    print(res.statusCode);
+    print(res);
+    return img;
+  }
+  upload()async{
+    SharedPreferences preferences= await SharedPreferences.getInstance();
+    String id=await preferences.getString("id");
+    var res = await uploadImage(path, url);
+
+    final result = await APIClient().SaveGuestSelfie(res);
+
+
+    if(result["status"]=="success"){
+      _scaffoldkey.currentState.showSnackBar(APIClient.successToast(result["msg"]));
+
+    }
+    else{
+      _scaffoldkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));
+
+    }
+  }
+  String img="";
+  fetchSelfie()async{
+    final result= await APIClient().fetchGuestSelfie();
+    img=result["data"][0]["image"];
+    print(img);
+  }
+  _launchURL() async {
+    const url = 'https://api.whatsapp.com/send?phone=918016112117&text=Hi,%20I%20found%20you%20on%20Call2Sex%20App...';
+    if (await canLaunch(url)) {
+
+      await launch(url,forceSafariVC: false,
+          forceWebView: false);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 }

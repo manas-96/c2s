@@ -18,7 +18,35 @@ class _SignUpState extends State<SignUp> {
   String lastname="";
   String user_type="Guest";
   int selectedAddress=1;
+
+
+  bool checkLoader=true;
+  bool loginStatus=true;
   bool visible=false;
+
+
+
+  Future<bool> loader(String msg) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text(msg),
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  child: Text("OK"),
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                ),
+              )
+
+            ],
+          );
+        });
+  }
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
   Future<bool> _onBackPressed() {
     return showDialog(
@@ -62,13 +90,13 @@ class _SignUpState extends State<SignUp> {
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color:Colors.blueGrey[900].withOpacity(0.9),
+            color:Colors.pink[900].withOpacity(0.5),
             child: SafeArea(
-              child: SingleChildScrollView(physics: NeverScrollableScrollPhysics(),
+              child: SingleChildScrollView(//physics: NeverScrollableScrollPhysics(),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: 15,),
+                    SizedBox(height: 5,),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       child: Align(
@@ -257,16 +285,31 @@ class _SignUpState extends State<SignUp> {
                     ),
 
                     SizedBox(height: 10,),
+                    Container(width: MediaQuery.of(context).size.width,
+
+                      alignment: Alignment.center,
+                      child: Visibility(
+                          maintainSize: true,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          visible: visible,
+                          child: Container(
+                              margin: EdgeInsets.only(top: 10, bottom: 10),
+                              child: CircularProgressIndicator()
+                          )
+                      ),
+                    ),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       child: Center(
                         child: RaisedButton(
-                          onPressed: (){
+                          onPressed:checkLoader? (){
                             register();
                             setState(() {
                               visible=true;
+                              checkLoader=false;
                             });
-                          },
+                          }:null,
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
@@ -292,19 +335,7 @@ class _SignUpState extends State<SignUp> {
                         )
                       ),
                     ),
-                    Container(width: MediaQuery.of(context).size.width,
-                      alignment: Alignment.center,
-                      child: Visibility(
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          visible: visible,
-                          child: Container(
-                              margin: EdgeInsets.only(top: 50, bottom: 30),
-                              child: CircularProgressIndicator()
-                          )
-                      ),
-                    ),
+
                   ],
                 ),
               ),
@@ -357,27 +388,36 @@ class _SignUpState extends State<SignUp> {
           "contact" : mobile
         });
         setState(() {
+          checkLoader=true;
           visible=false;
         });
 
         if( result["status"] == "failed" ){
-
+          setState(() {
+            checkLoader=true;
+            visible=false;
+          });
           _scaffolkey.currentState.showSnackBar(APIClient.errorToast(result["msg"].toString()));
           print(result["message"].toString());
         } else {
           _scaffolkey.currentState.showSnackBar(APIClient.successToast(result["msg"].toString()));
           print(result["message"].toString());
 
-          Future.delayed(const Duration(seconds: 1), () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OtpVerification(
               mobile: mobile.toString(),
+              name: "$firstname $lastname",
+              fockOtp: result["otp"],
             )));
-          });
+
 
 
         }
 
       } catch (e) {
+        setState(() {
+          checkLoader=true;
+          visible=false;
+        });
         _scaffolkey.currentState.showSnackBar(APIClient.errorToast(e.toString()));
 
       }

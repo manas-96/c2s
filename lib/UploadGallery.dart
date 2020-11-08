@@ -1,8 +1,13 @@
-import 'package:call2sex/PrimaryWallet.dart';
-import 'package:call2sex/SecondaryWallet.dart';
+import 'package:call2sex/UploadFreeGalllery.dart';
+import 'package:call2sex/UploadPaidGallery.dart';
 import 'package:flutter/material.dart';
 
-class Wallet extends StatelessWidget {
+class UploadGallery extends StatefulWidget {
+  @override
+  _UploadGalleryState createState() => _UploadGalleryState();
+}
+
+class _UploadGalleryState extends State<UploadGallery> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,24 +21,22 @@ class Wallet extends StatelessWidget {
             bottom: TabBar(
               indicatorColor: Colors.white,
               tabs: [
-                Tab(text: 'Primary wallet',),
-                Tab(text: 'Secondary wallet',),
+                Tab(text: 'Free Gallery',),
+                Tab(text: 'Paid Gallery',),
               ],
             ),
-            title: Text('Call2Sex',style: TextStyle(fontSize: 24,color: Colors.white),),
+            title: Text('Upload Gallery',style: TextStyle(fontSize: 24,color: Colors.white),),
 
           ),
           body: TabBarView(
             children: [
-              PrimaryWallet(),
-              SecondaryWallet(),
+              UploadFreeGallery(),
+              UploadPaidGallery()
 
             ],
           ),
         ),
       ),
     );
-
   }
 }
-

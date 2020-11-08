@@ -1,6 +1,9 @@
+import 'package:call2sex/UploadGallery.dart';
 import 'package:call2sex/WorkerProfile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Wallet.dart';
 
@@ -12,6 +15,10 @@ class Dashboard2 extends StatefulWidget {
 
 class _Dashboard2State extends State<Dashboard2> {
   int _currentIndex = 0;
+  String name="";
+  String lastName="";
+  String image="";
+  SharedPreferences sharedPreferences;
 
   Future<bool> _onBackPressed() {
     return showDialog(
@@ -39,64 +46,106 @@ class _Dashboard2State extends State<Dashboard2> {
         });
   }
 
-  final List<Widget> _children = [
-    WorkerProfile(),
-    Wallet(),
+  @override
+  void initState() {
+    // TODO: implement initState
+    SharedPreferences.getInstance().then((SharedPreferences sp) {
+      sharedPreferences = sp;
+      name=  sharedPreferences.getString("firstname");
+      lastName=  sharedPreferences.getString("lastname");
+      image=sharedPreferences.getString("image");
 
-  ];
+      //mobile);
+
+
+      setState(() {});
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(onWillPop: _onBackPressed,
-      child: Scaffold(
-        body: _children[_currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (int index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.blueGrey[900],
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              activeIcon: ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return RadialGradient(
-                    center: Alignment.topLeft,
-                    radius: 1,
-                    colors: <Color>[
-                      Colors.redAccent,
-                      Colors.orangeAccent
-                    ],
-                    tileMode: TileMode.repeated,
-                  ).createShader(bounds);
-                },
-                child: Icon(Icons.dashboard),
-              ),
-              icon: new Icon(Icons.home),
-              title: new Text('Home',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),),
-            ),
-            BottomNavigationBarItem(
-              activeIcon: ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return RadialGradient(
-                    center: Alignment.topLeft,
-                    radius: 1.0,
-                    colors: <Color>[
-                      Colors.redAccent,
-                      Colors.orangeAccent
-                    ],
-                    tileMode: TileMode.mirror,
-                  ).createShader(bounds);
-                },
-                child: Icon(Icons.next_week),
-              ),
-              icon: new Icon(Icons.account_balance_wallet),
-              title: new Text('Wallet',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),),
-            ),
-          ],
-        ),
+     child: Scaffold(
+       appBar: AppBar(
+         backgroundColor: Colors.pink[500],
+         title: Text("Home"),
+       ),
+       body: Container(
+         height: MediaQuery.of(context).size.height,
+         width: MediaQuery.of(context).size.width,
+         child: Padding(
+           padding: const EdgeInsets.all(8.0),
+           child: ListView(
+             children: [
+               Padding(
+                 padding: const EdgeInsets.all(20.0),
+                 child: Container(
+                   width: MediaQuery.of(context).size.width,
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     children: [
+                       Container(
+                         height: 180,width: 180,
+                         decoration: BoxDecoration(
+                           shape: BoxShape.circle,
+                           border: Border.all(width: 2,color: Colors.purple[300]),
+                           image: DecorationImage(
+                               image: NetworkImage("https://www.call2sex.com/${image.toString().replaceFirst('~', '')}"),fit: BoxFit.fill
+                           )
+                         ),
+                       ),
+                       Container(
+                         child: Text("Hi ! $name",style: TextStyle(color: Colors.purple,fontWeight: FontWeight.bold,fontSize: 18),),
+                       ),
+                     ],
+                   ),
+                 ),
+               ),
+               SizedBox(height: 20,),
+               GridView(
+                 shrinkWrap: true,
+                 physics: NeverScrollableScrollPhysics(),
+                 gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 5,crossAxisSpacing: 5),
+
+                 children: [
+
+                   InkWell(
+                     child:  box(900, "Profile"),
+                     onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>WorkerProfile()));
+                     },
+                   ),
+                   InkWell(
+                     child: box(800, "Gallery"),
+                     onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
+                     },
+                   ),
+
+                   box(700, "Bookings"),
+                   InkWell(
+                     child: box(400, "Wallet"),
+                     onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>Wallet()));
+                     },
+                   ),
+                 ],
+               )
+             ],
+           ),
+         ),
+       ),
+     ),
+    );
+  }
+  box(int num, String name){
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: Colors.pink[num].withOpacity(0.9)
+      ),
+      child: Center(
+        child: Text(name,style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
       ),
     );
   }

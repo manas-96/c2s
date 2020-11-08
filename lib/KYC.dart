@@ -1,4 +1,5 @@
 import 'package:call2sex/APIClient.dart';
+import 'package:call2sex/Dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,8 +17,8 @@ class _KYCState extends State<KYC> {
   Widget build(BuildContext context) {
     return Scaffold(key: _scaffolkey,
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey[900],
-        title: Text("KYC"),
+        backgroundColor: Colors.pink[900],
+        title: Text("Payment setting"),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -31,7 +32,7 @@ class _KYCState extends State<KYC> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: Colors.blueGrey[900])
+                        border: Border.all(width: 2,color: Colors.pink[900])
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5),
@@ -43,7 +44,7 @@ class _KYCState extends State<KYC> {
                         decoration:InputDecoration(
                           //icon: Icon(Icons.person,color: Colors.white,),
                             labelText: 'Account holder ',
-                            labelStyle: TextStyle(color: Colors.blueGrey[900]),
+                            labelStyle: TextStyle(color: Colors.pink[900]),
                             border: InputBorder.none
                         ) ,
                       ),
@@ -54,7 +55,7 @@ class _KYCState extends State<KYC> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: Colors.blueGrey[900])
+                        border: Border.all(width: 2,color: Colors.pink[900])
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5),
@@ -66,7 +67,7 @@ class _KYCState extends State<KYC> {
                         decoration:InputDecoration(
                           //icon: Icon(Icons.person,color: Colors.white,),
                             labelText: 'Bank name',
-                            labelStyle: TextStyle(color: Colors.blueGrey[900]),
+                            labelStyle: TextStyle(color: Colors.pink[900]),
                             border: InputBorder.none
                         ) ,
                       ),
@@ -77,7 +78,7 @@ class _KYCState extends State<KYC> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: Colors.blueGrey[900])
+                        border: Border.all(width: 2,color: Colors.pink[900])
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5),
@@ -89,7 +90,7 @@ class _KYCState extends State<KYC> {
                         decoration:InputDecoration(
                           //icon: Icon(Icons.person,color: Colors.white,),
                             labelText: 'Account number',
-                            labelStyle: TextStyle(color: Colors.blueGrey[900]),
+                            labelStyle: TextStyle(color: Colors.pink[900]),
                             border: InputBorder.none
                         ) ,
                       ),
@@ -100,7 +101,7 @@ class _KYCState extends State<KYC> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: Colors.blueGrey[900])
+                        border: Border.all(width: 2,color: Colors.pink[900])
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5),
@@ -112,7 +113,7 @@ class _KYCState extends State<KYC> {
                         decoration:InputDecoration(
                           //icon: Icon(Icons.person,color: Colors.white,),
                             labelText: 'IFSC',
-                            labelStyle: TextStyle(color: Colors.blueGrey[900]),
+                            labelStyle: TextStyle(color: Colors.pink[900]),
                             border: InputBorder.none
                         ) ,
                       ),
@@ -138,7 +139,7 @@ class _KYCState extends State<KYC> {
                       saveBank();
                     }
                   },
-                  color: Colors.blueGrey[900],
+                  color: Colors.pink[900],
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Text("Submit",style: TextStyle(color: Colors.white,fontSize: 17),),
@@ -158,6 +159,7 @@ class _KYCState extends State<KYC> {
     if(res["status"]=="success"){
 
       _scaffolkey.currentState.showSnackBar(APIClient.successToast(res["msg"]));
+     // Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
 
     }
     else{

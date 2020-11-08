@@ -31,10 +31,7 @@ class _Enquiry2State extends State<Enquiry2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(key: _scaffolkey,
-      appBar: AppBar(
-        backgroundColor: Colors.blueGrey[900],
-        title: Text("Enquiry")
-      ),
+
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -42,260 +39,261 @@ class _Enquiry2State extends State<Enquiry2> {
               image: DecorationImage(
                   image: AssetImage("images/logo.jpg"),fit: BoxFit.fill
               )),
-        child: Container(
-          
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          
-          color: Colors.blueGrey[900].withOpacity(0.9),
-          child: SingleChildScrollView(
-            child:Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 10,),
-                Container(
-                  height: 150,width: 150,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image:  AssetImage("images/1.png"),fit: BoxFit.fill
-                      )
-                  ),
-                ),
-                //======================================================== State
-                Text("Address Information",style: TextStyle(color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold),),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
+        child: SafeArea(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            
+            color: Colors.pink[900].withOpacity(0.5),
+            child: SingleChildScrollView(
+              child:Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: MediaQuery.of(context).size.height*0.05,),
+                  Container(
+                    height: 150,width: 150,
                     decoration: BoxDecoration(
-                      border: Border.all(width: 1,color: Colors.white),
-                      color: Colors.blueGrey[900],
+                        image: DecorationImage(
+                            image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                        )
                     ),
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                    //color:  Colors.blueGrey[900],
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton<String>(
-                                value: _myState,
-                                iconSize: 30,
-                                icon: (null),
-                                style: TextStyle(
-                                  color: Colors. blueGrey,
-                                  fontSize: 16,
+                  ),
+                  //======================================================== State
+                  Text("Address Information",style: TextStyle(color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold),),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1,color: Colors.white),
+                        color:  Colors.white70,
+                      ),
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      //color:  Colors.pink[900],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton<String>(
+                                  value: _myState,
+                                  iconSize: 30,
+                                  icon: (null),
+                                  style: TextStyle(
+                                    color: Colors. black,
+                                    fontSize: 16,
+                                  ),
+                                  hint: Text('Select State',style: TextStyle(color: Colors.white)),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      _myState = newValue;
+                                      _getdistsList();
+                                      print(_myState);
+                                    });
+                                  },
+                                  items: statesList?.map((item) {
+                                    return new DropdownMenuItem(
+                                      child: new Text(item['state_name']),
+                                      value: item['state_id'].toString(),
+                                    );
+                                  })?.toList() ??
+                                      [],
                                 ),
-                                hint: Text('Select State',style: TextStyle(color: Colors.white)),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    _myState = newValue;
-                                    _getdistsList();
-                                    print(_myState);
-                                  });
-                                },
-                                items: statesList?.map((item) {
-                                  return new DropdownMenuItem(
-                                    child: new Text(item['state_name']),
-                                    value: item['state_id'].toString(),
-                                  );
-                                })?.toList() ??
-                                    [],
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-
-                //======================================================== dist
-
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1,color: Colors.white),
-                      color: Colors.blueGrey[900],
-                    ),
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                    //color:  Colors.blueGrey[900],
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton<String>(
-                                value: _mydist,
-                                iconSize: 30,
-                                icon: (null),
-                                style: TextStyle(
-                                  color: Colors. blueGrey,
-                                  fontSize: 16,
-                                ),
-                                hint: Text('Select dist',style: TextStyle(color: Colors.white),),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    _mydist = newValue;
-                                    _getcityList();
-                                    print(_mydist);
-                                  });
-                                },
-                                items: distsList?.map((item) {
-                                  return new DropdownMenuItem(
-                                    child: new Text(item['dist_name']),
-                                    value: item['dist_id'].toString(),
-                                  );
-                                })?.toList() ??
-                                    [],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1,color: Colors.white),
-                          color: Colors.blueGrey[900],
-                    ),
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton<String>(
-                                value: _mycity,
-                                iconSize: 30,
-                                icon: (null),
-                                style: TextStyle(
-                                  color: Colors. blueGrey,
-                                  fontSize: 16,
-                                ),
-                                hint: Text('Select city',style: TextStyle(color: Colors.white)),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    _mycity = newValue;
-                                    _getpinList();
-                                    print(_mycity);
-                                  });
-                                },
-                                items: city?.map((item) {
-                                  return new DropdownMenuItem(
-                                    child: new Text(item['city_name']),
-                                    value: item['city_id'].toString(),
-                                  );
-                                })?.toList() ??
-                                    [],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                    //color:  Colors.blueGrey[900],
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1,color: Colors.white),
-                      color: Colors.blueGrey[900],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton<String>(
-                                value: _pin,
-                                iconSize: 30,
-                                icon: (null),
-                                style: TextStyle(
-                                  color: Colors. blueGrey,
-                                  fontSize: 16,
-                                ),
-                                hint: Text('Select Pincode',style: TextStyle(color: Colors.white),),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    _pin = newValue;
-                                    _getcityList();
-                                    print(_pin);
-                                  });
-                                },
-                                items: pinList?.map((item) {
-                                  return new DropdownMenuItem(
-                                    child: new Text(item['pin_code']),
-                                    value: item['pin_id'].toString(),
-                                  );
-                                })?.toList() ??
-                                    [],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: Colors.white)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: TextFormField(style: TextStyle(color: Colors.white),
-                        // keyboardType: TextInputType.number,
-                        onChanged: (val){
-                          landmark=val;
-                        },
-                        decoration:InputDecoration(
-                          //icon: Icon(Icons.person,color: Colors.white,),
-                            labelText: 'Landmark',
-                            labelStyle: TextStyle(color: Colors.white),
-                            border: InputBorder.none
-                        ) ,
+                        ],
                       ),
                     ),
                   ),
-                ),
 
-                Padding(
-                  padding: EdgeInsets.only(top: 40,left: MediaQuery.of(context).size.width*0.3,right: MediaQuery.of(context).size.width*0.3),
-                  child: RaisedButton(
-                    onPressed: (){
-                      submit();
-                    },
-                    child: Container(height: 48,
-                      child: Center(
-                        child: Text("Submit"),
+
+                  //======================================================== dist
+
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1,color: Colors.white),
+                        color:   Colors.white70,
+                      ),
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      //color:  Colors.pink[900],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton<String>(
+                                  value: _mydist,
+                                  iconSize: 30,
+                                  icon: (null),
+                                  style: TextStyle(
+                                    color: Colors. black,
+                                    fontSize: 16,
+                                  ),
+                                  hint: Text('Select dist',style: TextStyle(color: Colors.white),),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      _mydist = newValue;
+                                      _getcityList();
+                                      print(_mydist);
+                                    });
+                                  },
+                                  items: distsList?.map((item) {
+                                    return new DropdownMenuItem(
+                                      child: new Text(item['dist_name']),
+                                      value: item['dist_id'].toString(),
+                                    );
+                                  })?.toList() ??
+                                      [],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1,color: Colors.white),
+                        color:  Colors.white70,
+                      ),
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton<String>(
+                                  value: _mycity,
+                                  iconSize: 30,
+                                  icon: (null),
+                                  style: TextStyle(
+                                    color: Colors. black,
+                                    fontSize: 16,
+                                  ),
+                                  hint: Text('Select city',style: TextStyle(color: Colors.white)),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      _mycity = newValue;
+                                      _getpinList();
+                                      print(_mycity);
+                                    });
+                                  },
+                                  items: city?.map((item) {
+                                    return new DropdownMenuItem(
+                                      child: new Text(item['city_name']),
+                                      value: item['city_id'].toString(),
+                                    );
+                                  })?.toList() ??
+                                      [],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      //color:  Colors.pink[900],
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1,color: Colors.white),
+                        color:  Colors.white70,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton<String>(
+                                  value: _pin,
+                                  iconSize: 30,
+                                  icon: (null),
+                                  style: TextStyle(
+                                    color: Colors. black,
+                                    fontSize: 16,
+                                  ),
+                                  hint: Text('Select Pincode',style: TextStyle(color: Colors.white),),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      _pin = newValue;
+                                      _getcityList();
+                                      print(_pin);
+                                    });
+                                  },
+                                  items: pinList?.map((item) {
+                                    return new DropdownMenuItem(
+                                      child: new Text(item['pin_code']),
+                                      value: item['pin_id'].toString(),
+                                    );
+                                  })?.toList() ??
+                                      [],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 2,color: Colors.white)
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: TextFormField(style: TextStyle(color: Colors.white),
+                          // keyboardType: TextInputType.number,
+                          onChanged: (val){
+                            landmark=val;
+                          },
+                          decoration:InputDecoration(
+                            //icon: Icon(Icons.person,color: Colors.white,),
+                              labelText: 'Landmark',
+                              labelStyle: TextStyle(color: Colors.white),
+                              border: InputBorder.none
+                          ) ,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(top: 40,left: MediaQuery.of(context).size.width*0.3,right: MediaQuery.of(context).size.width*0.3),
+                    child: RaisedButton(
+                      onPressed: (){
+                        submit();
+                      },
+                      child: Container(height: 48,
+                        child: Center(
+                          child: Text("Submit"),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
             ),
-          )
-          ),
+        ),
       ),
 
     );
@@ -391,7 +389,7 @@ class _Enquiry2State extends State<Enquiry2> {
       }
       return resData;
     } else {
-      throw Exception('Failed to SignUp');
+      throw Exception('Failed to enquiry');
     }
   }
 
