@@ -177,8 +177,6 @@ class _UploadFreeGalleryState extends State<UploadFreeGallery> {
     return img;
   }
   upload()async{
-    SharedPreferences preferences= await SharedPreferences.getInstance();
-    String id=await preferences.getString("id");
     var res = await uploadImage(path, url);
 
     final result = await APIClient().saveFreeGallery(res);

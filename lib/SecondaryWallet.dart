@@ -9,6 +9,21 @@ class SecondaryWallet extends StatefulWidget {
 }
 
 class _SecondaryWalletState extends State<SecondaryWallet> {
+  String balance="";
+  walletBalance()async{
+    final result= await APIClient().secondaryBalance();
+    print(result);
+    if(result["status"]=="failed"){
+      setState(() {
+        balance="0";
+      });
+    }
+    else{
+      setState(() {
+        balance= result["data"][0]["Balance"].toString();
+      });
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -64,21 +79,7 @@ class _SecondaryWalletState extends State<SecondaryWallet> {
       ),
     );
   }
-  String balance="";
-  walletBalance()async{
-    final result= await APIClient().secondaryBalance();
-    print(result);
-    if(result["status"]=="failed"){
-      setState(() {
-        balance="0";
-      });
-    }
-    else{
-      setState(() {
-        balance= result["data"][0]["Balance"].toString();
-      });
-    }
-  }
+
   transaction(){
     return FutureBuilder(
       future: getTransaction(),
@@ -122,10 +123,10 @@ class _SecondaryWalletState extends State<SecondaryWallet> {
                         ),
                         Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text("Send money to ABC",style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text("Rewarded from C2S",style: TextStyle(fontWeight: FontWeight.bold),),
                             SizedBox(height: 10,),
-                            Text("20/10/2020"),
-                            SizedBox(height: 6,),
+                            // Text(snap.data[index]["ondate"]),
+                            // SizedBox(height: 6,),
                             Text("Transaction id : ${snap.data[index]["TxnId"]}")
                           ],
                         ),

@@ -1,4 +1,6 @@
 import 'package:call2sex/APIClient.dart';
+import 'package:call2sex/PaymentPreview.dart';
+import 'package:call2sex/Withdrawl.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryWallet extends StatefulWidget {
@@ -7,6 +9,21 @@ class PrimaryWallet extends StatefulWidget {
 }
 
 class _PrimaryWalletState extends State<PrimaryWallet> {
+  String balance="";
+  walletBalance()async{
+    final result= await APIClient().primaryBalance();
+    if(result["status"]=="failed"){
+      setState(() {
+        balance="0";
+      });
+    }
+    else{
+      setState(() {
+        balance= result["data"][0]["Balance"].toString();
+        print(balance);
+      });
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -38,20 +55,19 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
                   ),
                   SizedBox(height: 10,),
                   Text(" Available balance",style: TextStyle(color: Colors.white,fontSize: 12),),
+                  SizedBox(height: 10,),
                   Padding(
                     padding: EdgeInsets.only(left: 30, right: 30),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Row(mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        FlatButton(
-                          child: Text("Add Money"),
-                          onPressed: (){},
-                          color: Colors.white,
-                        ),
-                        FlatButton(
-                          child: Text("Withdraw"),
-                          onPressed: (){},
-                          color: Colors.white,
-                        ),
+
+                        // FlatButton(
+                        //   child: Text("Withdraw"),
+                        //   onPressed: (){
+                        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>Withdraw()));
+                        //   },
+                        //   color: Colors.white,
+                        // ),
                       ],
                     ),
                   ),
@@ -70,20 +86,7 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
       ),
     );
   }
-  String balance="";
-  walletBalance()async{
-    final result= await APIClient().primaryBalance();
-    if(result["status"]=="failed"){
-      setState(() {
-        balance="0";
-      });
-    }
-    else{
-      setState(() {
-        balance= result["data"][0]["Balance"].toString();
-      });
-    }
-  }
+
   bool trnasCheck=false;
   getTransaction()async{
     final result= await APIClient().primaryTrancation();
@@ -135,18 +138,21 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.teal[900].withOpacity(0.5)),
                           ),
-                          child: Icon(Icons.transit_enterexit),
+                          child:snap.data[index]["amounttype"]=="In"? Icon(Icons.add):Icon(Icons.remove),
                         ),
                         Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text("Send money to ABC",style: TextStyle(fontWeight: FontWeight.bold),),
+                            title(snap.data[index]["string"]),
                             SizedBox(height: 10,),
-                            Text("20/10/2020"),
+                            Text(snap.data[index]["ondate"]+" , " + snap.data[index]["ontime"]),
                             SizedBox(height: 6,),
-                            Text("Transaction id : ${snap.data[index]["TxnId"]}")
+                            Container(
+                              width: MediaQuery.of(context).size.width/2,
+                                child: Text("TxnID : ${snap.data[index]["txnid"]}",
+                                overflow: TextOverflow.clip,))
                           ],
                         ),
-                        Text("Rs ${snap.data[index]["Amount_In"]}",style: TextStyle(color: Colors.green,fontSize: 18,fontWeight: FontWeight.bold),),
+                        Text("Rs ${snap.data[index]["amount_in"]}",style: TextStyle(color:snap.data[index]["amounttype"]=="In" ?Colors.green:Colors.red,fontSize: 18,fontWeight: FontWeight.bold),),
                         SizedBox(width: 1,)
                       ],
                     ),
@@ -168,5 +174,18 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
         );
       },
     );
+  }
+  title(String intype){
+    //print(intype);
+    return Text(intype,style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),);
+    // if(intype=="booking"){
+    //   return Text("Money paid for booking");
+    // }
+    // else if(intype=="reward"){
+    //   Text("Money received from C2S");
+    // }
+    // else{
+    //   Text("Money added to wallet");
+    // }
   }
 }

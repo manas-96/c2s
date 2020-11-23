@@ -49,52 +49,56 @@ class _WorkerState extends State<Worker> {
             ),
           );
         }
-        return GridView.builder(
-            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 5,crossAxisSpacing: 5),
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: snap.data.length,
-            itemBuilder: (context,index){
-              return GestureDetector(
-                onTap: (){
-                 // print(snap.data);
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ModelDetails(
-                    id: snap.data[index]["user_id"].toString(),
-                  )));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(snap.data[index]["image"]==null?"https://im.indiatimes.in/content/itimes/photo/2015/Jan/8/1420735448-indian-actress-sana-khan-navel-show-hot-photo-gallery-pics-pictures.jpg?w=875&h=1317&cc=1"
-                          :"https://www.call2sex.com/${snap.data[index]["image"].toString().replaceFirst('~', '')}"
-                          ),
-                          fit: BoxFit.fill
-                      )
-                  ),
+        return Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: GridView.builder(
+              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 5,crossAxisSpacing: 5),
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: snap.data.length,
+              itemBuilder: (context,index){
+                return GestureDetector(
+                  onTap: (){
+                   // print(snap.data);
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ModelDetails(
+                      id: snap.data[index]["user_id"].toString(),
+                    )));
+                  },
                   child: Container(
-                      //color: Colors.pink.withOpacity(0.4),
-                      child: Stack(
-
-                        children: [
-                          Positioned(left: 5,bottom: 5,
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                //Text("Model Model",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 17),),
-                                Row(crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.favorite,color: Colors.pink,),
-                                    Text("132",style: TextStyle(color: Colors.white),)
-                                  ],
-                                )
-                              ],
+                    decoration: BoxDecoration(color: Colors.pink.withOpacity(0.3),
+                        image: DecorationImage(
+                          image: getImage(snap.data[index]["gender"], snap.data[index]["image"]), fit: BoxFit.fill
                             ),
-                          ),
-                        ],
-                      )
+
+                        ),
+
+                    child: Container(
+                        //color: Colors.pink.withOpacity(0.4),
+                        child: Stack(
+
+                          children: [
+                            Positioned(left: 5,bottom: 5,
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(snap.data[index]["username"]==null?"":snap.data[index]["username"],style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 17),),
+
+                                  Row(crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(Icons.favorite,color: Colors.pink,),
+                                      SizedBox(width: 4,),
+                                      Text("132",style: TextStyle(color: Colors.white),)
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
                   ),
-                ),
-              );
-            }
+                );
+              }
+          ),
         );
       },
     );
@@ -109,6 +113,24 @@ class _WorkerState extends State<Worker> {
       setState(() {
         checkModel=true;
       });
+    }
+  }
+  getImage(String gender, String img){
+    print(img);
+    print(gender);
+    if(img!=null){
+      return NetworkImage(img);
+    }
+    else {
+      if(gender=="male"||gender=="Male"){
+        return AssetImage("images/male.png",);
+      }
+      else if(gender=="female"||gender=="Female"){
+        return AssetImage("images/female.png",);
+      }
+      else{
+        return AssetImage("images/no.png");
+      }
     }
   }
 }

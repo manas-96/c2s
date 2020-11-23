@@ -12,6 +12,8 @@ import 'APIClient.dart';
 import 'ChangePassword.dart';
 import 'KYC.dart';
 import 'Login.dart';
+import 'Prime.dart';
+import 'UploadVoter.dart';
 
 class GuestProfile extends StatefulWidget {
   @override
@@ -159,7 +161,7 @@ class _GuestProfileState extends State<GuestProfile> {
                     InkWell(
                       child: box(700, "Upload KYC",Icon(Icons.home_repair_service,size: 40,color: Colors.white,)),
                       onTap: (){
-                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>Wallet()));
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadVoter()));
                       },
                     ),
                     InkWell(
@@ -193,6 +195,12 @@ class _GuestProfileState extends State<GuestProfile> {
                       onTap: (){
                         _launchURL();
                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
+                      },
+                    ),
+                    InkWell(
+                      child: box(300, "Prime",Icon(Icons.account_balance_wallet_rounded,size: 40,color: Colors.white,)),
+                      onTap: (){
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>Prime()));
                       },
                     ),
 

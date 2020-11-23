@@ -89,7 +89,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height/20,),
                     Container(
-                      height: 150,width: 150,
+                      height: 150,width: 200,
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image:  AssetImage("images/1.png"),fit: BoxFit.fill
@@ -226,7 +226,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.all(13.0),
-                            child: Text("ChangePassword",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17,),),
+                            child: Text("Change Password",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17,),),
                           ),
                         ),
                       ),

@@ -114,7 +114,7 @@ class _LoginState extends State<Login> {
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height/20,),
                       Container(
-                        height: 150,width: 150,
+                        height: 150,width: 200,
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image:  AssetImage("images/1.png"),fit: BoxFit.fill

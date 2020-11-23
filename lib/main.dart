@@ -1,7 +1,9 @@
+import 'package:call2sex/AnimationPage.dart';
 import 'package:call2sex/Enquiry.dart';
 import 'package:call2sex/Login.dart';
 import 'package:call2sex/SignUp.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'Dashboard.dart';
 
@@ -13,8 +15,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp
+    ]);
+
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,7 +39,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Enquiry(),
+      home: animationPage(),
     );
   }
 }

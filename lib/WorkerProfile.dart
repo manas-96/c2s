@@ -1,5 +1,6 @@
 import 'package:call2sex/ChangePassword.dart';
 import 'package:call2sex/ServiceSetting.dart';
+import 'package:call2sex/WorkerSaveInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,6 +30,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
     // TODO: implement initState
     SharedPreferences.getInstance().then((SharedPreferences sp) {
       sharedPreferences = sp;
+     // print(sharedPreferences.getString("contact"));
       name=  sharedPreferences.getString("firstname");
       lastName=  sharedPreferences.getString("lastname");
       email= sharedPreferences.getString("email");
@@ -37,9 +39,10 @@ class _WorkerProfileState extends State<WorkerProfile> {
       uid= sharedPreferences.getString("uid");
       image=sharedPreferences.getString("image");
       //mobile);
-      print(mobile+"mobile");
+     // print(mobile+"mobile");
       print(sharedPreferences.getString("id"));
       setState(() {});
+
     });
     super.initState();
   }
@@ -120,11 +123,11 @@ class _WorkerProfileState extends State<WorkerProfile> {
                     InkWell(
                       child: box(900, "Upload Details",Icon(Icons.details,size: 40,color: Colors.white,)),
                       onTap: (){
-                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>WorkerSaveInfo()));
                       },
                     ),
                     InkWell(
-                      child: box(800, "Service Setting",Icon(Icons.home_repair_service,size: 40,color: Colors.white,)),
+                      child: box(800, "Rate Setting",Icon(Icons.home_repair_service,size: 40,color: Colors.white,)),
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ServiceSetting()));
                       },

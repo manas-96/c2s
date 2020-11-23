@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:call2sex/UploadGallery.dart';
+import 'package:call2sex/WorkerBookingHistory.dart';
 import 'package:call2sex/WorkerProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Wallet.dart';
@@ -19,7 +23,7 @@ class _Dashboard2State extends State<Dashboard2> {
   String lastName="";
   String image="";
   SharedPreferences sharedPreferences;
-
+  bool _switchValue=true;
   Future<bool> _onBackPressed() {
     return showDialog(
         context: context,
@@ -46,6 +50,7 @@ class _Dashboard2State extends State<Dashboard2> {
         });
   }
 
+  String uid="";
   @override
   void initState() {
     // TODO: implement initState
@@ -54,10 +59,9 @@ class _Dashboard2State extends State<Dashboard2> {
       name=  sharedPreferences.getString("firstname");
       lastName=  sharedPreferences.getString("lastname");
       image=sharedPreferences.getString("image");
-
+      uid= sharedPreferences.getString("uid");
       //mobile);
-
-
+      print(image);
       setState(() {});
     });
     super.initState();
@@ -90,18 +94,39 @@ class _Dashboard2State extends State<Dashboard2> {
                            shape: BoxShape.circle,
                            border: Border.all(width: 2,color: Colors.purple[300]),
                            image: DecorationImage(
-                               image: NetworkImage("https://www.call2sex.com/${image.toString().replaceFirst('~', '')}"),fit: BoxFit.fill
+                               image: image==null?AssetImage("images/female.png"):NetworkImage("https://www.call2sex.com/${image.toString().replaceFirst('~', '')}"),fit: BoxFit.fill
                            )
                          ),
                        ),
                        Container(
                          child: Text("Hi ! $name",style: TextStyle(color: Colors.purple,fontWeight: FontWeight.bold,fontSize: 18),),
                        ),
+                       Container(
+                         child: Text("C2S ID: $uid",style: TextStyle(color: Colors.purple,fontWeight: FontWeight.bold,fontSize: 18),),
+                       ),
+
                      ],
                    ),
                  ),
                ),
                SizedBox(height: 20,),
+               Container(width: MediaQuery.of(context).size.width,
+                 child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                   children: [
+                     Text("Availability status"),
+
+                     CupertinoSwitch(
+                       value: _switchValue,
+                       onChanged: (value) {
+                         setState(() {
+                           _switchValue = value;
+                         });
+                       },
+                     ),
+                   ],
+                 ),
+               ),
+               SizedBox(height: 10,),
                GridView(
                  shrinkWrap: true,
                  physics: NeverScrollableScrollPhysics(),
@@ -121,8 +146,13 @@ class _Dashboard2State extends State<Dashboard2> {
                        Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
                      },
                    ),
+                   InkWell(
+                     child: box(700, "Bookings"),
+                     onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>WorkerBookingHistory()));
+                     },
+                   ),
 
-                   box(700, "Bookings"),
                    InkWell(
                      child: box(400, "Wallet"),
                      onTap: (){
@@ -148,5 +178,8 @@ class _Dashboard2State extends State<Dashboard2> {
         child: Text(name,style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
       ),
     );
+  }
+  uploadProfilePic()async{
+
   }
 }

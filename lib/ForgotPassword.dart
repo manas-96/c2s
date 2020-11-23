@@ -46,7 +46,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         child: Column(mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: 150,width: 150,
+                              height: 150,width: 200,
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image:  AssetImage("images/1.png"),fit: BoxFit.fill

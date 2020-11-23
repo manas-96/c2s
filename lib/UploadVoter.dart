@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 
 class UploadVoter extends StatefulWidget {
@@ -17,49 +20,122 @@ class _UploadVoterState extends State<UploadVoter> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: GridView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing:15,childAspectRatio: 8/6),
+        child: ListView(
           children: [
-            InkWell(
-              child: box(800, "Upload Voter(front)",),
-              onTap: (){
-                //getImage();
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
-              },
-            ),
-            InkWell(
-              child: box(800, "Upload Voter(back)",),
-              onTap: (){
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing:15,childAspectRatio: 8/6),
+                children: [
 
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
-              },
+                  InkWell(
+                    child: box(800, "Upload Voter(front)",),
+                    onTap: (){
+                     getImage();
+                      getImage();
+                      setState(() {
+                        vf=_image.path;
+                        print("vf");
+                        print(vf);
+                      });
+
+                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
+                    },
+                  ),
+                  InkWell(
+                    child: box(700, "Upload Voter(back)",),
+                    onTap: (){
+                      getImage();
+                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
+                    },
+                  ),
+                  InkWell(
+                    child: box(600, "Upload Adhaar(front)",),
+                    onTap: (){
+                      getImage();
+                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
+                    },
+                  ),
+                  InkWell(
+                    child: box(500, "Upload Adhaar(back)",),
+                    onTap: (){
+                      getImage();
+                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
+                    },
+                  ),
+                  InkWell(
+                    child: box(400, "Upload Pan(front)",),
+                    onTap: (){
+                      getImage();
+                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
+                    },
+                  ),
+
+                  InkWell(
+                    child: box(300, "Upload Selfie",),
+                    onTap: (){
+                      getImage();
+                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
+                    },
+                  ),
+                ],
+              ),
             ),
-            InkWell(
-              child: box(800, "Upload Selfie",),
-              onTap: (){
-                //getImage();
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
-              },
-            ),
+
           ],
-        ),
+        )
       ),
     );
   }
-  box(int num, String name){
+  String vf="";
+  String vb="";
+  String af="";
+  String ab="";
+  String selfie="";
+  String pan="";
+  File _image;
+  var path;
+  final picker = ImagePicker();
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        path=_image.path;
+        // if(path!=null) {
+        //   imgList.add(path);
+        //   print("imgList");
+        //   print(imgList.length == 0 ? "no image" : imgList[0]);
+        // }
+        //upload();
+      } else {
+        print('No image selected.');
+      }
+    });
+
+  }
+  box(int num, String name,){
+    //print(image==null?"no image":image.path);
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Colors.pink[num].withOpacity(0.9)
+            color: Colors.pink[num].withOpacity(0.9),
+
         ),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 1,),
-            Text(name,style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),
-          ],
+        //alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 1,),
+              Text(name,
+                style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.bold),),
+            ],
+          ),
         )
     );
   }
