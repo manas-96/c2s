@@ -31,98 +31,171 @@ class _UploadVoterState extends State<UploadVoter> {
                 children: [
 
                   InkWell(
-                    child: box(800, "Upload Voter(front)",),
+                    child: box(800, "Upload Voter(front)",_voterFront),
                     onTap: (){
-                     getImage();
-                      getImage();
-                      setState(() {
-                        vf=_image.path;
-                        print("vf");
-                        print(vf);
-                      });
-
+                      voterFront();
                       //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
                     },
                   ),
                   InkWell(
-                    child: box(700, "Upload Voter(back)",),
+                    child: box(700, "Upload Voter(back)",_voterBack),
                     onTap: (){
-                      getImage();
+                      voterBack();
                       //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
                     },
                   ),
                   InkWell(
-                    child: box(600, "Upload Adhaar(front)",),
+                    child: box(600, "Upload Adhaar(front)",_adhaarFront),
                     onTap: (){
-                      getImage();
+                      adhaarFront();
                       //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
                     },
                   ),
                   InkWell(
-                    child: box(500, "Upload Adhaar(back)",),
+                    child: box(500, "Upload Adhaar(back)",_adhaarBack),
                     onTap: (){
-                      getImage();
+                      adhaarBack();
                       //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
                     },
                   ),
                   InkWell(
-                    child: box(400, "Upload Pan(front)",),
+                    child: box(400, "Upload Pan(front)",_pan),
                     onTap: (){
-                      getImage();
+                      panUpload();
                       //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
                     },
                   ),
-
                   InkWell(
-                    child: box(300, "Upload Selfie",),
+                    child: box(300, "Upload Selfie",_image),
                     onTap: (){
-                      getImage();
+                      imageUpload();
                       //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
                     },
                   ),
                 ],
               ),
             ),
+            Padding(
+              padding: EdgeInsets.only(top: 44.0,left: MediaQuery.of(context).size.width/3-12,right: MediaQuery.of(context).size.width/3-12),
+              child: RaisedButton(
+                onPressed: (){
+
+                },
+                color: Colors.pink[900],
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text("Upload",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16),),
+                ),
+              ),
+            )
 
           ],
         )
       ),
     );
   }
-  String vf="";
-  String vb="";
-  String af="";
-  String ab="";
-  String selfie="";
-  String pan="";
+
+  File _voterFront;
+  var pathvotarFront;
+  final picker = ImagePicker();
+  Future voterFront() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _voterFront = File(pickedFile.path);
+        pathvotarFront=_voterFront.path;
+      } else {
+        //('No image selected.');
+      }
+    });
+
+  }
+  File _voterBack;
+  var pathvoterBack;
+  Future voterBack() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _voterBack = File(pickedFile.path);
+        pathvoterBack=_voterBack.path;
+      } else {
+        //('No image selected.');
+      }
+    });
+
+  }
+  File _adhaarFront;
+  var pathadhaarFront;
+  Future adhaarFront() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _adhaarFront = File(pickedFile.path);
+        pathadhaarFront=_adhaarFront.path;
+      } else {
+        //('No image selected.');
+      }
+    });
+
+  }
+  File _adhaarBack;
+  var pathadhaarBack;
+  Future adhaarBack() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _adhaarBack = File(pickedFile.path);
+        pathadhaarBack=_adhaarBack.path;
+      } else {
+        //('No image selected.');
+      }
+    });
+
+  }
+  File _pan;
+  var pan;
+  Future panUpload() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _pan = File(pickedFile.path);
+        pan=_pan.path;
+      } else {
+        //('No image selected.');
+      }
+    });
+
+  }
   File _image;
   var path;
-  final picker = ImagePicker();
-  Future getImage() async {
+  Future imageUpload() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
         path=_image.path;
-        // if(path!=null) {
-        //   imgList.add(path);
-        //   print("imgList");
-        //   print(imgList.length == 0 ? "no image" : imgList[0]);
-        // }
-        //upload();
       } else {
-        print('No image selected.');
+        //('No image selected.');
       }
     });
 
   }
-  box(int num, String name,){
-    //print(image==null?"no image":image.path);
+  box(int num, String name, File img){
+    ////(image==null?"no image":image.path);
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Colors.pink[num].withOpacity(0.9),
+            color: Colors.pink[num],
+
+                  image: DecorationImage(
+                      image:img==null?AssetImage("images/up.jpg"): FileImage(img),fit: BoxFit.cover
+                  )
 
         ),
         //alignment: Alignment.center,
@@ -131,9 +204,7 @@ class _UploadVoterState extends State<UploadVoter> {
           child: Column(mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 1,),
-              Text(name,
-                style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.bold),),
+              img==null?Text(name,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),):Text("")
             ],
           ),
         )

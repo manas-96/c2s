@@ -189,8 +189,8 @@ class _EnquiryOtpState extends State<EnquiryOtp> {
 
     }
     else{
-      print(widget.mobile);
-      print(otp);
+      //(widget.mobile);
+      //(otp);
       final result= await APIClient().EnquiryOtp(widget.mobile, otp);
       setState(() {
         checkLoader=true;
@@ -199,7 +199,7 @@ class _EnquiryOtpState extends State<EnquiryOtp> {
       if(result["status"]=="success") {
         _scaffoldkey.currentState.showSnackBar(
             APIClient.successToast("success"));
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry2()));
+        //Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry2()));
       }
       else{
         setState(() {

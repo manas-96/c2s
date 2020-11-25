@@ -15,7 +15,12 @@ class WorkerSaveInfo extends StatefulWidget {
 }
 
 class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
+  bool visible=false;
+  String interested="Men";
+  int interestValue=1;
   bool _switchValue=true;
+  int selectedAddress=1;
+  String gender="female";
   String email="";
   String address="";
   String h="";
@@ -38,7 +43,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
         //upload();
         //uploadImage(path,url);
       } else {
-        print('No image selected.');
+        //('No image selected.');
       }
     });
   }
@@ -120,6 +125,92 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
             ),
             SizedBox(height: 10,),
             Padding(
+              padding: const EdgeInsets.only(left:8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text("Gender: ",style: TextStyle(color: Colors.black,fontSize: 17),),
+                  new Radio(
+                    value: 0,
+                    groupValue: selectedAddress,
+                    onChanged: (val){
+                      setState(() {
+                        selectedAddress=val;//(selectedAddress.toString());
+                        gender="male";
+                        //(gender);
+                      });
+                    },
+                    activeColor: Colors.pink[900]
+                  ),
+                  new Text(
+                    'Male',
+                    style: new TextStyle(
+                        fontSize: 16.0,color: Colors.black
+                    ),
+                  ),
+                  new Radio(
+                    value: 1,
+                    groupValue: selectedAddress,
+                    onChanged: (value){
+                      setState(() {
+                        selectedAddress=value;
+                        gender="female";
+                        //(gender);
+                      });
+                    },
+                    activeColor: Colors.pink[900],
+                  ),
+                  new Text(
+                    'female',
+                    style: new TextStyle(fontSize: 16.0,color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left:8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text("Interested: ",style: TextStyle(color: Colors.black,fontSize: 17),),
+                  new Radio(
+                      value: 0,
+                      groupValue: interestValue,
+                      onChanged: (val){
+                        setState(() {
+                          interestValue=val;//(interestValue.toString());
+                          interested="Women";
+                          //(interested);
+                        });
+                      },
+                      activeColor: Colors.pink[900]
+                  ),
+                  new Text(
+                    'Women',
+                    style: new TextStyle(
+                        fontSize: 16.0,color: Colors.black
+                    ),
+                  ),
+                  new Radio(
+                    value: 1,
+                    groupValue: interestValue,
+                    onChanged: (value){
+                      setState(() {
+                        interestValue=value;
+                        interested="Men";
+                        //(interested);
+                      });
+                    },
+                    activeColor: Colors.pink[900],
+                  ),
+                  new Text(
+                    'Men',
+                    style: new TextStyle(fontSize: 16.0,color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
@@ -148,7 +239,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                               setState(() {
                                 _myState = newValue;
                                 _getdistsList();
-                                print(_myState);
+                                //(_myState);
                               });
                             },
                             items: statesList?.map((item) {
@@ -199,7 +290,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                               setState(() {
                                 _mydist = newValue;
                                 _getcityList();
-                                print(_mydist);
+                                //(_mydist);
                               });
                             },
                             items: distsList?.map((item) {
@@ -246,7 +337,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                               setState(() {
                                 _mycity = newValue;
                                 _getpinList();
-                                print(_mycity);
+                                //(_mycity);
                               });
                             },
                             items: city?.map((item) {
@@ -294,7 +385,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                               setState(() {
                                 _pin = newValue;
                                 _getcityList();
-                                print(_pin);
+                                //(_pin);
                               });
                             },
                             items: pinList?.map((item) {
@@ -487,7 +578,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: TextFormField(style: TextStyle(color: Colors.black),
-                    maxLength: 2000,
+                    maxLength: 500,
                     //keyboardType: TextInputType.number,
                     onChanged: (val){
                       about=val;
@@ -501,6 +592,19 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     ) ,
                   ),
                 ),
+              ),
+            ),
+            Padding(
+              padding:  EdgeInsets.only(left:MediaQuery.of(context).size.width/2-15,right: MediaQuery.of(context).size.width/2-15,top: 5,bottom: 5),
+              child: Visibility(
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  visible: visible,
+                  child: Container(
+                      //margin: EdgeInsets.only(top: 20, bottom: 20),
+                      child: CircularProgressIndicator()
+                  )
               ),
             ),
             Padding(
@@ -532,7 +636,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
     }, ).then((response) {
       var data = json.decode(response.body);
 
-//      print(data);
+//      //(data);
       setState(() {
         statesList = data['data'];
       });
@@ -590,8 +694,8 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
     SharedPreferences pref= await SharedPreferences.getInstance();
     String token= pref.getString("api_token");
     var request = http.MultipartRequest('POST', Uri.parse(url),);
-    print("req");
-    print(request);
+    //("req");
+    //(request);
     request.files.add(await http.MultipartFile.fromPath("", filename,),);
 
     final Map <String ,String> header= {
@@ -603,14 +707,14 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
     request.headers.addAll(header);
     var res = await request.send();
     var response= await http.Response.fromStream(res);
-    print('printing...');
-    print(json.decode(response.body));
+    //('//ing...');
+    //(json.decode(response.body));
     var img=await json.decode(response.body)["imgurl"];
-    print(img);
-    print(response.body);
+    //(img);
+    //(response.body);
 
-    print(res.statusCode);
-    print(res);
+    //(res.statusCode);
+    //(res);
     return img;
   }
   submit()async{
@@ -639,7 +743,11 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select Profile Image"));
     }
     else {
+      setState(() {
+        visible=true;
+      });
       String res = await uploadImage(path, url);
+      //(h.toString()+" "+w);
       SharedPreferences pref = await SharedPreferences.getInstance();
       String token = pref.getString("api_token");
       String firstname = pref.getString("firstname");
@@ -653,29 +761,39 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
 
       };
       final body = {
+        "gender":gender,
         "user_id":id,
         "firstname": firstname,
         "lastname": lastname,
-        "email": email,
+        //"email": email,
         "city_id": _mycity,
         "dist_id": _mydist,
         "state_id": _myState,
         "pin_id": _pin.toString(),
-        "location": address,
+        "address": address,
         "shareableno": shareableno,
         "image": res,
         "isavailable":_switchValue.toString(),
-        "work_status":"1"
+        "work_status":"1",
+        "interested": interested,
+        "height":h.toString(),
+        "weight":w.toString(),
+        "color":c,
+        "about":about,
+        "username":username
 
       };
 
       final response = await http.post(
           "https://www.call2sex.com/api/WorkerApi/SaveInfo", body: body,
           headers: header);
-      print(response.statusCode);
+      //(response.statusCode);
       if (response.statusCode == 200) {
+        setState(() {
+          visible=false;
+        });
         final resData = await json.decode(response.body);
-        print(resData);
+        //(resData);
         if (resData["status"] == "success") {
           _scaffolkey.currentState.showSnackBar(
               APIClient.successToast(resData["msg"]));
@@ -685,6 +803,9 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
               APIClient.errorToast(resData["msg"]));
         }
       } else {
+        setState(() {
+          visible=false;
+        });
         throw Exception('Failed to submit');
       }
     }

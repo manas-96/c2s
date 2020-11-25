@@ -16,11 +16,11 @@ class _ZoomImageState extends State<ZoomImage> {
         appBar: AppBar(
           backgroundColor: Colors.pink[900],
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right:15.0),
-              child: Icon(Icons.delete,
-                color: Colors.white,),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.only(right:15.0),
+            //   child: Icon(Icons.delete,
+            //     color: Colors.white,),
+            // )
           ],
         ),
         body: SafeArea(

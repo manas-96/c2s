@@ -2,14 +2,17 @@ import 'dart:ui';
 
 import 'package:call2sex/CheckOut.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'APIClient.dart';
 import 'ZoomImage.dart';
 
 class ModelDetails extends StatefulWidget {
   final id;
+  final img;
 
-  const ModelDetails({Key key, this.id}) : super(key: key);
+  const ModelDetails({Key key, this.id, this.img}) : super(key: key);
   @override
   _ModelDetailsState createState() => _ModelDetailsState();
 }
@@ -17,13 +20,25 @@ class ModelDetails extends StatefulWidget {
 class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderStateMixin{
   TabController _controller;
 
+  bool prime=false;
+  fetchPrime()async{
+    SharedPreferences pref=await  SharedPreferences.getInstance();
+    String id= pref.getString("id");
+    final req=await APIClient().fetchPrime(id);
+    if(req["status"]=="success"){
+      setState(() {
+        prime=true;
+      });
+    }
+  }
   bool checkStatus=false;
   @override
   void initState() {
+    fetchPrime();
     fetchDetails();
     super.initState();
     _controller = new TabController(length: 3, vsync: this);
-    print(widget.id);
+    //(widget.id);
   }
   @override
   Widget build(BuildContext context) {
@@ -47,7 +62,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                  image: NetworkImage("https://image.shutterstock.com/image-photo/high-fashion-model-womans-face-260nw-1652167117.jpg"),fit: BoxFit.fill
+                                  image: getImage(widget.img),fit: BoxFit.fill
                               )
                           ),
                         ),
@@ -55,12 +70,12 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                         Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(//width: MediaQuery.of(context).size.width*0.38,
-                              child: Text(name.substring(0,15),
-                                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
+                              child: Text(name.length>15?name.substring(0,15):name,
+                                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
                               overflow: TextOverflow.fade,),
 
                             ),
-                            Text(c2sId,style: TextStyle(fontSize: 13.8),)
+                            Text(c2sId,style: TextStyle(fontSize: 13),)
                           ],
                         ),
                         SizedBox(width: 5,),
@@ -100,7 +115,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage("https://image.shutterstock.com/image-photo/high-fashion-model-womans-face-260nw-1652167117.jpg"),fit: BoxFit.fill
+                    image: getImage(widget.img),fit: BoxFit.fill
                   )
                 ),
               ),
@@ -120,17 +135,24 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                              SizedBox(width: 10,),
                              IconButton(
                                icon: Icon(Icons.share),
-                               onPressed: (){},
+                               onPressed: (){
+                                 final RenderBox box = context.findRenderObject();
+                                 Share.share("https://www.call2sex.com${widget.img}",
+                                     //subject: "refer your friend. Referral code $uid ",
+                                     sharePositionOrigin:
+                                     box.localToGlobal(Offset.zero) &
+                                     box.size);
+                               },
                              )
                            ],
                          ),
                          Row(
                            children: [
-                             Text("Available",style: TextStyle(color: Colors.black,fontSize: 15),),
+                             Text(isActive=="true"?"Available":"Not available",style: TextStyle(color: Colors.black,fontSize: 15),),
                              SizedBox(width: 5,),
                              CircleAvatar(
                                radius: 7,
-                               backgroundColor: Colors.green,
+                               backgroundColor: isActive=="true"?Colors.green:Colors.red,
                              )
                            ],
                          )
@@ -182,10 +204,19 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
     return FutureBuilder(
       future: getFree(),
       builder: (context,snap){
-        if(snap.data==null){
+        if(checkFree){
           return Container(
-            height: 50,width: 50,
-            child: CircularProgressIndicator(),
+            width: MediaQuery.of(context).size.width,
+            height: 60,
+            alignment: Alignment.center,
+            child: Text("Photos not found",style: TextStyle(color: Colors.pink,fontSize: 17),),
+          );
+        }
+        if(snap.data==null){
+          return Center(
+            child: Container(height: 50,width: 50,
+              child: CircularProgressIndicator(),
+            ),
           );
         }
         return GridView.builder(
@@ -195,10 +226,10 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
             //reverse: true,
             itemCount: snap.data.length,
             itemBuilder: (context,index){
-              // print(snap.data[index]["imgurl"]);
+              // //(snap.data[index]["imgurl"]);
               return InkWell(
                 onTap: (){
-                  print("tapped");
+                  //("tapped");
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>ZoomImage(img: snap.data[index]["imgurl"],)));
                 },
 
@@ -224,24 +255,35 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
     return FutureBuilder(
       future: getPrime(),
       builder: (context,snap){
-        if(snap.data==null){
+        if(checkPrime){
           return Container(
-            height: 50,width: 50,
-            child: CircularProgressIndicator(),
+            width: MediaQuery.of(context).size.width,
+            height: 60,
+            alignment: Alignment.center,
+            child: Text("Photos not found",style: TextStyle(color: Colors.pink,fontSize: 17),),
+          );
+        }
+        if(snap.data==null){
+          return Center(
+            child: Container(height: 50,width: 50,
+              child: CircularProgressIndicator(),
+            ),
           );
         }
         return GridView.builder(
             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 5,crossAxisSpacing: 5),
-            shrinkWrap: true,
+            //shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             //reverse: true,
             itemCount: snap.data.length,
             itemBuilder: (context,index){
-              // print(snap.data[index]["imgurl"]);
+              // //(snap.data[index]["imgurl"]);
               return InkWell(
                 onTap: (){
-                  print("tapped");
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ZoomImage(img: snap.data[index]["imgurl"],)));
+                  //("tapped");
+                 if(prime){
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=>ZoomImage(img: snap.data[index]["imgurl"],)));
+                 }
                 },
 
                 child: Container(
@@ -253,7 +295,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                           fit: BoxFit.fill
                       )
                   ),
-                  child: BackdropFilter(
+                  child:prime?Text(""): BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
                     child: Container(
                       decoration: BoxDecoration(
@@ -271,24 +313,33 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
       },
     );
   }
+  bool checkFree=true;
   getFree()async{
     final result= await APIClient().fetchFreeGallery(widget.id.toString());
-    print(result);
+    //(result);
     if(result["status"]=="success"){
+      setState(() {
+        checkFree=false;
+      });
       return result["data"];
     }
   }
+  bool checkPrime=true;
   getPrime()async{
     final result= await APIClient().fetchPrimeGallery(widget.id.toString());
-    print(result);
+    //(result);
     if(result["status"]=="success"){
+      setState(() {
+        checkPrime=false;
+      });
       return result["data"];
     }
   }
   about(){
     return Padding(
       padding: const EdgeInsets.only(left:2.0,right: 2),
-      child: Column(
+      child: ListView(
+        //shrinkWrap: true,
         children: [
           Container(
             decoration: BoxDecoration(
@@ -297,14 +348,13 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                //shrinkWrap: true,
                 children: [
-                  Text("About Sexy Sila",style: TextStyle(fontSize: 19,fontWeight: FontWeight.bold),),
+                  Text(name,style: TextStyle(fontSize: 19,fontWeight: FontWeight.bold),),
                   SizedBox(height: 8,),
-                  Text("For merchants who have built their app on Flutter platform - Paytm provides a "
-                      "bridge for you to conveniently integrate All-in-One SDK. In this document, we will "
-                      "highlight the steps required to integrate All-in-One SDK with Flutter platform for your app."
-                      " This platform helps you to build a seamless and responsive checkout experience for your application.",
+                  Text(aboutModel==null?"Come on let's have some fun":aboutModel,
                     textAlign: TextAlign.justify,
+                      style: TextStyle(fontSize: 17)
                   )
                 ],
               ),
@@ -322,10 +372,31 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                   SizedBox(height: 8,),
                   Row(
                     children: [
-                      Text("Gender:"),
-                      Text("Female")
+                      Text("Gender : ",style: TextStyle(fontSize: 17)),
+                      Text(gender==null||gender==""?"Unknown":gender,style: TextStyle(fontSize: 17),)
                     ],
-                  )
+                  ),
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      Text("Height : ",style: TextStyle(fontSize: 17)),
+                      Text(height==null||height==""?"Unknown":height,style: TextStyle(fontSize: 17),)
+                    ],
+                  ),
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      Text("Weight : ",style: TextStyle(fontSize: 17)),
+                      Text(weight==null||weight==""?"Unknown":weight,style: TextStyle(fontSize: 17),)
+                    ],
+                  ),
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      Text("Color : ",style: TextStyle(fontSize: 17)),
+                      Text(bodyColor==null||bodyColor==""?"Unknown":bodyColor,style: TextStyle(fontSize: 17),)
+                    ],
+                  ),
 
                 ],
               ),
@@ -339,13 +410,39 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
   String image="";
   String c2sId="";
   String aboutModel="";
+  String gender="";
+  String height="";
+  String weight="";
+  String bodyColor;
+  String isActive;
   fetchDetails()async{
-    final res=await APIClient().modelDetails(widget.id);
+    //(widget.id);
+    final res=await APIClient().fetchWorkerInfo(widget.id);
     if(res["status"]=="success"){
+      //(res);
       setState(() {
-        name="${res["data"][0]["firstname"]} ${res["data"][0]["lastname"]}";
+        name="${res["data"][0]["firstname"]==null?" ":res["data"][0]["firstname"]} ${res["data"][0]["lastname"]==null?" ":res["data"][0]["lastname"]}";
         c2sId=res["data"][0]["UID"];
+        aboutModel=res["data"][0]["about"];
+        gender=res["data"][0]["gender"];
+        height=res["data"][0]["height"];
+        weight=res["data"][0]["weight"];
+        bodyColor=res["data"][0]["color"];
+        isActive=res["data"][0]["isactive"].toString();
       });
+    }
+  }
+  getImage( String img){
+    //("image//////////////////////");
+    //(img);
+    if(widget.img=="null" || widget.img==""){
+      //("image//////////////////////asset");
+      return AssetImage("images/no.png");
+
+    }
+    else {
+      //("image//////////////////////asset");
+      return NetworkImage("https://www.call2sex.com$img");
     }
   }
 }

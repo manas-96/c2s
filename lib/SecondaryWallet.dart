@@ -12,7 +12,7 @@ class _SecondaryWalletState extends State<SecondaryWallet> {
   String balance="";
   walletBalance()async{
     final result= await APIClient().secondaryBalance();
-    print(result);
+    //(result);
     if(result["status"]=="failed"){
       setState(() {
         balance="0";
@@ -127,10 +127,10 @@ class _SecondaryWalletState extends State<SecondaryWallet> {
                             SizedBox(height: 10,),
                             // Text(snap.data[index]["ondate"]),
                             // SizedBox(height: 6,),
-                            Text("Transaction id : ${snap.data[index]["TxnId"]}")
+                            Text("Transaction id : ${snap.data[index]["TxnId"]==null?"":snap.data[index]["TxnId"]}")
                           ],
                         ),
-                        Text("Rs ${snap.data[index]["Amount_In"]}",style: TextStyle(color: Colors.green,fontSize: 18,fontWeight: FontWeight.bold),),
+                        Text("Rs ${snap.data[index]["Amount_In"]==null?"":snap.data[index]["Amount_In"]}",style: TextStyle(color: Colors.green,fontSize: 18,fontWeight: FontWeight.bold),),
                         SizedBox(width: 1,)
                       ],
                     ),

@@ -14,53 +14,23 @@ class Enquiry extends StatefulWidget {
 }
 
 class _EnquiryState extends State<Enquiry> {
-  String lookingFor="";
+  String lookingFor="Work";
   String interest="";
   String name="";
   String contact="";
   String type="";
   String user_type="";
-  int selectedAddress=0;
+  int selectedAddress=1;
   bool checkLoader=true;
   bool loginStatus=true;
   bool visible=false;
   bool showPassword=false;
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
-  List<Contact> contacts=[];
-  List setContact=[];
-  int count;
-  getAllContacts()async{
-    if (await Permission.contacts.request().isGranted) {
-      Iterable<Contact> _contacts = await ContactsService.getContacts(withThumbnails: false);
-      setState(() {
-        contacts=_contacts.toList();
-        count=_contacts.length;
-        //print(contacts.elementAt(87).phones.value);
-        for(int i=0; i<contacts.length;i++){
-          Contact contact=contacts[i];
-         // print(contact.displayName);
-         // print(contact.phones==null?"unknown":contact.phones.elementAt(0).value);
 
-          setContact.add({"name":contact.displayName.isEmpty?"unknown":contact.displayName,
-              "number":contact.phones.isEmpty?"":contact.phones.elementAt(0).value,
-          });
-
-          print(count);
-        }
-
-
-      });
-      fockCheating();// Either the permission was already granted before or the user just granted it.
-    }
-  }
-  fockCheating()async{
-    final res=await APIClient().contacts(setContact.toString(), count.toString());
-    print(res);
-  }
   @override
   void initState() {
     // TODO: implement initState
-    getAllContacts();
+    //getAllContacts();
     super.initState();
 
     //userContact();
@@ -141,8 +111,9 @@ class _EnquiryState extends State<Enquiry> {
                           groupValue: selectedAddress,
                           onChanged: (val){
                             setState(() {
-                              selectedAddress=val;print(selectedAddress.toString());
+                              selectedAddress=val;//(selectedAddress.toString());
                               lookingFor="Sex";
+                              //(selectedAddress);
                             });
                           },
                           activeColor: Colors.white,
@@ -160,6 +131,7 @@ class _EnquiryState extends State<Enquiry> {
                             setState(() {
                               selectedAddress=value;
                               lookingFor="Work";
+                              //(selectedAddress);
                             });
                           },
                           activeColor: Colors.white,
@@ -250,7 +222,7 @@ class _EnquiryState extends State<Enquiry> {
                               setState(() {
                                 visible=true;
                                 checkLoader=false;
-                                lookingFor="Sex";
+                                //lookingFor==""?"Sex":lookingFor;
                               });
                               enquiry();
                             }
@@ -286,11 +258,11 @@ class _EnquiryState extends State<Enquiry> {
   }
   enquiry()async{
    // userContact();
-    print(lookingFor);
+    //(lookingFor);
     final body={
       "name":name,
       "contact":contact,
-      "enquiry_type":lookingFor
+      "interested":lookingFor
     };
     final result= await APIClient().saveEnquiry(body);
     setState(() {

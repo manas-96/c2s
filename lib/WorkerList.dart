@@ -59,9 +59,10 @@ class _WorkerState extends State<Worker> {
               itemBuilder: (context,index){
                 return GestureDetector(
                   onTap: (){
-                   // print(snap.data);
+                   // //(snap.data);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>ModelDetails(
                       id: snap.data[index]["user_id"].toString(),
+                      img: "${snap.data[index]["image"]}",
                     )));
                   },
                   child: Container(
@@ -116,10 +117,10 @@ class _WorkerState extends State<Worker> {
     }
   }
   getImage(String gender, String img){
-    print(img);
-    print(gender);
+    //(img);
+    //(gender);
     if(img!=null){
-      return NetworkImage(img);
+      return NetworkImage("https://www.call2sex.com$img");
     }
     else {
       if(gender=="male"||gender=="Male"){

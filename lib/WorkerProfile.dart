@@ -10,6 +10,9 @@ import 'KYC.dart';
 import 'Login.dart';
 
 class WorkerProfile extends StatefulWidget {
+  final img;
+
+  const WorkerProfile({Key key, this.img}) : super(key: key);
   @override
   _WorkerProfileState createState() => _WorkerProfileState();
 }
@@ -30,7 +33,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
     // TODO: implement initState
     SharedPreferences.getInstance().then((SharedPreferences sp) {
       sharedPreferences = sp;
-     // print(sharedPreferences.getString("contact"));
+     // //(sharedPreferences.getString("contact"));
       name=  sharedPreferences.getString("firstname");
       lastName=  sharedPreferences.getString("lastname");
       email= sharedPreferences.getString("email");
@@ -39,8 +42,8 @@ class _WorkerProfileState extends State<WorkerProfile> {
       uid= sharedPreferences.getString("uid");
       image=sharedPreferences.getString("image");
       //mobile);
-     // print(mobile+"mobile");
-      print(sharedPreferences.getString("id"));
+     // //(mobile+"mobile");
+      //(sharedPreferences.getString("id"));
       setState(() {});
 
     });
@@ -86,12 +89,12 @@ class _WorkerProfileState extends State<WorkerProfile> {
                       CircleAvatar(
                         radius: 50,
                         backgroundColor: Colors.white,
-                        child: image==""?Icon(Icons.person,color: Colors.pink[900],):
+                        child: widget.img==null?Icon(Icons.person,color: Colors.pink[900],):
                         Container(height: 90,width: 90,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: NetworkImage("https://www.call2sex.com/${image.toString().replaceFirst('~', '')}"),fit: BoxFit.fill
+                              image: NetworkImage("https://www.call2sex.com/${widget.img.toString() }"),fit: BoxFit.fill
                             )
                           ),
                         ),

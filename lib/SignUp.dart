@@ -157,7 +157,7 @@ class _SignUpState extends State<SignUp> {
                             groupValue: selectedAddress,
                             onChanged: (val){
                               setState(() {
-                                selectedAddress=val;print(selectedAddress.toString());
+                                selectedAddress=val;//(selectedAddress.toString());
                                 user_type="Worker";
                               });
                             },
@@ -387,6 +387,7 @@ class _SignUpState extends State<SignUp> {
           "user_type":user_type,
           "contact" : mobile
         });
+        print(result);
         setState(() {
           checkLoader=true;
           visible=false;
@@ -398,10 +399,10 @@ class _SignUpState extends State<SignUp> {
             visible=false;
           });
           _scaffolkey.currentState.showSnackBar(APIClient.errorToast(result["msg"].toString()));
-          print(result["message"].toString());
+          //(result["message"].toString());
         } else {
           _scaffolkey.currentState.showSnackBar(APIClient.successToast(result["msg"].toString()));
-          print(result["message"].toString());
+          //(result["message"].toString());
 
             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OtpVerification(
               mobile: mobile.toString(),

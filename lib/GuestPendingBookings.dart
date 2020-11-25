@@ -2,19 +2,19 @@ import 'package:call2sex/APIClient.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class WorkerPendingBooking extends StatefulWidget {
+class GuestPendingBooking extends StatefulWidget {
   @override
-  _WorkerPendingBookingState createState() => _WorkerPendingBookingState();
+  _GuestPendingBookingState createState() => _GuestPendingBookingState();
 }
 
-class _WorkerPendingBookingState extends State<WorkerPendingBooking> {
+class _GuestPendingBookingState extends State<GuestPendingBooking> {
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(key: _scaffolkey,
       body: ListView(
         children: [
-         fetchBookings(),
+          fetchBookings(),
         ],
       ),
     );
@@ -53,26 +53,13 @@ class _WorkerPendingBookingState extends State<WorkerPendingBooking> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Booking done by ${snap.data[index]["firstname"]} ${snap.data[index]["lastname"]}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                        Text("Booking done for ${snap.data[index]["firstname"]} ${snap.data[index]["lastname"]}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
                         Text("Service type : ${snap.data[index]["service_name"]}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
                         Text("Price : ${snap.data[index]["price"]}",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green,fontSize: 17)),
                         Row(
                           children: [
-                            RaisedButton(
-                              onPressed: (){
-                                acceptBooking(snap.data[index]["booking_id"].toString());
-                              },
-                              color: Colors.green,
-                              child: Text("Accept",style: TextStyle(color: Colors.white),),
-                            ),
-                            SizedBox(width: 20,),
-                            RaisedButton(
-                              onPressed: (){
-                                rejectBooking(snap.data[index]["booking_id"].toString());
-                              },
-                              color: Colors.red,
-                              child: Text("Reject",style: TextStyle(color: Colors.white),),
-                            ),
+                            Text("Status : "),
+                            Text(snap.data[index]["status"],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),)
                           ],
                         )
                       ],
@@ -90,7 +77,7 @@ class _WorkerPendingBookingState extends State<WorkerPendingBooking> {
   getPendingReq()async{
     SharedPreferences pref= await SharedPreferences.getInstance();
     String id= pref.getString("id");
-    final result= await APIClient().pendingBooking(id);
+    final result= await APIClient().pendingBookingGuest(id);
     if(result["status"]!="success"){
       setState(() {
         check=true;

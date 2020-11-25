@@ -281,7 +281,6 @@ class _LoginState extends State<Login> {
         //_scaffoldkey.currentState.showSnackBar(APIClient.successToast("Please wait !"));
 
         final result = await APIClient().authRequest(mobile,password);
-        //print(result);
         setState(() {
           checkLoader=true;
           visible=false;
@@ -290,9 +289,9 @@ class _LoginState extends State<Login> {
           setState(() {
             loginStatus=false;
           });
-          print(loginStatus);
+          //(loginStatus);
           loader(result["msg"]);
-          print(result["msg"].toString());
+          //(result["msg"].toString());
         } else {
 
           if(result["data"][0]["user_type"]=="guest" || result["data"][0]["user_type"]=="Guest"){

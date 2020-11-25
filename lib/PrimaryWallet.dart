@@ -20,7 +20,7 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
     else{
       setState(() {
         balance= result["data"][0]["Balance"].toString();
-        print(balance);
+        //(balance);
       });
     }
   }
@@ -142,13 +142,13 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
                         ),
                         Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            title(snap.data[index]["string"]),
+                            title(snap.data[index]["string"]==null?"":snap.data[index]["string"]),
                             SizedBox(height: 10,),
                             Text(snap.data[index]["ondate"]+" , " + snap.data[index]["ontime"]),
                             SizedBox(height: 6,),
                             Container(
                               width: MediaQuery.of(context).size.width/2,
-                                child: Text("TxnID : ${snap.data[index]["txnid"]}",
+                                child: Text("TxnID : ${snap.data[index]["txnid"]==null?"":snap.data[index]["txnid"]}",
                                 overflow: TextOverflow.clip,))
                           ],
                         ),
@@ -176,7 +176,7 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
     );
   }
   title(String intype){
-    //print(intype);
+    ////(intype);
     return Text(intype,style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),);
     // if(intype=="booking"){
     //   return Text("Money paid for booking");

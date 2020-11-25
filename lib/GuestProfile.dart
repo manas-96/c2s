@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:call2sex/GuestBookingComplete.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share/share.dart';
@@ -42,7 +43,7 @@ class _GuestProfileState extends State<GuestProfile> {
         path=_image.path;
         upload();
       } else {
-        print('No image selected.');
+        //('No image selected.');
       }
     });
   }
@@ -119,7 +120,7 @@ class _GuestProfileState extends State<GuestProfile> {
                           color: Colors.white,
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image: NetworkImage(img=="https://static.vecteezy.com/system/resources/previews/000/142/008/large_2x/stylish-man-s-headshot-vector.jpg"?"":"https://www.call2sex.com$img"),fit: BoxFit.fill
+                            image: img!=null?NetworkImage("https://www.call2sex.com$img"):AssetImage("images/no.png"),fit: BoxFit.fill
                           )
                         ),
                       ),
@@ -152,7 +153,7 @@ class _GuestProfileState extends State<GuestProfile> {
                       },
                     ),
                     InkWell(
-                      child: box(800, "Upload Selfie",Icon(Icons.camera_alt,size: 40,color: Colors.white,)),
+                      child: box(800, "Upload Image",Icon(Icons.camera_alt,size: 40,color: Colors.white,)),
                       onTap: (){
                         getImage();
                         //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
@@ -265,8 +266,8 @@ class _GuestProfileState extends State<GuestProfile> {
     SharedPreferences pref= await SharedPreferences.getInstance();
     String token= pref.getString("api_token");
     var request = http.MultipartRequest('POST', Uri.parse(url),);
-    print(filename);
-    print(request);
+    //(filename);
+
     request.files.add(await http.MultipartFile.fromPath("", filename,),);
 
     final Map <String ,String> header= {
@@ -278,13 +279,13 @@ class _GuestProfileState extends State<GuestProfile> {
     request.headers.addAll(header);
     var res = await request.send();
     var response= await http.Response.fromStream(res);
-    print('printing...');
+    print('//ing...');
     var img=await json.decode(response.body)["imgurl"];
     print(img);
     print(response.body);
 
-    print(res.statusCode);
-    print(res);
+    //(res.statusCode);
+    //(res);
     return img;
   }
   upload()async{

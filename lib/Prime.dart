@@ -1,4 +1,8 @@
+import 'package:call2sex/APIClient.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_mac/get_mac.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Prime extends StatefulWidget {
   @override
@@ -6,10 +10,22 @@ class Prime extends StatefulWidget {
 }
 
 class _PrimeState extends State<Prime> {
-  var id=0;
+  final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
+  var id=1;
+  String pack="Damaka pack";
+  String duration="6";
+  String amount="199";
+  DateTime dateTime;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    dateTime= DateTime.now();
+    //(dateTime.toString());
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(key: _scaffolkey,
       appBar: AppBar(
         title: Text("Prime"),
         backgroundColor: Colors.pink[900],
@@ -43,6 +59,7 @@ class _PrimeState extends State<Prime> {
                                 child: Text("Benefits :",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.pink[900]),),
 
                               ),
+                            //  Text('MAC Address : $_platformVersion\n'),
                               SizedBox(height: 15,),
                               Text("1. Premium Member Discounts",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.black)),
                               SizedBox(height: 5,),
@@ -75,10 +92,14 @@ class _PrimeState extends State<Prime> {
                                  value: 0,
                                  groupValue: id,
                                  title: Text("RS 99",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.pink[900]),),
-                                 subtitle: Text("3 months"),
+                                 subtitle: Text("1 month Normal pack"),
                                  onChanged: (val) {
                                    setState(() {
+                                     pack= "Normal pack";
+                                     duration="1";
+                                     amount="99";
                                      id=val;
+                                     //(id.toString());
                                    });
                                  },
 
@@ -94,11 +115,15 @@ class _PrimeState extends State<Prime> {
                                child: RadioListTile(
                                  value: 1,
                                  groupValue: id,
-                                 title: Text("RS 199",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.pink[900]),),
-                                 subtitle: Text("1 year"),
+                                 title: Text("RS 199 ",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.pink[900]),),
+                                 subtitle: Text("6 months Damaka pack"),
                                  onChanged: (val) {
                                    setState(() {
+                                     pack="Damaka pack";
+                                     duration="6";
+                                     amount="199";
                                      id=val;
+                                     //(id.toString());
                                    });
                                  },
 
@@ -116,7 +141,9 @@ class _PrimeState extends State<Prime> {
                 width: MediaQuery.of(context).size.width,
                 child: RaisedButton(
                   color: Colors.pink[900],
-                  onPressed: (){},
+                  onPressed: (){
+                    prime();
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text("Pay",
@@ -129,5 +156,17 @@ class _PrimeState extends State<Prime> {
         ),
       ),
     );
+  }
+  prime()async{
+    SharedPreferences preferences=await SharedPreferences.getInstance();
+    String id= preferences.getString("id");
+    //(id+" "+amount+" "+duration+" "+dateTime.toString().substring(0,16)+pack);
+    final res=await APIClient().prime(id, amount, duration, dateTime.toString().substring(0,16), pack);
+    if(res["status"]=="success"){
+      _scaffolkey.currentState.showSnackBar(APIClient.successToast(res["msg"]));
+    }
+    else{
+      _scaffolkey.currentState.showSnackBar(APIClient.errorToast(res["msg"]));
+    }
   }
 }

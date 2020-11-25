@@ -34,6 +34,7 @@ dependencies:
   webview_flutter: ^1.0.7
   contacts_service: ^0.4.6
   permission_handler: ^5.0.1+1
+  get_mac: ^0.0.1
   http:
   shared_preferences:
 

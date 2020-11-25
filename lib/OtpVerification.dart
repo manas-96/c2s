@@ -230,7 +230,7 @@ class _OtpVerificationState extends State<OtpVerification> {
   }
   resend()async{
     final result= await APIClient().resendOTP(widget.mobile, widget.fockOtp,widget.name);
-    print(result);
+    //(result);
       //loader(result["msg"]);
     if(result["status"]=="success"){
       _scaffoldkey.currentState.showSnackBar(APIClient.successToast(result["msg"]));

@@ -79,8 +79,10 @@ class _WithdrawState extends State<Withdraw> {
     SharedPreferences preferences= await SharedPreferences.getInstance();
     String id= preferences.getString("id");
     final res= await APIClient().fetchWithdraw(id);
+    print("withdrawal");
     print(res);
     if(res["status"]!="success"){
+
       setState(() {
         check=true;
       });
@@ -138,7 +140,11 @@ class _WithdrawState extends State<Withdraw> {
                             SizedBox(height: 10,),
                             // Text(snap.data[index]["ondate"]),
                             // SizedBox(height: 6,),
-                            Text("Transaction id : ${snap.data[index]["txnid"]}"),
+                            Text("TxnID : ${snap.data[index]["txnid"]}"),
+                            SizedBox(height: 5,),
+                            Text("RefID : ${snap.data[index]["ref_id"]==null?"":snap.data[index]["ref_id"]}"),
+                            SizedBox(height: 5,),
+                            Text("Accept date : ${snap.data[index]["acc_date"]==null?"Not accepted":snap.data[index]["acc_date"]}"),
                             SizedBox(height: 5,),
                             Row(
                               children: [

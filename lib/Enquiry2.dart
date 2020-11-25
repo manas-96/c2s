@@ -89,7 +89,7 @@ class _Enquiry2State extends State<Enquiry2> {
                                     setState(() {
                                       _myState = newValue;
                                       _getdistsList();
-                                      print(_myState);
+                                      //(_myState);
                                     });
                                   },
                                   items: statesList?.map((item) {
@@ -140,7 +140,7 @@ class _Enquiry2State extends State<Enquiry2> {
                                     setState(() {
                                       _mydist = newValue;
                                       _getcityList();
-                                      print(_mydist);
+                                      //(_mydist);
                                     });
                                   },
                                   items: distsList?.map((item) {
@@ -187,7 +187,7 @@ class _Enquiry2State extends State<Enquiry2> {
                                     setState(() {
                                       _mycity = newValue;
                                       _getpinList();
-                                      print(_mycity);
+                                      //(_mycity);
                                     });
                                   },
                                   items: city?.map((item) {
@@ -234,7 +234,7 @@ class _Enquiry2State extends State<Enquiry2> {
                                     setState(() {
                                       _pin = newValue;
                                       _getcityList();
-                                      print(_pin);
+                                      //(_pin);
                                     });
                                   },
                                   items: pinList?.map((item) {
@@ -308,7 +308,7 @@ class _Enquiry2State extends State<Enquiry2> {
     }, ).then((response) {
       var data = json.decode(response.body);
 
-//      print(data);
+//      //(data);
       setState(() {
         statesList = data['data'];
       });
@@ -376,10 +376,10 @@ class _Enquiry2State extends State<Enquiry2> {
     };
 
     final response = await http.post("https://www.call2sex.com/api/EnquiryApi/SaveEnquiry",body: body);
-    print(response.statusCode);
+    //(response.statusCode);
     if (response.statusCode == 200) {
       final resData =await  json.decode(response.body);
-      print(resData);
+      //(resData);
       if(resData["status"]=="success"){
         _scaffolkey.currentState.showSnackBar(APIClient.successToast(resData["msg"]));
       }

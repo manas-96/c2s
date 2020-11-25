@@ -1,9 +1,10 @@
-import 'package:call2sex/WorkerBookingConfirmation.dart';
-import 'package:call2sex/CompleteWorkerBooking.dart';
-import 'package:call2sex/WorkerPendingBooking.dart';
+
+import 'package:call2sex/GuestBookingComplete.dart';
+import 'package:call2sex/GuestBookingConfirmation.dart';
+import 'package:call2sex/GuestPendingBookings.dart';
 import 'package:flutter/material.dart';
 
-class WorkerBookingHistory extends StatelessWidget {
+class GuestBookingHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +20,7 @@ class WorkerBookingHistory extends StatelessWidget {
               tabs: [
                 Tab(text: 'Pending',),
                 Tab(text: 'Confirmation'),
-                Tab(text: 'history',),
+                Tab(text: 'Complete',),
               ],
             ),
             title: Text('Booking History',style: TextStyle(fontSize: 24,color: Colors.white),),
@@ -27,9 +28,9 @@ class WorkerBookingHistory extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              WorkerPendingBooking(),
-              WorkerBookingConfirmation(),
-              CompleteWorkerBooking()
+              GuestPendingBooking(),
+              GuestBookingConfirmation(),
+              GuestBookingComplete()
 
             ],
           ),

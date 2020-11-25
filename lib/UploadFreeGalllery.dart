@@ -29,7 +29,7 @@ class _UploadFreeGalleryState extends State<UploadFreeGallery> {
         path=_image.path;
         upload();
       } else {
-        print('No image selected.');
+        //('No image selected.');
       }
     });
   }
@@ -106,10 +106,10 @@ class _UploadFreeGalleryState extends State<UploadFreeGallery> {
               reverse: true,
               itemCount: snap.data.length,
               itemBuilder: (context,index){
-               // print(snap.data[index]["imgurl"]);
+               // //(snap.data[index]["imgurl"]);
                 return GestureDetector(
                   onTap: (){
-                    print("tapped");
+                    //("tapped");
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>ZoomImage(img: snap.data[index]["imgurl"],)));
                   },
                   onDoubleTap: (){
@@ -139,7 +139,7 @@ class _UploadFreeGalleryState extends State<UploadFreeGallery> {
     SharedPreferences pref= await SharedPreferences.getInstance();
     String id= pref.getString("id");
     final result= await APIClient().fetchFreeGallery(id);
-    print(result);
+    //(result);
     if(result["status"]=="success"){
 
       return result["data"];
@@ -154,8 +154,8 @@ class _UploadFreeGalleryState extends State<UploadFreeGallery> {
     SharedPreferences pref= await SharedPreferences.getInstance();
     String token= pref.getString("api_token");
     var request = http.MultipartRequest('POST', Uri.parse(url),);
-    print("req");
-    print(request);
+    //("req");
+    //(request);
     request.files.add(await http.MultipartFile.fromPath("", filename,),);
 
     final Map <String ,String> header= {
@@ -167,13 +167,13 @@ class _UploadFreeGalleryState extends State<UploadFreeGallery> {
     request.headers.addAll(header);
     var res = await request.send();
     var response= await http.Response.fromStream(res);
-    print('printing...');
+    //('//ing...');
     var img=await json.decode(response.body)["imgurl"];
-    print(img);
-    print(response.body);
+    //(img);
+    //(response.body);
 
-    print(res.statusCode);
-    print(res);
+    //(res.statusCode);
+    //(res);
     return img;
   }
   upload()async{

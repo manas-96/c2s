@@ -197,7 +197,7 @@ class _ServiceSettingState extends State<ServiceSetting> {
   fetchRate()async{
     SharedPreferences pref= await SharedPreferences.getInstance();
     String id= pref.getString("id");
-    print(id);
+    //(id);
     final result= await APIClient().fetchRate(id);
     if(result["status"]=="success"){
       setState(() {

@@ -256,7 +256,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         //_scaffoldkey.currentState.showSnackBar(APIClient.successToast("Please wait !"));
 
         final result = await APIClient().changePassword(newPassword, oldPassword);
-        print(result);
+        //(result);
         setState(() {
           checkLoader=true;
           visible=false;
@@ -265,9 +265,9 @@ class _ChangePasswordState extends State<ChangePassword> {
           setState(() {
             ChangePasswordStatus=false;
           });
-          print(ChangePasswordStatus);
+          //(ChangePasswordStatus);
           loader(result["msg"]);
-          print(result["msg"].toString());
+          //(result["msg"].toString());
         } else {
           _scaffoldkey.currentState.showSnackBar(APIClient.successToast("Password changed successfully"));
           Navigator.pop(context);

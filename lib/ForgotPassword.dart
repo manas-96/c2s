@@ -106,13 +106,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       width: MediaQuery.of(context).size.width,
                       child: Center(
                         child: RaisedButton(
-                          onPressed:checkLoader? (){
-                            verify();
-                            setState(() {
-                              visible=true;
-                              checkLoader=false;
-                            });
-                          }:null,
+                          onPressed: (){
+                            if(mobile==""){
+                              _scaffoldkey.currentState.showSnackBar(APIClient.errorToast("enter mobile number"));
+                            }
+                            else{
+                              verify();
+                              setState(() {
+                                visible=true;
+                                checkLoader=false;
+                              });
+                            }
+                          },
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.all(14.0),
@@ -152,6 +157,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         visible=false;
       });
       if(result["status"]=="success"){
+        print(result);
         _scaffoldkey.currentState.showSnackBar(APIClient.successToast("Password sent to your registered number"));
 
         }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:call2sex/APIClient.dart';
 import 'package:call2sex/UploadGallery.dart';
 import 'package:call2sex/WorkerBookingHistory.dart';
 import 'package:call2sex/WorkerProfile.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Login.dart';
 import 'Wallet.dart';
 
 
@@ -49,10 +51,41 @@ class _Dashboard2State extends State<Dashboard2> {
           );
         });
   }
+  Future<bool> logout() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Are you sure?'),
+            content: Text('Log out from the application'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('NO'),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              FlatButton(
+                child: Text('YES'),
+                onPressed: () {
+                  //check?Navigator.pop(context):
+                  logOut();
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
+                },
+              ),
+            ],
+          );
+        });
+  }
+  logOut()async{
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    pref.clear();
+  }
 
   String uid="";
   @override
   void initState() {
+    getInfo();
     // TODO: implement initState
     SharedPreferences.getInstance().then((SharedPreferences sp) {
       sharedPreferences = sp;
@@ -61,7 +94,7 @@ class _Dashboard2State extends State<Dashboard2> {
       image=sharedPreferences.getString("image");
       uid= sharedPreferences.getString("uid");
       //mobile);
-      print(image);
+      //(image);
       setState(() {});
     });
     super.initState();
@@ -73,6 +106,19 @@ class _Dashboard2State extends State<Dashboard2> {
        appBar: AppBar(
          backgroundColor: Colors.pink[500],
          title: Text("Home"),
+         actions: [
+           Padding(
+             padding: const EdgeInsets.only(right:10.0),
+             child: Center(
+               child: IconButton(
+                 icon: Icon(Icons.power_settings_new,color: Colors.white,),
+                 onPressed: (){
+                  logout();
+                 },
+               ),
+             ),
+           ),
+         ],
        ),
        body: Container(
          height: MediaQuery.of(context).size.height,
@@ -94,7 +140,7 @@ class _Dashboard2State extends State<Dashboard2> {
                            shape: BoxShape.circle,
                            border: Border.all(width: 2,color: Colors.purple[300]),
                            image: DecorationImage(
-                               image: image==null?AssetImage("images/female.png"):NetworkImage("https://www.call2sex.com/${image.toString().replaceFirst('~', '')}"),fit: BoxFit.fill
+                               image: img==null?AssetImage("images/female.png"):NetworkImage("https://www.call2sex.com/${img.toString()}"),fit: BoxFit.contain
                            )
                          ),
                        ),
@@ -137,7 +183,9 @@ class _Dashboard2State extends State<Dashboard2> {
                    InkWell(
                      child:  box(900, "Profile"),
                      onTap: (){
-                       Navigator.push(context, MaterialPageRoute(builder: (context)=>WorkerProfile()));
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>WorkerProfile(
+                         img: img,
+                       )));
                      },
                    ),
                    InkWell(
@@ -179,7 +227,16 @@ class _Dashboard2State extends State<Dashboard2> {
       ),
     );
   }
-  uploadProfilePic()async{
-
+  String img;
+  getInfo()async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String id=pref.getString("id");
+    final res= await APIClient().fetchWorkerInfo(id);
+    if(res["status"]=="success"){
+      //(res["data"]);
+      setState(() {
+        img=res["data"][0]["image"];
+      });
+    }
   }
 }

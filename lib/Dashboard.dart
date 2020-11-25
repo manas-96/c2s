@@ -1,3 +1,4 @@
+import 'package:call2sex/GuestBookingHistory.dart';
 import 'package:call2sex/GuestProfile.dart';
 import 'package:call2sex/WorkerList.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,7 @@ class _DashboardState extends State<Dashboard> {
     final List<Widget> _children = [
       Worker(),
       Wallet(),
+      GuestBookingHistory(),
       GuestProfile(),
     ];
 
@@ -70,11 +72,15 @@ class _DashboardState extends State<Dashboard> {
                 icon: new Icon(Icons.account_balance_wallet),
                 title: new Text('Wallet',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),),
               ),
+              BottomNavigationBarItem(
 
+                  icon: Icon(Icons.receipt_outlined),
+                  title: Text('History',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),)),
               BottomNavigationBarItem(
 
                   icon: Icon(Icons.person),
                   title: Text('My Account',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),)),
+
             ],
           ),
         ),
