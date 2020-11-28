@@ -78,11 +78,11 @@ class _OtpVerificationState extends State<OtpVerification> {
                         children: [
                           Container(
                             height: 150,width: 200,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image:  AssetImage("images/1.png"),fit: BoxFit.fill
-                                )
-                            ),
+                            // decoration: BoxDecoration(492536
+                            //     image: DecorationImage(
+                            //         image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                            //     )
+                            // ),
                           ),
                         ],
                       ),

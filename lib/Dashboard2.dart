@@ -78,8 +78,13 @@ class _Dashboard2State extends State<Dashboard2> {
         });
   }
   logOut()async{
-    SharedPreferences pref= await SharedPreferences.getInstance();
-    pref.clear();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+    preferences.getKeys();
+    for(String key in preferences.getKeys()) {
+        preferences.remove(key);
+    }
+   // print(pref.getString("id"));
   }
 
   String uid="";
@@ -140,7 +145,7 @@ class _Dashboard2State extends State<Dashboard2> {
                            shape: BoxShape.circle,
                            border: Border.all(width: 2,color: Colors.purple[300]),
                            image: DecorationImage(
-                               image: img==null?AssetImage("images/female.png"):NetworkImage("https://www.call2sex.com/${img.toString()}"),fit: BoxFit.contain
+                               image: img==null?AssetImage("images/female.png"):NetworkImage("https://www.call2sex.com/${img.toString()}"),fit: BoxFit.fill
                            )
                          ),
                        ),
@@ -156,23 +161,6 @@ class _Dashboard2State extends State<Dashboard2> {
                  ),
                ),
                SizedBox(height: 20,),
-               Container(width: MediaQuery.of(context).size.width,
-                 child: Row(mainAxisAlignment: MainAxisAlignment.end,
-                   children: [
-                     Text("Availability status"),
-
-                     CupertinoSwitch(
-                       value: _switchValue,
-                       onChanged: (value) {
-                         setState(() {
-                           _switchValue = value;
-                         });
-                       },
-                     ),
-                   ],
-                 ),
-               ),
-               SizedBox(height: 10,),
                GridView(
                  shrinkWrap: true,
                  physics: NeverScrollableScrollPhysics(),
@@ -236,6 +224,7 @@ class _Dashboard2State extends State<Dashboard2> {
       //(res["data"]);
       setState(() {
         img=res["data"][0]["image"];
+        print(img);
       });
     }
   }

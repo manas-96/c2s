@@ -12,16 +12,20 @@ class _SecondaryWalletState extends State<SecondaryWallet> {
   String balance="";
   walletBalance()async{
     final result= await APIClient().secondaryBalance();
-    //(result);
+    print(result);
     if(result["status"]=="failed"){
-      setState(() {
-        balance="0";
-      });
+      if(mounted){
+        setState(() {
+          balance="0";
+        });
+      }
     }
     else{
-      setState(() {
-        balance= result["data"][0]["Balance"].toString();
-      });
+      if(mounted){
+        setState(() {
+          balance= result["data"][0]["Balance"].toString();
+        });
+      }
     }
   }
   @override
@@ -161,9 +165,11 @@ class _SecondaryWalletState extends State<SecondaryWallet> {
       return result["data"];
     }
     else{
-      setState(() {
-        trnasCheck=true;
-      });
+      if(mounted){
+        setState(() {
+          trnasCheck=true;
+        });
+      }
     }
   }
 }

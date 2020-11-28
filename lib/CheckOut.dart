@@ -1,3 +1,5 @@
+import 'package:call2sex/Dashboard.dart';
+import 'package:call2sex/GuestBookingHistory.dart';
 import 'package:call2sex/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -104,7 +106,8 @@ class _CheckOutState extends State<CheckOut> {
                       color: Colors.pink[900],
                       onPressed: (){
                         bookModel();
-                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>Payment()));
+
+                        //
                       },
                     ),
                   ),
@@ -155,6 +158,9 @@ class _CheckOutState extends State<CheckOut> {
      final result= await APIClient().bookModel(widget.userId, userId, serviceName, amount);
      if(result["status"]=="success"){
        _scaffolkey.currentState.showSnackBar(APIClient.successToast(result["msg"]));
+       Future.delayed(const Duration(seconds: 1), () {
+         Navigator.push(context, MaterialPageRoute(builder: (context)=>GuestBookingHistory()));
+       });
      }
      else{
        _scaffolkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));

@@ -93,11 +93,11 @@ class _EnquiryState extends State<Enquiry> {
                   SizedBox(height: MediaQuery.of(context).size.height*0.15,),
                   Container(
                     height: 150,width: 200,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image:  AssetImage("images/1.png"),fit: BoxFit.fill
-                        )
-                    ),
+                    // decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //         image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                    //     )
+                    // ),
                   ),
                   Text("Send Enquiry ",style: TextStyle(fontSize: 24,color: Colors.white,fontWeight: FontWeight.bold),),
                   Padding(

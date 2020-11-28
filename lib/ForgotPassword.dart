@@ -47,11 +47,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           children: [
                             Container(
                               height: 150,width: 200,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image:  AssetImage("images/1.png"),fit: BoxFit.fill
-                                  )
-                              ),
+                              // decoration: BoxDecoration(
+                              //     image: DecorationImage(
+                              //         image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                              //     )
+                              // ),
                             ),
                           ],
                         ),
@@ -152,6 +152,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
     else{
       final result= await APIClient().forgotPassword(mobile);
+      print(result);
       setState(() {
         checkLoader=true;
         visible=false;

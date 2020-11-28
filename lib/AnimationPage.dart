@@ -32,10 +32,6 @@ class _animationPageState extends State<animationPage> with SingleTickerProvider
     } on PlatformException {
       platformVersion = 'Failed to get Device MAC Address.';
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
@@ -86,6 +82,10 @@ class _animationPageState extends State<animationPage> with SingleTickerProvider
       //APIClient().authRequest(sharedPreferences.getString("email"), sharedPreferences.getString("pass"));
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Enquiry()), (Route<dynamic> route) => false);
     }else{
+      print(sharedPreferences.getString("user_type"));
+      print(sharedPreferences.getString("id"));
+      print(sharedPreferences.getString("lastname"));
+
       if(sharedPreferences.getString("user_type")=="guest" || sharedPreferences.getString("user_type")=="Guest")
         {
           Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));

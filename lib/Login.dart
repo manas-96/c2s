@@ -115,11 +115,11 @@ class _LoginState extends State<Login> {
                       SizedBox(height: MediaQuery.of(context).size.height/20,),
                       Container(
                         height: 150,width: 200,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image:  AssetImage("images/1.png"),fit: BoxFit.fill
-                            )
-                        ),
+                        // decoration: BoxDecoration(
+                        //     image: DecorationImage(
+                        //         image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                        //     )
+                        // ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left:18.0),
@@ -195,7 +195,7 @@ class _LoginState extends State<Login> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text("Forget password ?",
-                              style: TextStyle(color: Colors.yellow,fontSize: 16,fontWeight: FontWeight.bold),),
+                              style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),),
                           ),
                         ),
                       ),

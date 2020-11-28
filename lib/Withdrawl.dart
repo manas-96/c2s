@@ -119,6 +119,7 @@ class _WithdrawState extends State<Withdraw> {
             String price=snap.data[index]["amount"].toInt().toString();
             return Container(
               width: MediaQuery.of(context).size.width,
+              //height: MediaQuery.of(context).size.height,
               color: Colors.white.withOpacity(0.8),
               child: Column(
                 children: <Widget>[
@@ -162,15 +163,7 @@ class _WithdrawState extends State<Withdraw> {
                     ),
                   ),
                   SizedBox(height: 5,),
-                  Row(
-                    children: <Widget>[
-                      SizedBox(width: 70,),
-                      Container(
-                        height: 1,width: MediaQuery.of(context).size.width-70,
-                        color: Colors.grey.withOpacity(0.5),
-                      )
-                    ],
-                  )
+
                 ],
               ),
             );

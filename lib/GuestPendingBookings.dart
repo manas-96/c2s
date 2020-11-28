@@ -53,13 +53,16 @@ class _GuestPendingBookingState extends State<GuestPendingBooking> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Booking done for ${snap.data[index]["firstname"]} ${snap.data[index]["lastname"]}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                        Text("Service type : ${snap.data[index]["service_name"]}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
+                        Text("Booking Done for ${snap.data[index]["firstname"]} ${snap.data[index]["lastname"]}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 19),),
+                        Text("Model ID: ${snap.data[index]["uid"]} ",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18),),
+                        Text("Service type : ${snap.data[index]["service_name"]}",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18)),
+
                         Text("Price : ${snap.data[index]["price"]}",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green,fontSize: 17)),
+                        Text("Date : : ${snap.data[index]["ondate"]} ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
                         Row(
                           children: [
                             Text("Status : "),
-                            Text(snap.data[index]["status"],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),)
+                            Text(snap.data[index]["status"],style: TextStyle(fontWeight: FontWeight.w400,fontSize: 17,color:Colors.red),)
                           ],
                         )
                       ],
@@ -78,7 +81,9 @@ class _GuestPendingBookingState extends State<GuestPendingBooking> {
     SharedPreferences pref= await SharedPreferences.getInstance();
     String id= pref.getString("id");
     final result= await APIClient().pendingBookingGuest(id);
+    print(result);
     if(result["status"]!="success"){
+
       setState(() {
         check=true;
       });

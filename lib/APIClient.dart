@@ -1,4 +1,4 @@
-import 'package:call2sex/ForgotPassword.dart';
+//import 'package:call2sex/ForgotPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
 import 'dart:convert';
@@ -38,11 +38,25 @@ class APIClient{
       throw Exception('Failed to load post');
     }
   }
+   fetchVoter() async {
+     final header = await _buildHeaderWithAuth();
+     SharedPreferences pref= await SharedPreferences.getInstance();
+     String id= pref.getString("id");
+    final response = await http.get("https://www.call2sex.com/api/KycApi/FetchUserDocs?user_id=$id",headers: header );
+    //(response.statusCode);
+    if (response.statusCode == 200) {
+      final responseData = await json.decode(response.body);
+      //print(responseData);
+      return responseData;
+    } else {
+      throw Exception('Failed to load post');
+    }
+  }
   Future<Map<String, dynamic>> otpVerification(String contact, String otp) async {
     // final authHeader = await _buildHeader();
 
     final response = await http.get("https://www.call2sex.com/api/LoginApi/CheckOTP?contact=$contact&otp=$otp", );
-    //(response.statusCode);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final responseData = await json.decode(response.body);
       //(responseData);
@@ -126,6 +140,19 @@ class APIClient{
 
     final header=await _buildHeaderWithAuth();
     final response = await http.get("https://www.call2sex.com/api/WorkerApi/FetchInfo?user_id=$id",headers: header  );
+    //(response.statusCode);
+    if (response.statusCode == 200) {
+      final resData =await  json.decode(response.body);
+      //(resData);
+      return resData;
+    } else {
+      throw Exception('Failed to accept booking');
+    }
+  }
+  modelDetails(String id) async {
+
+    final header=await _buildHeaderWithAuth();
+    final response = await http.get("https://www.call2sex.com/api/GuestApi/FetchModelDetails?user_id=$id",headers: header  );
     //(response.statusCode);
     if (response.statusCode == 200) {
       final resData =await  json.decode(response.body);
@@ -245,6 +272,19 @@ class APIClient{
       throw Exception('Failed to SignUp');
     }
   }
+  fetchBank(String id) async {
+    final header= await _buildHeaderWithAuth();
+
+    final response = await http.get("https://www.call2sex.com/api/WorkerApi/FetchBank?user_id=$id",headers: header);
+    //(response.statusCode);
+    if (response.statusCode == 200) {
+      final resData =await  json.decode(response.body);
+      ////(resData);
+      return resData;
+    } else {
+      throw Exception('Failed to SignUp');
+    }
+  }
 
   saveBankDetails(String bank, String account, String name, String ifsc)async{
     final header= await _buildHeaderWithAuth();
@@ -263,6 +303,40 @@ class APIClient{
     if (response.statusCode == 200) {
       final resData =await  json.decode(response.body);
       //(resData);
+      return resData;
+    } else {
+      throw Exception('Failed to SignUp');
+    }
+  }
+  saveLike(String likerId, String islike)async{
+    final header= await _buildHeaderWithAuth();
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    String id= pref.getString("id");
+    //(id);
+    final body={
+      "liker_id":likerId,
+      "islike":islike,
+      "user_id":id,
+    };
+    final response = await http.post("https://www.call2sex.com/api/GuestApi/SaveLike",headers: header,body: body);
+    //(response.statusCode);
+    if (response.statusCode == 200) {
+      final resData =await  json.decode(response.body);
+      //(resData);
+      return resData;
+    } else {
+      throw Exception('Failed to SignUp');
+    }
+  }
+  fetchLike(String liker_id) async {
+    final header= await _buildHeaderWithAuth();
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    String id= pref.getString("id");
+    final response = await http.get("https://www.call2sex.com/api/GuestApi/FetchLike?user_id=$id&liker_id=$liker_id",headers: header);
+    //(response.statusCode);
+    if (response.statusCode == 200) {
+      final resData =await  json.decode(response.body);
+      ////(resData);
       return resData;
     } else {
       throw Exception('Failed to SignUp');
@@ -339,6 +413,49 @@ class APIClient{
       "imgurl":img,
     };
     final response = await http.post("https://www.call2sex.com/api/GuestApi/SaveGuestSelfie",headers: header,body: body);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      final resData =await  json.decode(response.body);
+      print(resData);
+      return resData;
+    } else {
+      throw Exception('Failed to SignUp');
+    }
+  }
+  uploadFront(String kyc, String cat, String front_imgurl, String back_imgurl)async{
+    final header= await _buildHeaderWithAuth();
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    String id= pref.getString("id");
+    //(id);
+    final body={
+      "user_id":id,
+      "kyc_id":kyc,
+      "front_imgurl":front_imgurl,
+      "cat_id":cat,
+      "back_imgurl":back_imgurl
+    };
+    final response = await http.post("https://www.call2sex.com/api/KycApi/SaveUserKyc",headers: header,body: body);
+    //(response.statusCode);
+    if (response.statusCode == 200) {
+      final resData =await  json.decode(response.body);
+      //(resData);
+      return resData;
+    } else {
+      throw Exception('Failed to SignUp');
+    }
+  }
+  uploadBack( String img, String kyc, String cat, String imgurl )async{
+    final header= await _buildHeaderWithAuth();
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    String id= pref.getString("id");
+    //(id);
+    final body={
+      "kyc_id":kyc,
+      "user_id":id,
+      "back_imgurl":imgurl,
+      "cat_id":cat,
+    };
+    final response = await http.post("https://www.call2sex.com/api/KycApi/SaveUserKyc",headers: header,body: body);
     //(response.statusCode);
     if (response.statusCode == 200) {
       final resData =await  json.decode(response.body);
@@ -399,7 +516,7 @@ class APIClient{
       throw Exception('Failed');
     }
   }
-  modelDetails(String id)async{
+  modelsDetails(String id)async{
     final header= await _buildHeaderWithAuth();
     final response = await http.get("https://www.call2sex.com/api/GuestApi/FetchModelDetails?user_id=$id",headers: header,);
     //(response.statusCode);
@@ -552,16 +669,19 @@ class APIClient{
       "mac":mac
     };
 
-    final response = await http.post("https://www.call2sex.com/api/ContactApi/SaveContacts",body: body);
-    //("status code");
-    //(response.statusCode);
-    if (response.statusCode == 200) {
-      final resData =await  json.decode(response.body);
-      //(resData);
-      return resData;
-    } else {
-      throw Exception("failed");
-    }
+     try{
+       final response = await http.post("https://www.call2sex.com/api/ContactApi/SaveContacts",body: body);
+       //("status code");
+       print(response.statusCode);
+       if (response.statusCode == 200) {
+         final resData =await  json.decode(response.body);
+         //(resData);
+         return resData;
+       }
+     }
+     catch(e){
+
+     }
   }
   prime(String id,String amount , String duration, String duration_start,String pack_name)async{
     final header= await _buildHeaderWithAuth();

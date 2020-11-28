@@ -19,22 +19,57 @@ class ModelDetails extends StatefulWidget {
 
 class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderStateMixin{
   TabController _controller;
-
+  int count=0;
+  bool islike;
+  saveLike()async{
+    print(islike);
+    final result= await APIClient().saveLike(widget.id,islike?"1":"0");
+    if(result["status"]=="success"){
+      _scaffolkey.currentState.showSnackBar(APIClient.successToast(result["msg"]));
+    }
+  }
+  fetchLike()async{
+    final result= await APIClient().fetchLike(widget.id);
+    print(result);
+    if(result["status"]!="success"){
+      if(mounted){
+        setState(() {
+          islike=false;
+        });
+      }
+    }
+    else{
+       if(mounted){
+        setState(() {
+          islike=true;
+        });
+      }
+    }
+  }
   bool prime=false;
   fetchPrime()async{
     SharedPreferences pref=await  SharedPreferences.getInstance();
     String id= pref.getString("id");
     final req=await APIClient().fetchPrime(id);
     if(req["status"]=="success"){
-      setState(() {
+      if(mounted){
+        setState(() {
         prime=true;
       });
+      }
+      else{
+        return;
+      }
     }
   }
   bool checkStatus=false;
+    final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
+    fetchLike();
     fetchPrime();
+    details();
     fetchDetails();
     super.initState();
     _controller = new TabController(length: 3, vsync: this);
@@ -42,7 +77,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(key: _scaffolkey,
       appBar: AppBar(
         title: Text("Model Details"),
         backgroundColor: Colors.pink[900],
@@ -99,9 +134,9 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                           color: Colors.pink,
                           child: Text("Book Now",style: TextStyle(color: Colors.white),),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.more_vert),
-                        )
+                        // IconButton(
+                        //   icon: Icon(Icons.more_vert),
+                        // )
                       ],
                     )
                   ],
@@ -110,13 +145,28 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
             ),
             Padding(
               padding: const EdgeInsets.only(top:8.0,bottom: 8),
-              child: Container(
-                height: MediaQuery.of(context).size.height*0.5,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: getImage(widget.img),fit: BoxFit.fill
-                  )
+              child: GestureDetector(
+                onDoubleTap: (){
+                  setState(() {
+                    print(islike);
+                      if(islike==false){
+                      count=count+1;
+                    }
+                    else{
+                      count=count-1;
+                    }
+                    islike=!islike;
+                  });
+                  saveLike();
+                },
+                   child: Container(
+                  height: MediaQuery.of(context).size.height*0.5,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: getImage(widget.img),fit: BoxFit.fill
+                    )
+                  ),
                 ),
               ),
             ),
@@ -131,13 +181,13 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                            children: [
                              Icon(Icons.favorite,color: Colors.pink,size: 30,),
                              SizedBox(width: 5,),
-                             Text("132",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+                             Text(count.toString(),style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
                              SizedBox(width: 10,),
                              IconButton(
                                icon: Icon(Icons.share),
                                onPressed: (){
                                  final RenderBox box = context.findRenderObject();
-                                 Share.share("https://www.call2sex.com${widget.img}",
+                                 Share.share("https://www.call2sex.com/$c2sId",
                                      //subject: "refer your friend. Referral code $uid ",
                                      sharePositionOrigin:
                                      box.localToGlobal(Offset.zero) &
@@ -318,9 +368,11 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
     final result= await APIClient().fetchFreeGallery(widget.id.toString());
     //(result);
     if(result["status"]=="success"){
-      setState(() {
+      if(mounted){
+        setState(() {
         checkFree=false;
       });
+      }
       return result["data"];
     }
   }
@@ -329,9 +381,11 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
     final result= await APIClient().fetchPrimeGallery(widget.id.toString());
     //(result);
     if(result["status"]=="success"){
-      setState(() {
+      if(mounted){
+        setState(() {
         checkPrime=false;
       });
+      }
       return result["data"];
     }
   }
@@ -339,7 +393,8 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
     return Padding(
       padding: const EdgeInsets.only(left:2.0,right: 2),
       child: ListView(
-        //shrinkWrap: true,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         children: [
           Container(
             decoration: BoxDecoration(
@@ -420,8 +475,9 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
     final res=await APIClient().fetchWorkerInfo(widget.id);
     if(res["status"]=="success"){
       //(res);
-      setState(() {
-        name="${res["data"][0]["firstname"]==null?" ":res["data"][0]["firstname"]} ${res["data"][0]["lastname"]==null?" ":res["data"][0]["lastname"]}";
+      if(mounted){
+        setState(() {
+        name="${res["data"][0]["firstname"]} ${res["data"][0]["lastname"]}";
         c2sId=res["data"][0]["UID"];
         aboutModel=res["data"][0]["about"];
         gender=res["data"][0]["gender"];
@@ -430,8 +486,22 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
         bodyColor=res["data"][0]["color"];
         isActive=res["data"][0]["isactive"].toString();
       });
+      }
     }
   }
+  details()async{
+        final res=await APIClient().modelsDetails(widget.id);
+        if(res["status"]=="success"){
+          print(res["data"][0]["counts"]);
+          if(mounted){
+            setState(() {
+              count=res["data"][0]["counts"];
+            });
+          }
+        }
+
+  }
+
   getImage( String img){
     //("image//////////////////////");
     //(img);

@@ -12,6 +12,7 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
   String balance="";
   walletBalance()async{
     final result= await APIClient().primaryBalance();
+    print(result);
     if(result["status"]=="failed"){
       setState(() {
         balance="0";

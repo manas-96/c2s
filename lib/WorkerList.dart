@@ -81,15 +81,19 @@ class _WorkerState extends State<Worker> {
                             Positioned(left: 5,bottom: 5,
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(snap.data[index]["username"]==null?"":snap.data[index]["username"],style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 17),),
+                                  //Text(snap.data[index]["username"]==null?"":snap.data[index]["username"],style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 17),),
 
-                                  Row(crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Icon(Icons.favorite,color: Colors.pink,),
-                                      SizedBox(width: 4,),
-                                      Text("132",style: TextStyle(color: Colors.white),)
-                                    ],
-                                  )
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Row(crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.favorite,color: Colors.pink,),
+                                        SizedBox(width: 4,),
+                                        Text(snap.data[index]["counts"].toString(),style: TextStyle(color: Colors.pink,fontWeight: FontWeight.bold,fontSize: 17),),
+                                      ],
+                                    ),
+                                  ),
+                                
                                 ],
                               ),
                             ),

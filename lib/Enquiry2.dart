@@ -52,11 +52,11 @@ class _Enquiry2State extends State<Enquiry2> {
                   SizedBox(height: MediaQuery.of(context).size.height*0.05,),
                   Container(
                     height: 150,width: 150,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image:  AssetImage("images/1.png"),fit: BoxFit.fill
-                        )
-                    ),
+                    // decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //         image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                    //     )
+                    // ),
                   ),
                   //======================================================== State
                   Text("Address Information",style: TextStyle(color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold),),

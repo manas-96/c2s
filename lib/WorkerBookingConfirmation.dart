@@ -77,9 +77,11 @@ class _WorkerBookingConfirmationState extends State<WorkerBookingConfirmation> {
                     child: Column(mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Booking Confirmed by ${snap.data[index]["firstname"]}",style: TextStyle(color: Colors.black,fontSize: 17,fontWeight: FontWeight.bold),),
+                        Text("Booking Confirmed for ${snap.data[index]["firstname"]}",style: TextStyle(color: Colors.black,fontSize: 17,fontWeight: FontWeight.bold),),
                         SizedBox(height: 5,),
                         Text("Price : ${snap.data[index]["price"]}"),
+                        SizedBox(height: 5,),
+                        Text("Guest ID: ${snap.data[index]["uid"]} ",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16),),
                         SizedBox(height: 5,),
                         Text("Service name : ${snap.data[index]["service_name"]}"),
                         SizedBox(height: 5,),
@@ -149,7 +151,7 @@ class _WorkerBookingConfirmationState extends State<WorkerBookingConfirmation> {
         (context as Element).reassemble();
       }
       else{
-        _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Booking canceled"));
+        _scaffolkey.currentState.showSnackBar(APIClient.errorToast(res["msg"]));
       }
     }
   }

@@ -53,8 +53,10 @@ class _WorkerPendingBookingState extends State<WorkerPendingBooking> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Booking done by ${snap.data[index]["firstname"]} ${snap.data[index]["lastname"]}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                        Text("Service type : ${snap.data[index]["service_name"]}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
+                        Text("Booking done by ${snap.data[index]["firstname"]}}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 19),),
+                        Text("Guest ID: ${snap.data[index]["uid"]} ",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18),),
+                        Text("Service type : ${snap.data[index]["service_name"]}",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18)),
+                        Text("Date : : ${snap.data[index]["ondate"]} ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
                         Text("Price : ${snap.data[index]["price"]}",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green,fontSize: 17)),
                         Row(
                           children: [

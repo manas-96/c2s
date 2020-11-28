@@ -120,11 +120,11 @@ class _SignUpState extends State<SignUp> {
                           children: [
                             Container(
                               height: 150,width: 200,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image:  AssetImage("images/1.png"),fit: BoxFit.fill
-                                  )
-                              ),
+                              // decoration: BoxDecoration(
+                              //     image: DecorationImage(
+                              //         image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                              //     )
+                              // ),
                             ),
                           ],
                         ),

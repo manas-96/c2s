@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:call2sex/FetchVoter.dart';
 import 'package:call2sex/GuestBookingComplete.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -115,12 +116,12 @@ class _GuestProfileState extends State<GuestProfile> {
                       ),
                       SizedBox(height: 10,),
                       Container(
-                        height: 90,width: 90,
+                        height: 110,width: 110,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image: img!=null?NetworkImage("https://www.call2sex.com$img"):AssetImage("images/no.png"),fit: BoxFit.fill
+                            image: img!=null||img!=""?NetworkImage("https://www.call2sex.com$img"):AssetImage("images/no.png"),fit: BoxFit.fill
                           )
                         ),
                       ),
@@ -145,13 +146,6 @@ class _GuestProfileState extends State<GuestProfile> {
                   gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing:15,childAspectRatio: 8/6),
 
                   children: [
-
-                    InkWell(
-                      child:  box(900, "Change Password",Icon(Icons.vpn_key_rounded,size: 40,color: Colors.white,)),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePassword()));
-                      },
-                    ),
                     InkWell(
                       child: box(800, "Upload Image",Icon(Icons.camera_alt,size: 40,color: Colors.white,)),
                       onTap: (){
@@ -162,13 +156,36 @@ class _GuestProfileState extends State<GuestProfile> {
                     InkWell(
                       child: box(700, "Upload KYC",Icon(Icons.home_repair_service,size: 40,color: Colors.white,)),
                       onTap: (){
-                         Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadVoter()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>FetchVoter()));
                       },
                     ),
+
+
+
                     InkWell(
                       child: box(600, "Payment Setting",Icon(Icons.payment,size: 40,color: Colors.white,)),
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
+                      },
+                    ),
+                    InkWell(
+                      child: box(300, "Prime",Icon(Icons.account_balance_wallet_rounded,size: 40,color: Colors.white,)),
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Prime()));
+                      },
+                    ),
+                    InkWell(
+                      child:  box(900, "Change Password",Icon(Icons.vpn_key_rounded,size: 40,color: Colors.white,)),
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePassword()));
+                      },
+                    ),
+
+                    InkWell(
+                      child: box(400, "Support",Icon(Icons.support,size: 40,color: Colors.white,)),
+                      onTap: (){
+                        _launchURL();
+                       // Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
                       },
                     ),
                     InkWell(
@@ -192,18 +209,26 @@ class _GuestProfileState extends State<GuestProfile> {
                       },
                     ),
                     InkWell(
-                      child: box(400, "Support",Icon(Icons.support,size: 40,color: Colors.white,)),
-                      onTap: (){
-                        _launchURL();
-                       // Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
+                      child: box(500, "Chat(Coming)",Icon(Icons.share,size: 40,color: Colors.white,)),
+                      onTap:  () {
+                        // A builder is used to retrieve the context immediately
+                        // surrounding the RaisedButton.
+                        //
+                        // The context's `findRenderObject` returns the first
+                        // RenderObject in its descendent tree when it's not
+                        // a RenderObjectWidget. The RaisedButton's RenderObject
+                        // has its position and size after it's built.
+//                      final RenderBox box = context.findRenderObject();
+                        final RenderBox box = context.findRenderObject();
+                        Share.share("https://www.call2sex.com/\n"
+                            "Refer your friend. Referral code $uid",
+                            subject: "refer your friend. Referral code $uid ",
+                            sharePositionOrigin:
+                            box.localToGlobal(Offset.zero) &
+                            box.size);
                       },
                     ),
-                    InkWell(
-                      child: box(300, "Prime",Icon(Icons.account_balance_wallet_rounded,size: 40,color: Colors.white,)),
-                      onTap: (){
-                         Navigator.push(context, MaterialPageRoute(builder: (context)=>Prime()));
-                      },
-                    ),
+
 
                   ],
                 ),
@@ -292,9 +317,9 @@ class _GuestProfileState extends State<GuestProfile> {
     SharedPreferences preferences= await SharedPreferences.getInstance();
     String id=await preferences.getString("id");
     var res = await uploadImage(path, url);
-
+    print(res);
     final result = await APIClient().SaveGuestSelfie(res);
-
+    print(result);
 
     if(result["status"]=="success"){
       _scaffoldkey.currentState.showSnackBar(APIClient.successToast(result["msg"]));
@@ -308,8 +333,20 @@ class _GuestProfileState extends State<GuestProfile> {
   String img="";
   fetchSelfie()async{
     final result= await APIClient().fetchGuestSelfie();
-    img=result["data"][0]["image"];
-    print(img);
+    print(result["data"]);
+    if(result["data"][0]["image"]==null){
+
+    }
+    else{
+      if(mounted){
+        setState(() {
+          img=result["data"][0]["image"];
+        });
+      }
+    }
+    
+    print("data image");
+    print(result["data"][0]["firstname"]);
   }
   _launchURL() async {
     const url = 'https://api.whatsapp.com/send?phone=918016112117&text=Hi,%20I%20found%20you%20on%20Call2Sex%20App...';

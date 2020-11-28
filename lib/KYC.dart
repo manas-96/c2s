@@ -13,6 +13,16 @@ class _KYCState extends State<KYC> {
   String ifsc="";
   String name="";
   String bank="";
+  String fetchaccount="";
+  String fetchifsc="";
+  String fetchname="";
+  String fetchbank="";
+  @override
+  void initState() {
+    fetchBank();
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(key: _scaffolkey,
@@ -44,6 +54,7 @@ class _KYCState extends State<KYC> {
                         decoration:InputDecoration(
                           //icon: Icon(Icons.person,color: Colors.white,),
                             labelText: 'Account holder ',
+                            hintText: fetchname,
                             labelStyle: TextStyle(color: Colors.pink[900]),
                             border: InputBorder.none
                         ) ,
@@ -67,6 +78,7 @@ class _KYCState extends State<KYC> {
                         decoration:InputDecoration(
                           //icon: Icon(Icons.person,color: Colors.white,),
                             labelText: 'Bank name',
+                            hintText: fetchbank,
                             labelStyle: TextStyle(color: Colors.pink[900]),
                             border: InputBorder.none
                         ) ,
@@ -90,6 +102,7 @@ class _KYCState extends State<KYC> {
                         decoration:InputDecoration(
                           //icon: Icon(Icons.person,color: Colors.white,),
                             labelText: 'Account number',
+                            hintText: fetchaccount,
                             labelStyle: TextStyle(color: Colors.pink[900]),
                             border: InputBorder.none
                         ) ,
@@ -113,6 +126,7 @@ class _KYCState extends State<KYC> {
                         decoration:InputDecoration(
                           //icon: Icon(Icons.person,color: Colors.white,),
                             labelText: 'IFSC',
+                            hintText: fetchifsc,
                             labelStyle: TextStyle(color: Colors.pink[900]),
                             border: InputBorder.none
                         ) ,
@@ -144,7 +158,26 @@ class _KYCState extends State<KYC> {
                     padding: const EdgeInsets.all(5.0),
                     child: Text("Submit",style: TextStyle(color: Colors.white,fontSize: 17),),
                   ),
-                )
+                ),
+                check?Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Container(width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Name : $fetchname",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
+                            Text("A/C  : $fetchaccount",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
+                            Text("Bank : $fetchbank",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
+                            Text("IFSC : $fetchifsc",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ):Container(),
               ],
             ),
           ),
@@ -153,7 +186,26 @@ class _KYCState extends State<KYC> {
     );
   }
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
-
+  bool check=false;
+  fetchBank()async{
+    SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
+    String id= sharedPreferences.getString("id");
+    final result= await APIClient().fetchBank(id);
+    if(result["status"]=="success"){
+      if(mounted){
+        setState(() {
+          check=true;
+          fetchaccount= result["data"][0]["account_no"]==null?" ":result["data"][0]["account_no"];
+          fetchbank= result["data"][0]["bank_name"]==null?" ":result["data"][0]["bank_name"];
+          fetchname=result["data"][0]["accholder_name"]==null?" ":result["data"][0]["accholder_name"];
+          fetchifsc=result["data"][0]["ifce_code"]==null?" ":result["data"][0]["ifce_code"];
+        });
+      }
+    }
+    else{
+      print("Bank details not added");
+    }
+  }
   saveBank()async{
     final res= await APIClient().saveBankDetails(bank, account, name, ifsc);
     if(res["status"]=="success"){

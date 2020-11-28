@@ -90,11 +90,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                     SizedBox(height: MediaQuery.of(context).size.height/20,),
                     Container(
                       height: 150,width: 200,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image:  AssetImage("images/1.png"),fit: BoxFit.fill
-                          )
-                      ),
+                      // decoration: BoxDecoration(
+                      //     image: DecorationImage(
+                      //         image:  AssetImage("images/1.png"),fit: BoxFit.fill
+                      //     )
+                      // ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left:18.0),
