@@ -622,6 +622,28 @@ class APIClient{
       throw Exception('Failed');
     }
   }
+  enquiryTwo(String id, String state,String dist,String city, String pin,String location )async{
+    final header= await _buildHeader();
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    final body={
+      "enquiry_id":id,
+      "city_id":city,
+      "state_id":state,
+      "pin_id":pin,
+      "dist_id":dist,
+      "location":location,
+    };
+    print(body.toString());
+    final response = await http.post("https://www.call2sex.com/api/EnquiryApi/SaveEnquiry2",headers: header,body: body);
+    //(response.statusCode);
+    if (response.statusCode == 200) {
+      final resData =await  json.decode(response.body);
+      print(resData);
+      return resData;
+    } else {
+      throw Exception('Failed to SignUp');
+    }
+  }
   bookModel(String workerId, String userId,String serviceName,String amount )async{
     final header= await _buildHeaderWithAuth();
     SharedPreferences pref= await SharedPreferences.getInstance();

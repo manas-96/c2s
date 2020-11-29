@@ -127,9 +127,14 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                       children: [
                         RaisedButton(
                           onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckOut(
-                              userId: widget.id,
-                            )));
+                           if( isActive=="true"){
+                             Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckOut(
+                               userId: widget.id,
+                             )));
+                           }
+                           else{
+                             _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Model not available"));
+                           }
                           },
                           color: Colors.pink,
                           child: Text("Book Now",style: TextStyle(color: Colors.white),),
@@ -336,6 +341,9 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                  if(prime){
                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ZoomImage(img: snap.data[index]["imgurl"],)));
                  }
+                 else{
+                   _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Not a prime member"));
+                 }
                 },
 
                 child: Container(
@@ -528,7 +536,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
         height=res["data"][0]["height"].toString();
         weight=res["data"][0]["weight"].toString();
         bodyColor=res["data"][0]["color"];
-        isActive=res["data"][0]["isactive"].toString();
+        isActive=res["data"][0]["isavailable"].toString();
         city=res["data"][0]["city_name"].toString();
         state=res["data"][0]["state_name"];
         dist=res["data"][0]["dist_name"].toString();

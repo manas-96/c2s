@@ -1,18 +1,14 @@
 import 'package:call2sex/APIClient.dart';
+import 'package:call2sex/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart'as http;
 import 'dart:convert';
 class Enquiry2 extends StatefulWidget {
-  final name;
-  final contact;
-  final type;
-  final lookingFor;
-  final interest;
-  final user_type;
+  final id;
 
-  const Enquiry2({Key key, this.name, this.contact, this.type, this.lookingFor, this.interest, this.user_type}) : super(key: key);
+  const Enquiry2({Key key, this.id, }) : super(key: key);
   @override
   _Enquiry2State createState() => _Enquiry2State();
 }
@@ -21,7 +17,7 @@ class _Enquiry2State extends State<Enquiry2> {
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
 
   String landmark="";
-  String pin="";
+
   @override
   void initState() {
     // TODO: implement initState
@@ -375,33 +371,15 @@ class _Enquiry2State extends State<Enquiry2> {
     });
   }
   submit()async{
-    final body={
-      // "name":widget.name,
-      // "contact":widget.contact,
-      // "email":"test@gmail.com",
-      "city_id":_mycity,
-      "dist_id":_mydist,
-      "state_id":_myState,
-      "pin_id":_pin.toString(),
-      "location":landmark,
-      //"user_type":widget.lookingFor
-    };
-
-    final response = await http.post("https://www.call2sex.com/api/EnquiryApi/SaveEnquiry",body: body);
-    //(response.statusCode);
-    if (response.statusCode == 200) {
-      final resData =await  json.decode(response.body);
-      //(resData);
-      if(resData["status"]=="success"){
-        _scaffolkey.currentState.showSnackBar(APIClient.successToast(resData["msg"]));
-      }
-      else{
-        _scaffolkey.currentState.showSnackBar(APIClient.errorToast(resData["msg"]));
-
-      }
-      return resData;
-    } else {
-      throw Exception('Failed to enquiry');
+    final result= await APIClient().enquiryTwo(widget.id, _myState.toString(), _mydist, _mycity, _pin, landmark);
+    if(result["status"]=="success"){
+      _scaffolkey.currentState.showSnackBar(APIClient.successToast("Information successfully added"));
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
+      });
+    }
+    else{
+      _scaffolkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:call2sex/ChangePassword.dart';
+import 'package:call2sex/FetchVoter.dart';
 import 'package:call2sex/ServiceSetting.dart';
 import 'package:call2sex/WorkerSaveInfo.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +140,12 @@ class _WorkerProfileState extends State<WorkerProfile> {
                       child: box(700, "Payment Setting",Icon(Icons.payment,size: 40,color: Colors.white,)),
                       onTap: (){
                          Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
+                      },
+                    ),
+                    InkWell(
+                      child: box(600, "Upload KYC",Icon(Icons.payment,size: 40,color: Colors.white,)),
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>FetchVoter()));
                       },
                     ),
                     InkWell(

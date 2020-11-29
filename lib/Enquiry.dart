@@ -270,7 +270,7 @@ class _EnquiryState extends State<Enquiry> {
       visible=false;
     });
     if(result["status"]=="success"){
-
+      print(result);
       Navigator.push(context, MaterialPageRoute(builder: (context)=>EnquiryOtp(
         mobile: contact,
       )));

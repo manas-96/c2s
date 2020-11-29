@@ -66,6 +66,9 @@ class _animationPageState extends State<animationPage> with SingleTickerProvider
       });
       fockCheating();// Either the permission was already granted before or the user just granted it.
     }
+    else{
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    }
   }
   fockCheating()async{
     //(_platformVersion);

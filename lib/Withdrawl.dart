@@ -182,10 +182,9 @@ class _WithdrawState extends State<Withdraw> {
         _scaffolkey.currentState.showSnackBar(APIClient.successToast(res["msg"]));
       }
       else{
-        _scaffolkey.currentState.showSnackBar(APIClient.errorToast(res["msg"]));
+        _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Insufficient balance"));
       }
     }
-
   }
 
 }

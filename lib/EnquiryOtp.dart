@@ -197,10 +197,13 @@ class _EnquiryOtpState extends State<EnquiryOtp> {
         visible=false;
       });
       if(result["status"]=="success") {
+        print(result);
         _scaffoldkey.currentState.showSnackBar(
             APIClient.successToast("Successful, we will contact you soon"));
         Future.delayed(const Duration(milliseconds: 500), () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry2()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Enquiry2(
+            id: result["data"][0]["enquiry_id"].toString(),
+          )));
         });
 
 

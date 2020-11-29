@@ -19,6 +19,10 @@ class _CheckOutState extends State<CheckOut> {
   String fetchNight="";
   String fetchTrip="";
   String fetchShots="";
+  bool perHour=false;
+  bool perShot=false;
+  bool perNight=false;
+  bool perTrip=false;
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
   String amount="0";
   @override
@@ -47,36 +51,52 @@ class _CheckOutState extends State<CheckOut> {
                 gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing:15,childAspectRatio: 8/6),
                 children: [
                   InkWell(
-                    child: box(900, "Per Hour",fetchHour),
+                    child: box(900, "Per Hour",fetchHour,perHour),
                     onTap: (){
                      setState(() {
+                       perHour=true;
+                        perShot=false;
+                        perNight=false;
+                        perTrip=false;
                        serviceName="hour";
                        amount=fetchHour;
                      });
                     },
                   ),
                   InkWell(
-                    child: box(800, "Per Night",fetchNight),
+                    child: box(800, "Per Night",fetchNight,perNight),
                     onTap: (){
                       setState(() {
+                        perHour=false;
+                         perShot=false;
+                         perNight=true;
+                        perTrip=false;
                         serviceName="night";
                         amount=fetchNight;
                       });
                     },
                   ),
                   InkWell(
-                    child: box(700, "Per Shots",fetchShots),
+                    child: box(700, "Per Shots",fetchShots,perShot),
                     onTap: (){
                       setState(() {
+                        perHour=false;
+                        perShot=true;
+                        perNight=false;
+                        perTrip=false;
                         serviceName="shots";
                         amount=fetchShots;
                       });
                     },
                   ),
                   InkWell(
-                    child: box(500, "Trip",fetchTrip),
+                    child: box(500, "Trip",fetchTrip,perTrip),
                     onTap: (){
                       setState(() {
+                        perHour=false;
+                        perShot=false;
+                        perNight=false;
+                        perTrip=true;
                         serviceName="Trip";
                         amount=fetchTrip;
                       });
@@ -119,7 +139,7 @@ class _CheckOutState extends State<CheckOut> {
       ),
     );
   }
-  box(int num, String name,String amount){
+  box(int num, String name,String amount, bool check){
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -130,8 +150,10 @@ class _CheckOutState extends State<CheckOut> {
           children: [
 
             Text(name,style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),
-            SizedBox(height: 7,),
+            SizedBox(height: 5,),
             Text(amount,style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w300),),
+            SizedBox(height: 5,),
+            check?Icon(Icons.check,color: Colors.white,):Container()
           ],
         )
     );
