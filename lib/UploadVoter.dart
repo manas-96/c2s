@@ -89,18 +89,10 @@ class _UploadVoterState extends State<UploadVoter> {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 44.0,left: MediaQuery.of(context).size.width/3-12,right: MediaQuery.of(context).size.width/3-12),
-              child: RaisedButton(
-                onPressed: (){
-
-                },
-                color: Colors.pink[900],
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text("Upload",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16),),
-                ),
-              ),
+            SizedBox(height: 40,),
+            Container(width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              child: Text("Please upload one by one",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
             )
 
           ],

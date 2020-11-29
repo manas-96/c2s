@@ -1,4 +1,5 @@
 import 'package:call2sex/APIClient.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'UploadVoter.dart';
@@ -45,6 +46,7 @@ class _FetchVoterState extends State<FetchVoter> {
                     height: 190,
                    
                     decoration: BoxDecoration(
+                        border: Border.all(color: Colors.pink,width: 2),
                       image: DecorationImage(
                         image: NetworkImage("$voterBack"),fit: BoxFit.cover
                       )
@@ -57,6 +59,7 @@ class _FetchVoterState extends State<FetchVoter> {
                     height: 190,
                    
                     decoration: BoxDecoration(
+                      border: Border.all(color: Colors.pink,width: 2),
                       image: DecorationImage(
                         image: NetworkImage("$adhaarBack"),fit: BoxFit.cover
                       )
@@ -78,13 +81,15 @@ class _FetchVoterState extends State<FetchVoter> {
   String kyc_img="";
   String voterBack="";
   String adhaarBack="";
+  String approve=" ";
   fetchDocs()async{
     final result= await APIClient().fetchVoter();
     if(result["status"]=="success"){
-     // print(result);
+     print(result);
       for(int i=0;i<4;i++){
         if(mounted){
           setState(() {
+
             if(result["data"][i]["cat_id"]==2){
               voterBack="https://www.call2sex.com/${result["data"][i]["back_imgurl"]}";
               kyc_voter=result["data"][i]["kyc_id"].toString();
@@ -138,9 +143,15 @@ class _FetchVoterState extends State<FetchVoter> {
                 return Padding(
                   padding: const EdgeInsets.only(left:30.0,right: 30,top: 10),
                   child: Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(snap.data[index]["status"]?"Approved":"Not Approved",style: TextStyle(color:snap.data[index]["status"]==true?Colors.green:Colors.red,fontSize: 18,fontWeight: FontWeight.w500 ),),
+                    ),
                     height: 190,
                    
                     decoration: BoxDecoration(
+                        border: Border.all(color: Colors.pink,width: 2),
                       image: DecorationImage(
                         image: NetworkImage("https://www.call2sex.com${snap.data[index]["front_imgurl"]}"),fit: BoxFit.cover
                       )

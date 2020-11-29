@@ -15,7 +15,6 @@ class _WithdrawState extends State<Withdraw> {
   Widget build(BuildContext context) {
     return Scaffold(key: _scaffolkey,
       body: ListView(
-
         children: [
           Padding(
             padding: const EdgeInsets.all(0.0),
@@ -42,7 +41,7 @@ class _WithdrawState extends State<Withdraw> {
                           decoration:InputDecoration(
                             // icon: Icon(Icons.pay,color: Colors.white,),
                               labelText: 'Amount',
-                              hintText: 'Min 100 & Max 100000',
+                              hintText: 'Min 1000 & Max 100000',
                               labelStyle: TextStyle(color: Colors.black),
                               border: InputBorder.none
                           ) ,
@@ -117,55 +116,50 @@ class _WithdrawState extends State<Withdraw> {
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context,index){
             String price=snap.data[index]["amount"].toInt().toString();
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              //height: MediaQuery.of(context).size.height,
-              color: Colors.white.withOpacity(0.8),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          height: 60,width: 60,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.teal[900].withOpacity(0.5)),
+            return Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        height: 60,width: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.teal[900].withOpacity(0.5)),
+                        ),
+                        child: Icon(Icons.account_balance),
+                      ),
+                      Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Withdrawal request",style: TextStyle(fontWeight: FontWeight.bold),),
+                          SizedBox(height: 10,),
+                          // Text(snap.data[index]["ondate"]),
+                          // SizedBox(height: 6,),
+                          Text("TxnID : ${snap.data[index]["txnid"]}"),
+                          SizedBox(height: 5,),
+                          Text("RefID : ${snap.data[index]["ref_id"]==null?"":snap.data[index]["ref_id"]}"),
+                          SizedBox(height: 5,),
+                          Text("Accept date : ${snap.data[index]["acc_date"]==null?"Not accepted":snap.data[index]["acc_date"]}"),
+                          SizedBox(height: 5,),
+                          Row(
+                            children: [
+                              Text("Status : "),
+                              Text("${snap.data[index]["status"]}",style: TextStyle(color: Colors.green,fontSize: 15,fontWeight: FontWeight.bold),),
+                            ],
                           ),
-                          child: Icon(Icons.account_balance),
-                        ),
-                        Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("Withdrawal request",style: TextStyle(fontWeight: FontWeight.bold),),
-                            SizedBox(height: 10,),
-                            // Text(snap.data[index]["ondate"]),
-                            // SizedBox(height: 6,),
-                            Text("TxnID : ${snap.data[index]["txnid"]}"),
-                            SizedBox(height: 5,),
-                            Text("RefID : ${snap.data[index]["ref_id"]==null?"":snap.data[index]["ref_id"]}"),
-                            SizedBox(height: 5,),
-                            Text("Accept date : ${snap.data[index]["acc_date"]==null?"Not accepted":snap.data[index]["acc_date"]}"),
-                            SizedBox(height: 5,),
-                            Row(
-                              children: [
-                                Text("Status : "),
-                                Text("${snap.data[index]["status"]}",style: TextStyle(color: Colors.green,fontSize: 15,fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                          ],
-                        ),
+                        ],
+                      ),
 
-                        Text("Rs ${price}",style: TextStyle(color: Colors.green,fontSize: 18,fontWeight: FontWeight.bold),),
+                      Text("Rs ${price}",style: TextStyle(color: Colors.green,fontSize: 18,fontWeight: FontWeight.bold),),
 
-                        SizedBox(width: 1,)
-                      ],
-                    ),
+                      SizedBox(width: 1,)
+                    ],
                   ),
-                  SizedBox(height: 5,),
+                ),
+                SizedBox(height: 5,),
 
-                ],
-              ),
+              ],
             );
           },
         );
@@ -179,7 +173,7 @@ class _WithdrawState extends State<Withdraw> {
     if(amount==""){
       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Please enter amount"));
     }
-    else if(double.parse(amount).toInt()<100||double.parse(amount).toInt()>100000){
+    else if(double.parse(amount).toInt()<999||double.parse(amount).toInt()>100000){
       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Please enter valid amount"));
     }
     else{

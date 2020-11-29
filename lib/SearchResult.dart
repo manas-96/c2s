@@ -1,43 +1,31 @@
-import 'package:call2sex/APIClient.dart';
-import 'package:call2sex/ModelDetails.dart';
-import 'package:call2sex/Search.dart';
 import 'package:flutter/material.dart';
 
-class Worker extends StatefulWidget {
+import 'APIClient.dart';
+import 'ModelDetails.dart';
+
+class SearchResult extends StatefulWidget {
+  final state;
+  final dist;
+  final city;
+  final pin;
+
+  const SearchResult({Key key, this.state, this.dist, this.city, this.pin}) : super(key: key);
   @override
-  _WorkerState createState() => _WorkerState();
+  _SearchResultState createState() => _SearchResultState();
 }
 
-class _WorkerState extends State<Worker> {
-  bool checkModel=false;
+class _SearchResultState extends State<SearchResult> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text("Call2Sex"),
+        title: Text("Models"),
         backgroundColor: Colors.pink[900],
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(Icons.search,color: Colors.white,),
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Search()));
-              },
-            ),
-          )
-        ],
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        //color: Colors.pink[900],
-        child: ListView(
-          children: [
-            fetchModels()
-          ],
-        )
+      body: ListView(
+        children: [
+          fetchModels(),
+        ],
       ),
     );
   }
@@ -71,7 +59,7 @@ class _WorkerState extends State<Worker> {
               itemBuilder: (context,index){
                 return GestureDetector(
                   onTap: (){
-                   // //(snap.data);
+                    // //(snap.data);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>ModelDetails(
                       id: snap.data[index]["user_id"].toString(),
                       img: "${snap.data[index]["image"]}",
@@ -79,14 +67,14 @@ class _WorkerState extends State<Worker> {
                   },
                   child: Container(
                     decoration: BoxDecoration(color: Colors.pink.withOpacity(0.3),
-                        image: DecorationImage(
+                      image: DecorationImage(
                           image: getImage(snap.data[index]["gender"], snap.data[index]["image"]), fit: BoxFit.fill
-                            ),
+                      ),
 
-                        ),
+                    ),
 
                     child: Container(
-                        //color: Colors.pink.withOpacity(0.4),
+                      //color: Colors.pink.withOpacity(0.4),
                         child: Stack(
 
                           children: [
@@ -105,7 +93,7 @@ class _WorkerState extends State<Worker> {
                                       ],
                                     ),
                                   ),
-                                
+
                                 ],
                               ),
                             ),
@@ -119,18 +107,6 @@ class _WorkerState extends State<Worker> {
         );
       },
     );
-  }
-
-  getModel()async{
-    final result= await APIClient().workerList("","","","");
-    if(result["status"]=="success"){
-      return result["data"];
-    }
-    else{
-      setState(() {
-        checkModel=true;
-      });
-    }
   }
   getImage(String gender, String img){
     //(img);
@@ -148,6 +124,18 @@ class _WorkerState extends State<Worker> {
       else{
         return AssetImage("images/no.png");
       }
+    }
+  }
+  bool checkModel=false;
+  getModel()async{
+    final result= await APIClient().workerList(widget.city, widget.state, widget.dist, widget.pin);
+    if(result["status"]=="success"){
+      return result["data"];
+    }
+    else{
+      setState(() {
+        checkModel=true;
+      });
     }
   }
 }

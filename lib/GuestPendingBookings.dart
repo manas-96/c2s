@@ -56,7 +56,7 @@ class _GuestPendingBookingState extends State<GuestPendingBooking> {
                         Text("Booking Done for ${snap.data[index]["firstname"]} ${snap.data[index]["lastname"]}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 19),),
                         Text("Model ID: ${snap.data[index]["uid"]} ",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18),),
                         Text("Service type : ${snap.data[index]["service_name"]}",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18)),
-
+                        Text("Booking ID : C2SB${snap.data[index]["booking_id"]}",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18)),
                         Text("Price : ${snap.data[index]["price"]}",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green,fontSize: 17)),
                         Text("Date : : ${snap.data[index]["ondate"]} ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
                         Row(

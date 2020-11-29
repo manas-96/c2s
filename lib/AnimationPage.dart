@@ -80,7 +80,7 @@ class _animationPageState extends State<animationPage> with SingleTickerProvider
     if(sharedPreferences.getString("id") == null) {
       //sharedPreferences.getString("userId"));
       //APIClient().authRequest(sharedPreferences.getString("email"), sharedPreferences.getString("pass"));
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Enquiry()), (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login()), (Route<dynamic> route) => false);
     }else{
       print(sharedPreferences.getString("user_type"));
       print(sharedPreferences.getString("id"));

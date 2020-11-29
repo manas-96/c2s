@@ -153,7 +153,9 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                       count=count+1;
                     }
                     else{
-                      count=count-1;
+                     if(count>0){
+                       count=count-1;
+                     }
                     }
                     islike=!islike;
                   });
@@ -434,6 +436,20 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                   SizedBox(height: 8,),
                   Row(
                     children: [
+                      Text("age : ",style: TextStyle(fontSize: 17)),
+                      Text(age==null||age==""?"Unknown":age,style: TextStyle(fontSize: 17),)
+                    ],
+                  ),
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      Text("Interest in : ",style: TextStyle(fontSize: 17)),
+                      Text(interset==null||interset==""?"Unknown":interset,style: TextStyle(fontSize: 17),)
+                    ],
+                  ),
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
                       Text("Height : ",style: TextStyle(fontSize: 17)),
                       Text(height==null||height==""?"Unknown":height,style: TextStyle(fontSize: 17),)
                     ],
@@ -452,7 +468,28 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                       Text(bodyColor==null||bodyColor==""?"Unknown":bodyColor,style: TextStyle(fontSize: 17),)
                     ],
                   ),
-
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      Text("State : ",style: TextStyle(fontSize: 17)),
+                      Text(state==null||state==""?"Unknown":state,style: TextStyle(fontSize: 17),)
+                    ],
+                  ),
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      Text("District : ",style: TextStyle(fontSize: 17)),
+                      Text(dist==null||dist==""?"Unknown":dist,style: TextStyle(fontSize: 17),)
+                    ],
+                  ),
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      Text("City : ",style: TextStyle(fontSize: 17)),
+                      Text(city==null||city==""?"Unknown":city,style: TextStyle(fontSize: 17),)
+                    ],
+                  ),
+                  SizedBox(height: 8,),
                 ],
               ),
             ),
@@ -470,21 +507,31 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
   String weight="";
   String bodyColor;
   String isActive;
+  String age="";
+  String interset="";
+  String state="";
+  String city="";
+  String dist="";
   fetchDetails()async{
     //(widget.id);
     final res=await APIClient().fetchWorkerInfo(widget.id);
     if(res["status"]=="success"){
-      //(res);
+      print(res);
       if(mounted){
         setState(() {
         name="${res["data"][0]["firstname"]} ${res["data"][0]["lastname"]}";
         c2sId=res["data"][0]["UID"];
+        age=res["data"][0]["age"].toString();
+        interset=res["data"][0]["interested"];
         aboutModel=res["data"][0]["about"];
         gender=res["data"][0]["gender"];
-        height=res["data"][0]["height"];
-        weight=res["data"][0]["weight"];
+        height=res["data"][0]["height"].toString();
+        weight=res["data"][0]["weight"].toString();
         bodyColor=res["data"][0]["color"];
         isActive=res["data"][0]["isactive"].toString();
+        city=res["data"][0]["city_name"].toString();
+        state=res["data"][0]["state_name"];
+        dist=res["data"][0]["dist_name"].toString();
       });
       }
     }

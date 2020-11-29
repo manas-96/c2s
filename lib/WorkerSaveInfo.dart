@@ -21,7 +21,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
   bool _switchValue=true;
   int selectedAddress=1;
   String gender="female";
-  String email="";
+  String age="";
   String address="";
   String h="";
   String w="";
@@ -53,6 +53,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
   void initState() {
     // TODO: implement initState
     _getStateList();
+    fetchInfo();
     super.initState();
   }
   @override
@@ -161,7 +162,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     activeColor: Colors.pink[900],
                   ),
                   new Text(
-                    'female',
+                    'Female',
                     style: new TextStyle(fontSize: 16.0,color: Colors.black),
                   ),
                 ],
@@ -238,6 +239,12 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                             onChanged: (String newValue) {
                               setState(() {
                                 _myState = newValue;
+                                city=[];
+                                distsList=[];
+                                pinList=[];
+                                _mycity=null;
+                                _pin=null;
+                                _mydist=null;
                                 _getdistsList();
                                 //(_myState);
                               });
@@ -289,13 +296,17 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                             onChanged: (String newValue) {
                               setState(() {
                                 _mydist = newValue;
+                                city=[];
+                                pinList=[];
+                                _mycity=null;
+                                _pin=null;
                                 _getcityList();
                                 //(_mydist);
                               });
                             },
                             items: distsList?.map((item) {
                               return new DropdownMenuItem(
-                                child: new Text(item['dist_name']),
+                                child:  Text(item['dist_name']),
                                 value: item['dist_id'].toString(),
                               );
                             })?.toList() ??
@@ -336,6 +347,8 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                             onChanged: (String newValue) {
                               setState(() {
                                 _mycity = newValue;
+                                pinList=[];
+                                _pin=null;
                                 _getpinList();
                                 //(_mycity);
                               });
@@ -427,29 +440,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(width: 2,color: Colors.pink)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 5),
-                  child: TextFormField(style: TextStyle(color: Colors.black),
-                    // keyboardType: TextInputType.number,
-                    onChanged: (val){
-                      email=val;
-                    },
-                    decoration:InputDecoration(
-                      //icon: Icon(Icons.person,color: Colors.white,),
-                        labelText: 'Email',
-                        labelStyle: TextStyle(color: Colors.black),
-                        border: InputBorder.none
-                    ) ,
-                  ),
-                ),
-              ),
-            ),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -466,6 +457,29 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
                         labelText: 'Location',
+                        labelStyle: TextStyle(color: Colors.black),
+                        border: InputBorder.none
+                    ) ,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(width: 2,color: Colors.pink)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: TextFormField(style: TextStyle(color: Colors.black),
+                    keyboardType: TextInputType.number,
+                    onChanged: (val){
+                      age=val;
+                    },
+                    decoration:InputDecoration(
+                      //icon: Icon(Icons.person,color: Colors.white,),
+                        labelText: 'Age',
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -650,7 +664,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
   String distInfoUrl =
       '';
   Future<String> _getdistsList() async {
-    await http.get("https://www.call2sex.com/api/EnquiryApi/FetchbyState?state_id=11", headers: {
+    await http.get("https://www.call2sex.com/api/EnquiryApi/FetchbyState?state_id=$_myState", headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     }, ).then((response) {
       var data = json.decode(response.body);
@@ -742,6 +756,18 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
     else if(_image==null){
       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select Profile Image"));
     }
+    else if(h==""){
+      _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter height"));
+    }
+    else if(w==""){
+      _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter weight"));
+    }
+    else if(c==""){
+      _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter body color"));
+    }
+    else if(gender==""){
+      _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select District"));
+    }
     else {
       setState(() {
         visible=true;
@@ -765,7 +791,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
         "user_id":id,
         "firstname": firstname,
         "lastname": lastname,
-        //"email": email,
+        "age": age,
         "city_id": _mycity,
         "dist_id": _mydist,
         "state_id": _myState,
@@ -808,6 +834,16 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
         });
         throw Exception('Failed to submit');
       }
+    }
+  }
+  String fetchusername="";
+  String fetchage="";
+  fetchInfo()async{
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    String id= pref.getString("id");
+    final result= await APIClient().fetchWorkerInfo(id);
+    if(result["status"]=="success"){
+      print(result);
     }
   }
 }

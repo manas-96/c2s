@@ -71,6 +71,7 @@ class _GuestBookingConfirmationState extends State<GuestBookingConfirmation> {
                         Text("Price : ${snap.data[index]["price"]}",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18),),
                         Text("Model ID: ${snap.data[index]["uid"]} ",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18),),
                         Text("Service type : ${snap.data[index]["service_name"]}",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18)),
+                        Text("Booking ID : C2SB${snap.data[index]["booking_id"]}",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18)),
                         SizedBox(height: 1,),
                         Text("OTP : ${snap.data[index]["otp"]}",style: TextStyle(color: Colors.green,fontSize: 16,fontWeight: FontWeight.bold),),
                         Text("Date : ${snap.data[index]["ondate"]} ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),

@@ -303,13 +303,39 @@ class _SignUpState extends State<SignUp> {
                       width: MediaQuery.of(context).size.width,
                       child: Center(
                         child: RaisedButton(
-                          onPressed:checkLoader? (){
+                          onPressed: (){
+                            if(user_type==""){
+                              _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select user type"));
+                            }
+                            else if(user_type==""){
+                              _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select user type"));
+
+                            }
+                            else if(firstname==""){
+                              _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter your first name "));
+
+                            }
+                            else if(lastname==""){
+                              _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter your Last name"));
+
+                            }
+                            // else if(email==""){
+                            //   _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter your email"));
+                            //
+                            // }
+                            else if(mobile==""){
+                              _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter your Mobile number"));
+
+                            }
+                            else{
+
+                            }
                             register();
                             setState(() {
-                              visible=true;
-                              checkLoader=false;
+                              checkLoader?visible=true:null;
+                              checkLoader? checkLoader=false:null;
                             });
-                          }:null,
+                          },
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
@@ -319,7 +345,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top:5.0),
+                      padding: const EdgeInsets.only(top:5.0,bottom: 15),
                       child: Container(width: MediaQuery.of(context).size.width,
                         alignment: Alignment.center,
                         child: Row(mainAxisAlignment: MainAxisAlignment.center,
@@ -335,6 +361,7 @@ class _SignUpState extends State<SignUp> {
                         )
                       ),
                     ),
+
 
                   ],
                 ),

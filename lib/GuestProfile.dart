@@ -209,32 +209,14 @@ class _GuestProfileState extends State<GuestProfile> {
                       },
                     ),
                     InkWell(
-                      child: box(500, "Chat(Coming)",Icon(Icons.share,size: 40,color: Colors.white,)),
-                      onTap:  () {
-                        // A builder is used to retrieve the context immediately
-                        // surrounding the RaisedButton.
-                        //
-                        // The context's `findRenderObject` returns the first
-                        // RenderObject in its descendent tree when it's not
-                        // a RenderObjectWidget. The RaisedButton's RenderObject
-                        // has its position and size after it's built.
-//                      final RenderBox box = context.findRenderObject();
-                        final RenderBox box = context.findRenderObject();
-                        Share.share("https://www.call2sex.com/\n"
-                            "Refer your friend. Referral code $uid",
-                            subject: "refer your friend. Referral code $uid ",
-                            sharePositionOrigin:
-                            box.localToGlobal(Offset.zero) &
-                            box.size);
-                      },
+                      child: box(500, "Chat(Coming)",Icon(Icons.message,size: 40,color: Colors.white,)),
+                      onTap: (){},
                     ),
 
 
                   ],
                 ),
               ),
-
-
             ],
           ),
         ),

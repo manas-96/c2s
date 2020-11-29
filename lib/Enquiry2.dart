@@ -59,13 +59,13 @@ class _Enquiry2State extends State<Enquiry2> {
                     // ),
                   ),
                   //======================================================== State
-                  Text("Address Information",style: TextStyle(color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold),),
+                  Text("Your Address Information",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(width: 1,color: Colors.white),
-                        color:  Colors.white70,
+                        //color:  Colors.white70,
                       ),
                       padding: EdgeInsets.only(left: 15, right: 15, top: 5),
                       //color:  Colors.pink[900],
@@ -88,13 +88,19 @@ class _Enquiry2State extends State<Enquiry2> {
                                   onChanged: (String newValue) {
                                     setState(() {
                                       _myState = newValue;
+                                      city=[];
+                                      distsList=[];
+                                      pinList=[];
+                                      _mycity=null;
+                                      _pin=null;
+                                      _mydist=null;
                                       _getdistsList();
                                       //(_myState);
                                     });
                                   },
                                   items: statesList?.map((item) {
                                     return new DropdownMenuItem(
-                                      child: new Text(item['state_name']),
+                                      child: new Text(item['state_name'],style: TextStyle(),),
                                       value: item['state_id'].toString(),
                                     );
                                   })?.toList() ??
@@ -116,7 +122,7 @@ class _Enquiry2State extends State<Enquiry2> {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(width: 1,color: Colors.white),
-                        color:   Colors.white70,
+                       // color:   Colors.white70,
                       ),
                       padding: EdgeInsets.only(left: 15, right: 15, top: 5),
                       //color:  Colors.pink[900],
@@ -135,17 +141,21 @@ class _Enquiry2State extends State<Enquiry2> {
                                     color: Colors. black,
                                     fontSize: 16,
                                   ),
-                                  hint: Text('Select dist',style: TextStyle(color: Colors.white),),
+                                  hint: Text('Select dist',style: TextStyle(),),
                                   onChanged: (String newValue) {
                                     setState(() {
                                       _mydist = newValue;
+                                      city=[];
+                                      pinList=[];
+                                      _mycity=null;
+                                      _pin=null;
                                       _getcityList();
                                       //(_mydist);
                                     });
                                   },
                                   items: distsList?.map((item) {
                                     return new DropdownMenuItem(
-                                      child: new Text(item['dist_name']),
+                                      child: new Text(item['dist_name'],style: TextStyle(),),
                                       value: item['dist_id'].toString(),
                                     );
                                   })?.toList() ??
@@ -163,7 +173,7 @@ class _Enquiry2State extends State<Enquiry2> {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(width: 1,color: Colors.white),
-                        color:  Colors.white70,
+                        //color:  Colors.white70,
                       ),
                       padding: EdgeInsets.only(left: 15, right: 15, top: 5),
 
@@ -182,17 +192,19 @@ class _Enquiry2State extends State<Enquiry2> {
                                     color: Colors. black,
                                     fontSize: 16,
                                   ),
-                                  hint: Text('Select city',style: TextStyle(color: Colors.white)),
+                                  hint: Text('Select city',style: TextStyle()),
                                   onChanged: (String newValue) {
                                     setState(() {
                                       _mycity = newValue;
+                                      pinList=[];
+                                      _pin=null;
                                       _getpinList();
                                       //(_mycity);
                                     });
                                   },
                                   items: city?.map((item) {
                                     return new DropdownMenuItem(
-                                      child: new Text(item['city_name']),
+                                      child: new Text(item['city_name'],style: TextStyle(),),
                                       value: item['city_id'].toString(),
                                     );
                                   })?.toList() ??
@@ -212,7 +224,7 @@ class _Enquiry2State extends State<Enquiry2> {
                       //color:  Colors.pink[900],
                       decoration: BoxDecoration(
                         border: Border.all(width: 1,color: Colors.white),
-                        color:  Colors.white70,
+                        //color:  Colors.white70,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -239,7 +251,7 @@ class _Enquiry2State extends State<Enquiry2> {
                                   },
                                   items: pinList?.map((item) {
                                     return new DropdownMenuItem(
-                                      child: new Text(item['pin_code']),
+                                      child: new Text(item['pin_code'],style: TextStyle(),),
                                       value: item['pin_id'].toString(),
                                     );
                                   })?.toList() ??
@@ -322,7 +334,7 @@ class _Enquiry2State extends State<Enquiry2> {
   String distInfoUrl =
       '';
   Future<String> _getdistsList() async {
-    await http.get("https://www.call2sex.com/api/EnquiryApi/FetchbyState?state_id=11", headers: {
+    await http.get("https://www.call2sex.com/api/EnquiryApi/FetchbyState?state_id=$_myState", headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     }, ).then((response) {
       var data = json.decode(response.body);
@@ -364,15 +376,15 @@ class _Enquiry2State extends State<Enquiry2> {
   }
   submit()async{
     final body={
-      "name":widget.name,
-      "contact":widget.contact,
-      "email":"test@gmail.com",
+      // "name":widget.name,
+      // "contact":widget.contact,
+      // "email":"test@gmail.com",
       "city_id":_mycity,
       "dist_id":_mydist,
       "state_id":_myState,
       "pin_id":_pin.toString(),
       "location":landmark,
-      "user_type":widget.lookingFor
+      //"user_type":widget.lookingFor
     };
 
     final response = await http.post("https://www.call2sex.com/api/EnquiryApi/SaveEnquiry",body: body);

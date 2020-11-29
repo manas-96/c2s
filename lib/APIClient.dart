@@ -233,10 +233,10 @@ class APIClient{
     }
   }
 
-  workerList() async {
+  workerList(String city, String state, String dist, String pin) async {
     final header= await _buildHeaderWithAuth();
 
-    final response = await http.get("https://www.call2sex.com/api/GuestApi/FetchModels",headers: header);
+    final response = await http.get("https://www.call2sex.com/api/GuestApi/FetchModels?state_id=$state&dist_id=$dist&city_id=$city&pin_id=$pin",headers: header);
     //(response.statusCode);
     if (response.statusCode == 200) {
       final resData =await  json.decode(response.body);

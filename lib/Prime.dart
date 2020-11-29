@@ -19,6 +19,7 @@ class _PrimeState extends State<Prime> {
   @override
   void initState() {
     // TODO: implement initState
+    fetchPrime();
     super.initState();
     dateTime= DateTime.now();
     //(dateTime.toString());
@@ -158,15 +159,36 @@ class _PrimeState extends State<Prime> {
     );
   }
   prime()async{
-    SharedPreferences preferences=await SharedPreferences.getInstance();
-    String id= preferences.getString("id");
-    //(id+" "+amount+" "+duration+" "+dateTime.toString().substring(0,16)+pack);
-    final res=await APIClient().prime(id, amount, duration, dateTime.toString().substring(0,16), pack);
-    if(res["status"]=="success"){
-      _scaffolkey.currentState.showSnackBar(APIClient.successToast(res["msg"]));
+    if(checkPrime){
+      _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Already prime member"));
     }
     else{
-      _scaffolkey.currentState.showSnackBar(APIClient.errorToast(res["msg"]));
+      SharedPreferences preferences=await SharedPreferences.getInstance();
+      String id= preferences.getString("id");
+      //(id+" "+amount+" "+duration+" "+dateTime.toString().substring(0,16)+pack);
+      final res=await APIClient().prime(id, amount, duration, dateTime.toString().substring(0,16), pack);
+      if(res["status"]=="success"){
+        _scaffolkey.currentState.showSnackBar(APIClient.successToast(res["msg"]));
+      }
+      else{
+        _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Insufficient balance"));
+      }
+    }
+  }
+  bool checkPrime=false;
+  fetchPrime()async{
+    SharedPreferences pref=await  SharedPreferences.getInstance();
+    String id= pref.getString("id");
+    final req=await APIClient().fetchPrime(id);
+    if(req["status"]=="success"){
+      if(mounted){
+        setState(() {
+          checkPrime=true;
+        });
+      }
+      else{
+        return;
+      }
     }
   }
 }
