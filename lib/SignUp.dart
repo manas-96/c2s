@@ -410,7 +410,7 @@ class _SignUpState extends State<SignUp> {
         final result = await APIClient().signUP({
           "firstname": firstname,
           "lastname":lastname,
-          "ref_code":ref_code,
+          "ref_code":ref_code.toUpperCase(),
           "user_type":user_type,
           "contact" : mobile
         });

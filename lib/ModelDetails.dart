@@ -116,7 +116,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                         SizedBox(width: 5,),
                         Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.verified,color: Colors.green,) ,
+                            isactive?Icon(Icons.verified,color: Colors.green,):Container() ,
                             Text("")
                           ],
                         ),
@@ -194,7 +194,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                                icon: Icon(Icons.share),
                                onPressed: (){
                                  final RenderBox box = context.findRenderObject();
-                                 Share.share("https://www.call2sex.com/$c2sId",
+                                 Share.share("https://www.call2sex.com/app/$c2sId",
                                      //subject: "refer your friend. Referral code $uid ",
                                      sharePositionOrigin:
                                      box.localToGlobal(Offset.zero) &
@@ -445,7 +445,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                   Row(
                     children: [
                       Text("age : ",style: TextStyle(fontSize: 17)),
-                      Text(age==null||age==""?"Unknown":age,style: TextStyle(fontSize: 17),)
+                      Text(age==null||age==""?"Unknown":age.toString(),style: TextStyle(fontSize: 17),)
                     ],
                   ),
                   SizedBox(height: 8,),
@@ -459,14 +459,14 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                   Row(
                     children: [
                       Text("Height : ",style: TextStyle(fontSize: 17)),
-                      Text(height==null||height==""?"Unknown":height,style: TextStyle(fontSize: 17),)
+                      Text(height==null||height==""?"Unknown":height.toString(),style: TextStyle(fontSize: 17),)
                     ],
                   ),
                   SizedBox(height: 8,),
                   Row(
                     children: [
                       Text("Weight : ",style: TextStyle(fontSize: 17)),
-                      Text(weight==null||weight==""?"Unknown":weight,style: TextStyle(fontSize: 17),)
+                      Text(weight==null||weight==""?"Unknown":weight.toString(),style: TextStyle(fontSize: 17),)
                     ],
                   ),
                   SizedBox(height: 8,),
@@ -511,15 +511,16 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
   String c2sId="";
   String aboutModel="";
   String gender="";
-  String height="";
-  String weight="";
+  var height="";
+  var weight="";
   String bodyColor;
   String isActive;
-  String age="";
+  var age="";
   String interset="";
   String state="";
   String city="";
   String dist="";
+  bool isactive=false;
   fetchDetails()async{
     //(widget.id);
     final res=await APIClient().fetchWorkerInfo(widget.id);
@@ -529,17 +530,18 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
         setState(() {
         name="${res["data"][0]["firstname"]} ${res["data"][0]["lastname"]}";
         c2sId=res["data"][0]["UID"];
-        age=res["data"][0]["age"].toString();
+        age=res["data"][0]["age"];
         interset=res["data"][0]["interested"];
         aboutModel=res["data"][0]["about"];
         gender=res["data"][0]["gender"];
-        height=res["data"][0]["height"].toString();
-        weight=res["data"][0]["weight"].toString();
+        height=res["data"][0]["height"];
+        weight=res["data"][0]["weight"];
         bodyColor=res["data"][0]["color"];
         isActive=res["data"][0]["isavailable"].toString();
-        city=res["data"][0]["city_name"].toString();
+        city=res["data"][0]["city_name"];
         state=res["data"][0]["state_name"];
-        dist=res["data"][0]["dist_name"].toString();
+        dist=res["data"][0]["dist_name"];
+        isactive=res["data"][0]["isactive"];
       });
       }
     }

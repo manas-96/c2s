@@ -168,10 +168,10 @@ class _KYCState extends State<KYC> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Name : $fetchname",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
-                            Text("A/C  : $fetchaccount",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
-                            Text("Bank : $fetchbank",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
-                            Text("IFSC : $fetchifsc",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
+                            Text("NAME : $fetchname",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
+                            Text("A/C     : $fetchaccount",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
+                            Text("BANk  : $fetchbank",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
+                            Text("IFSC    : $fetchifsc",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w400),),
                           ],
                         ),
                       ),
@@ -191,14 +191,15 @@ class _KYCState extends State<KYC> {
     SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
     String id= sharedPreferences.getString("id");
     final result= await APIClient().fetchBank(id);
+    print(result);
     if(result["status"]=="success"){
       if(mounted){
         setState(() {
           check=true;
-          fetchaccount= result["data"][0]["account_no"]==null?" ":result["data"][0]["account_no"];
-          fetchbank= result["data"][0]["bank_name"]==null?" ":result["data"][0]["bank_name"];
-          fetchname=result["data"][0]["accholder_name"]==null?" ":result["data"][0]["accholder_name"];
-          fetchifsc=result["data"][0]["ifce_code"]==null?" ":result["data"][0]["ifce_code"];
+          fetchaccount= result["data"][0]["account_no"]==null?" Unknown":result["data"][0]["account_no"];
+          fetchbank= result["data"][0]["bank_name"]==null?" Unknown":result["data"][0]["bank_name"];
+          fetchname=result["data"][0]["accholder_name"]==null?" Unknown":result["data"][0]["accholder_name"];
+          fetchifsc=result["data"][0]["ifce_code"]==null?" Unknown":result["data"][0]["ifce_code"];
         });
       }
     }

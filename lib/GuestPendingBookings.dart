@@ -64,7 +64,29 @@ class _GuestPendingBookingState extends State<GuestPendingBooking> {
                             Text("Status : "),
                             Text(snap.data[index]["status"],style: TextStyle(fontWeight: FontWeight.w400,fontSize: 17,color:Colors.red),)
                           ],
-                        )
+                        ),
+                        SizedBox(height: 5,),
+                        Container(width: MediaQuery.of(context).size.width,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(),
+                                RaisedButton(
+                                  color: Colors.pink[900],
+                                  onPressed: (){
+                                    rejectBooking(snap.data[index]["booking_id"].toString());
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Cancel",style: TextStyle(color: Colors.white),),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+
                       ],
                     ),
                   ),
@@ -112,4 +134,5 @@ class _GuestPendingBookingState extends State<GuestPendingBooking> {
       _scaffolkey.currentState.showSnackBar(APIClient.errorToast(res["msg"]));
     }
   }
+
 }

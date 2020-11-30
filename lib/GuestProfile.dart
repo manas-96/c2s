@@ -200,9 +200,9 @@ class _GuestProfileState extends State<GuestProfile> {
                         // has its position and size after it's built.
 //                      final RenderBox box = context.findRenderObject();
                         final RenderBox box = context.findRenderObject();
-                        Share.share("https://www.call2sex.com/\n"
+                        Share.share("https://www.call2sex.com/app/$uid\n"
                             "Refer your friend. Referral code $uid",
-                            subject: "refer your friend. Referral code $uid ",
+                            subject: "Refer your friend. Referral code $uid ",
                             sharePositionOrigin:
                             box.localToGlobal(Offset.zero) &
                             box.size);

@@ -598,6 +598,18 @@ class APIClient{
       throw Exception('Failed');
     }
   }
+  changeStatus(String id ,String status)async{
+    final header= await _buildHeaderWithAuth();
+    final response = await http.get("https://www.call2sex.com/api/WalletApi/ChangeIsAvailable?user_id=$id&status=$status",headers: header,);
+    //(response.statusCode);
+    if (response.statusCode == 200) {
+      final resData =await  json.decode(response.body);
+      //(resData);
+      return resData;
+    } else {
+      throw Exception('Failed');
+    }
+  }
   verifyBooking(String id,String otp )async{
     final header= await _buildHeaderWithAuth();
     final response = await http.get("https://www.call2sex.com/api/WorkerApi/VerifyOTP?booking_id=$id&otp=$otp",headers: header,);

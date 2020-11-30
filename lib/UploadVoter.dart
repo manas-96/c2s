@@ -38,62 +38,26 @@ class _UploadVoterState extends State<UploadVoter> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: GridView(
+              child: ListView(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing:15,childAspectRatio: 8/6),
+               // gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing:15,childAspectRatio: 8/6),
                 children: [
 
                   InkWell(
-                    child: box(800, "Upload Voter(front)",_voterFront),
-                    onTap: (){
-                      voterFront();
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
-                    },
-                  ),
-                  InkWell(
-                    child: box(700, "Upload Voter(back)",_voterBack),
-                    onTap: (){
-                      voterBack();
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
-                    },
-                  ),
-                  InkWell(
-                    child: box(600, "Upload Adhaar(front)",_adhaarFront),
-                    onTap: (){
-                      adhaarFront();
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
-                    },
-                  ),
-                  InkWell(
-                    child: box(500, "Upload Adhaar(back)",_adhaarBack),
+                    child: box(500, "Upload Adhaar",_adhaarBack),
                     onTap: (){
                       adhaarBack();
                       //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
                     },
                   ),
-                  InkWell(
-                    child: box(400, "Upload Pan(front)",_pan),
-                    onTap: (){
-                      panUpload();
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
-                    },
-                  ),
-                  InkWell(
-                    child: box(300, "Upload Selfie",_image),
-                    onTap: (){
-                      imageUpload();
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadGallery()));
-                    },
-                  ),
+
+
                 ],
               ),
             ),
             SizedBox(height: 40,),
-            Container(width: MediaQuery.of(context).size.width,
-              alignment: Alignment.center,
-              child: Text("Please upload one by one",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
-            )
+
 
           ],
         )
@@ -104,51 +68,51 @@ class _UploadVoterState extends State<UploadVoter> {
   File _voterFront;
   var pathvotarFront;
   final picker = ImagePicker();
-  Future voterFront() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _voterFront = File(pickedFile.path);
-        pathvotarFront=_voterFront.path;
-       // uploadFront(pathvotarFront, "2");
-      } else {
-        //('No image selected.');
-      }
-    });
-
-  }
-  File _voterBack;
-  var pathvoterBack;
-  Future voterBack() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _voterBack = File(pickedFile.path);
-        pathvoterBack=_voterBack.path;
-        uploadFront(widget.kyc_id,"2",pathvotarFront,pathvoterBack);
-      } else {
-        //('No image selected.');
-      }
-    });
-
-  }
-  File _adhaarFront;
-  var pathadhaarFront;
-  Future adhaarFront() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _adhaarFront = File(pickedFile.path);
-        pathadhaarFront=_adhaarFront.path;
-      } else {
-        //('No image selected.');
-      }
-    });
-
-  }
+  // Future voterFront() async {
+  //   final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  //
+  //   setState(() {
+  //     if (pickedFile != null) {
+  //       _voterFront = File(pickedFile.path);
+  //       pathvotarFront=_voterFront.path;
+  //      // uploadFront(pathvotarFront, "2");
+  //     } else {
+  //       //('No image selected.');
+  //     }
+  //   });
+  //
+  // }
+  // File _voterBack;
+  // var pathvoterBack;
+  // Future voterBack() async {
+  //   final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  //
+  //   setState(() {
+  //     if (pickedFile != null) {
+  //       _voterBack = File(pickedFile.path);
+  //       pathvoterBack=_voterBack.path;
+  //       uploadFront(widget.kyc_id,"2",pathvotarFront,pathvoterBack);
+  //     } else {
+  //       //('No image selected.');
+  //     }
+  //   });
+  //
+  // }
+  // File _adhaarFront;
+  // var pathadhaarFront;
+  // Future adhaarFront() async {
+  //   final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  //
+  //   setState(() {
+  //     if (pickedFile != null) {
+  //       _adhaarFront = File(pickedFile.path);
+  //       pathadhaarFront=_adhaarFront.path;
+  //     } else {
+  //       //('No image selected.');
+  //     }
+  //   });
+  //
+  // }
   File _adhaarBack;
   var pathadhaarBack;
   Future adhaarBack() async {
@@ -158,48 +122,19 @@ class _UploadVoterState extends State<UploadVoter> {
       if (pickedFile != null) {
         _adhaarBack = File(pickedFile.path);
         pathadhaarBack=_adhaarBack.path;
-        uploadFront(widget.kyc_adhar,"1",pathadhaarFront,pathadhaarBack);
+        uploadFront(widget.kyc_adhar,"1"," ",pathadhaarBack);
       } else {
         //('No image selected.');
       }
     });
 
   }
-  File _pan;
-  var pan;
-  Future panUpload() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-    setState(() {
-      if (pickedFile != null) {
-        _pan = File(pickedFile.path);
-        pan=_pan.path;
-        uploadSingle(widget.kyc_pan,"3", pan);
-      } else {
-        //('No image selected.');
-      }
-    });
 
-  }
-  File _image;
-  var path;
-  Future imageUpload() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        path=_image.path;
-        uploadSelfie(widget.kyc_img,"4", path);
-      } else {
-        //('No image selected.');
-      }
-    });
-
-  }
   box(int num, String name, File img){
     ////(image==null?"no image":image.path);
     return Container(
+      height: 200,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             color: Colors.pink[num],
@@ -229,10 +164,28 @@ class _UploadVoterState extends State<UploadVoter> {
 
     request.files.add(await http.MultipartFile.fromPath("", filename,),);
     final Map <String ,String> header= {
-
       'Accept': 'application/json',
       'authorization' : 'Bearer '+'$token',
+    };
+    request.headers.addAll(header);
+    var res = await request.send();
+    var response= await http.Response.fromStream(res);
+    print('//ing...');
+    var img=await json.decode(response.body)["imgurl"];
+    print(img);
+    print(response.body);
+    return img;
+  }
+  pic(filename,) async {
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    String token= pref.getString("api_token");
+    var request = http.MultipartRequest('POST', Uri.parse("https://www.call2sex.com/api/KycApi/UploadSelfie"),);
+    print(filename);
 
+    request.files.add(await http.MultipartFile.fromPath("", filename,),);
+    final Map <String ,String> header= {
+      'Accept': 'application/json',
+      'authorization' : 'Bearer '+'$token',
     };
     request.headers.addAll(header);
     var res = await request.send();
@@ -244,31 +197,11 @@ class _UploadVoterState extends State<UploadVoter> {
     return img;
   }
   uploadFront(String kyc, String cat, String front,String back)async{
-    var res = await upload( front);
+    //var res = await upload( front);
     var res2= await upload(back);
-    print(res);
-    print(cat);
+    print(res2);
 
-    final result = await APIClient().uploadFront(kyc, cat, res,res2);
-    print(result);
-
-
-    if(result["status"]=="success"){
-      _scaffoldkey.currentState.showSnackBar(APIClient.successToast(result["msg"]));
-
-    }
-    else{
-      _scaffoldkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));
-
-    }
-  }
-  uploadSingle(String kyc, String cat, String front)async{
-    var res = await upload( front);
-    //var res2= await upload(back);
-    print(res);
-    print(cat);
-
-    final result = await APIClient().uploadFront(kyc, cat, res," ");
+    final result = await APIClient().uploadFront(kyc, cat, " ",res2);
     print(result);
 
 
@@ -282,7 +215,8 @@ class _UploadVoterState extends State<UploadVoter> {
     }
   }
   uploadSelfie(String kyc, String cat, String filename)async{
-    var res = await selfie(filename,);
+    print(filename);
+    var res = await pic(filename,);
     //var res2= await upload(back);
     print(res);
     print(cat);
@@ -316,8 +250,10 @@ class _UploadVoterState extends State<UploadVoter> {
     };
     request.headers.addAll(header);
     var res = await request.send();
+
     var response= await http.Response.fromStream(res);
     print('//ing...');
+    print(filename);
     var img=await json.decode(response.body)["imgurl"];
     print(img);
     print(response.body);

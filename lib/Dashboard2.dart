@@ -25,7 +25,7 @@ class _Dashboard2State extends State<Dashboard2> {
   String lastName="";
   String image="";
   SharedPreferences sharedPreferences;
-  bool _switchValue=true;
+  bool _switchValue=false;
   Future<bool> _onBackPressed() {
     return showDialog(
         context: context,
@@ -160,6 +160,25 @@ class _Dashboard2State extends State<Dashboard2> {
                    ),
                  ),
                ),
+               SizedBox(height: 10,),
+               Container(width: MediaQuery.of(context).size.width,
+                 child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                   children: [
+                     Text("Availability status"),
+
+                     CupertinoSwitch(
+                       value: _switchValue,
+                       onChanged: (value) {
+                         setState(() {
+                           _switchValue = value;
+                         });
+                         changeStatus(_switchValue);
+                       },
+                     ),
+                   ],
+                 ),
+               ),
+
                SizedBox(height: 20,),
                GridView(
                  shrinkWrap: true,
@@ -215,15 +234,33 @@ class _Dashboard2State extends State<Dashboard2> {
       ),
     );
   }
+  changeStatus(bool s)async{
+    String status="0";
+    if(s){
+      if(mounted){
+        setState(() {
+          status="1";
+        });
+      }
+    }
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String id=pref.getString("id");
+    final result= await APIClient().changeStatus(id, status);
+    print(result);
+    if(result["status"]=="success"){
+      print(result);
+    }
+  }
   String img;
   getInfo()async{
     SharedPreferences pref=await SharedPreferences.getInstance();
     String id=pref.getString("id");
     final res= await APIClient().fetchWorkerInfo(id);
     if(res["status"]=="success"){
-      //(res["data"]);
+      print(res["data"]);
       setState(() {
         img=res["data"][0]["image"];
+        _switchValue=res["data"][0]["isavailable"]==null?true:res["data"][0]["isavailable"];
         print(img);
       });
     }

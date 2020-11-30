@@ -480,6 +480,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
                         labelText: 'Age',
+                        hintText: ' ${age=="null"?" ":age}',
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -503,7 +504,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
                         labelText: 'Height(in ft.)',
-                        hintText: "Example 5.5",
+                        hintText: " ${h=="null"?"Example 5.5":h}",
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -527,7 +528,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
                         labelText: 'Weight(in kg)',
-                        hintText: "Example 54",
+                        hintText: " ${w=="null"?"Example 54":w}",
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -551,7 +552,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
                         labelText: 'Body Color',
-                       // hintText: "Example 54",
+                        hintText: " ${c==null?" ":c}",
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -600,7 +601,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
                         labelText: 'About',
-                        //hintText: "Example 54",
+                        hintText: " ${about==null?" ":about}",
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -809,6 +810,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
         "username":username
 
       };
+      print(body.toString());
 
       final response = await http.post(
           "https://www.call2sex.com/api/WorkerApi/SaveInfo", body: body,
@@ -819,7 +821,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
           visible=false;
         });
         final resData = await json.decode(response.body);
-        //(resData);
+        print(resData);
         if (resData["status"] == "success") {
           _scaffolkey.currentState.showSnackBar(
               APIClient.successToast(resData["msg"]));
@@ -837,13 +839,28 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
     }
   }
   String fetchusername="";
-  String fetchage="";
+  String fetchage="",fetchGender="";
+
   fetchInfo()async{
     SharedPreferences pref= await SharedPreferences.getInstance();
     String id= pref.getString("id");
-    final result= await APIClient().fetchWorkerInfo(id);
-    if(result["status"]=="success"){
-      print(result);
+    final res= await APIClient().fetchWorkerInfo(id);
+    if(res["status"]=="success"){
+     // print(result);
+      if(mounted){
+        setState(() {
+
+          age=res["data"][0]["age"].toString();
+          //interset=res["data"][0]["interested"];
+          about=res["data"][0]["about"];
+          //gender=res["data"][0]["gender"];
+          h=res["data"][0]["height"].toString();
+          w=res["data"][0]["weight"].toString();
+          c=res["data"][0]["color"];
+          //isActive=res["data"][0]["isavailable"].toString();
+
+        });
+      }
     }
   }
 }

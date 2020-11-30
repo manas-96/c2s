@@ -11,8 +11,10 @@ import 'Dashboard2.dart';
 
 class EnquiryOtp extends StatefulWidget {
   final mobile;
+  final name;
+  final looking;
 
-  const EnquiryOtp({Key key, this.mobile}) : super(key: key);
+  const EnquiryOtp({Key key, this.mobile, this.name, this.looking}) : super(key: key);
   @override
   _EnquiryOtpState createState() => _EnquiryOtpState();
 }
@@ -21,6 +23,7 @@ class _EnquiryOtpState extends State<EnquiryOtp> {
 
 
   String otp="";
+  bool check=true;
 
   bool showPassword=false;
   bool checkLoader=true;
@@ -129,8 +132,15 @@ class _EnquiryOtpState extends State<EnquiryOtp> {
                         padding: const EdgeInsets.all(8.0),
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: Text("Resend OTP",
-                            style: TextStyle(color: Colors.white),),
+                          child: InkWell(
+                            onTap: (){resend();
+                              setState(() {
+                                check=!check;
+                              });
+                            },
+                            child: Text("Resend OTP",
+                              style: TextStyle(color:check? Colors.white:Colors.yellow),),
+                          ),
                         ),
                       )
                   ),
@@ -215,6 +225,20 @@ class _EnquiryOtpState extends State<EnquiryOtp> {
         });
         _scaffoldkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));
       }
+    }
+  }
+  resend()async{
+    final body={
+      "name":widget.name,
+      "contact":widget.mobile,
+      "interested":widget.looking
+    };
+    final result= await APIClient().saveEnquiry(body);
+    if(result["status"]=="success"){
+      _scaffoldkey.currentState.showSnackBar(APIClient.successToast(result["msg"]));
+    }
+    else{
+      _scaffoldkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));
     }
   }
 }

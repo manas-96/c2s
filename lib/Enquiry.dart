@@ -273,6 +273,8 @@ class _EnquiryState extends State<Enquiry> {
       print(result);
       Navigator.push(context, MaterialPageRoute(builder: (context)=>EnquiryOtp(
         mobile: contact,
+        name: name,
+        looking: lookingFor,
       )));
     }
     else{

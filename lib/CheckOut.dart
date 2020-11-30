@@ -185,7 +185,7 @@ class _CheckOutState extends State<CheckOut> {
        });
      }
      else{
-       _scaffolkey.currentState.showSnackBar(APIClient.errorToast(result["msg"]));
+       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Insufficient balance"));
      }
    }
   }

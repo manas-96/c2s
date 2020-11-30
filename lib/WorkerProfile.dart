@@ -137,7 +137,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
                       },
                     ),
                     InkWell(
-                      child: box(700, "Payment Setting",Icon(Icons.payment,size: 40,color: Colors.white,)),
+                      child: box(700, "Bank Info",Icon(Icons.payment,size: 40,color: Colors.white,)),
                       onTap: (){
                          Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
                       },
@@ -173,6 +173,10 @@ class _WorkerProfileState extends State<WorkerProfile> {
                         _launchURL();
                         // Navigator.push(context, MaterialPageRoute(builder: (context)=>KYC()));
                       },
+                    ),
+                    InkWell(
+                      child: box(500, "Chat(Coming)",Icon(Icons.message,size: 40,color: Colors.white,)),
+                      onTap: (){},
                     ),
 
                   ],
