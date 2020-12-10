@@ -177,7 +177,7 @@ class _KYCState extends State<KYC> {
                       ),
                     ),
                   ),
-                ):Container(),
+                ) : Container(),
               ],
             ),
           ),
@@ -187,7 +187,7 @@ class _KYCState extends State<KYC> {
   }
   final GlobalKey<ScaffoldState> _scaffolkey = GlobalKey<ScaffoldState>();
   bool check=false;
-  fetchBank()async{
+  fetchBank()async {
     SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
     String id= sharedPreferences.getString("id");
     final result= await APIClient().fetchBank(id);

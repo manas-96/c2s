@@ -127,7 +127,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                       children: [
                         RaisedButton(
                           onPressed: (){
-                           if( isActive=="true"){
+                           if( isActive==true){
                              Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckOut(
                                userId: widget.id,
                              )));
@@ -205,11 +205,11 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                          ),
                          Row(
                            children: [
-                             Text(isActive=="true"?"Available":"Not available",style: TextStyle(color: Colors.black,fontSize: 15),),
+                             Text(isActive==true?"Available":"Not available",style: TextStyle(color: Colors.black,fontSize: 15),),
                              SizedBox(width: 5,),
                              CircleAvatar(
                                radius: 7,
-                               backgroundColor: isActive=="true"?Colors.green:Colors.red,
+                               backgroundColor: isActive==true?Colors.green:Colors.red,
                              )
                            ],
                          )
@@ -265,8 +265,8 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
           return Container(
             width: MediaQuery.of(context).size.width,
             height: 60,
-            alignment: Alignment.center,
-            child: Text("Photos not found",style: TextStyle(color: Colors.pink,fontSize: 17),),
+            alignment: Alignment.topCenter,
+            child: Text("\n\nPhotos not found",style: TextStyle(color: Colors.pink,fontSize: 17),),
           );
         }
         if(snap.data==null){
@@ -316,8 +316,8 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
           return Container(
             width: MediaQuery.of(context).size.width,
             height: 60,
-            alignment: Alignment.center,
-            child: Text("Photos not found",style: TextStyle(color: Colors.pink,fontSize: 17),),
+            alignment: Alignment.topCenter,
+            child: Text("\n\nPhotos not found",style: TextStyle(color: Colors.pink,fontSize: 17),),
           );
         }
         if(snap.data==null){
@@ -444,7 +444,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                   SizedBox(height: 8,),
                   Row(
                     children: [
-                      Text("age : ",style: TextStyle(fontSize: 17)),
+                      Text("Age : ",style: TextStyle(fontSize: 17)),
                       Text(age==null||age==""?"Unknown":age.toString(),style: TextStyle(fontSize: 17),)
                     ],
                   ),
@@ -459,14 +459,14 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
                   Row(
                     children: [
                       Text("Height : ",style: TextStyle(fontSize: 17)),
-                      Text(height==null||height==""?"Unknown":height.toString(),style: TextStyle(fontSize: 17),)
+                      Text(height.toString(),style: TextStyle(fontSize: 17),)
                     ],
                   ),
                   SizedBox(height: 8,),
                   Row(
                     children: [
                       Text("Weight : ",style: TextStyle(fontSize: 17)),
-                      Text(weight==null||weight==""?"Unknown":weight.toString(),style: TextStyle(fontSize: 17),)
+                      Text(weight.toString(),style: TextStyle(fontSize: 17),)
                     ],
                   ),
                   SizedBox(height: 8,),
@@ -514,7 +514,7 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
   var height="";
   var weight="";
   String bodyColor;
-  String isActive;
+  bool isActive;
   var age="";
   String interset="";
   String state="";
@@ -534,10 +534,10 @@ class _ModelDetailsState extends State<ModelDetails> with SingleTickerProviderSt
         interset=res["data"][0]["interested"];
         aboutModel=res["data"][0]["about"];
         gender=res["data"][0]["gender"];
-        height=res["data"][0]["height"];
-        weight=res["data"][0]["weight"];
+        height=res["data"][0]["height"].toString();
+        weight=res["data"][0]["weight"].toString();
         bodyColor=res["data"][0]["color"];
-        isActive=res["data"][0]["isavailable"].toString();
+        isActive=res["data"][0]["isavailable"];
         city=res["data"][0]["city_name"];
         state=res["data"][0]["state_name"];
         dist=res["data"][0]["dist_name"];

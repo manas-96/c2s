@@ -20,7 +20,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
   int interestValue=1;
   bool _switchValue=true;
   int selectedAddress=1;
-  String gender="female";
+  String gender="Female";
   String age="";
   String address="";
   String h="";
@@ -137,7 +137,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     onChanged: (val){
                       setState(() {
                         selectedAddress=val;//(selectedAddress.toString());
-                        gender="male";
+                        gender="Male";
                         //(gender);
                       });
                     },
@@ -155,7 +155,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     onChanged: (value){
                       setState(() {
                         selectedAddress=value;
-                        gender="female";
+                        gender="Female";
                         //(gender);
                       });
                     },
@@ -432,7 +432,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
                         labelText: 'User Name',
-                        // hintText: "Example 54",
+                         hintText: username==null?" ":" $username",
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -456,7 +456,8 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     },
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
-                        labelText: 'Location',
+                        labelText: 'Landmark',
+                        hintText: address==null?" ":" $address",
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -576,7 +577,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
                         labelText: 'Shareable Number',
-                        //hintText: "Example 54",
+                        hintText: " $shareno",
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -593,7 +594,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: TextFormField(style: TextStyle(color: Colors.black),
-                    maxLength: 500,
+                    //maxLength: 500,
                     //keyboardType: TextInputType.number,
                     onChanged: (val){
                       about=val;
@@ -601,7 +602,7 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
                     decoration:InputDecoration(
                       //icon: Icon(Icons.person,color: Colors.white,),
                         labelText: 'About',
-                        hintText: " ${about==null?" ":about}",
+                        hintText: " ${about==null?" ":about.length>10?about.substring(0,9):about}",
                         labelStyle: TextStyle(color: Colors.black),
                         border: InputBorder.none
                     ) ,
@@ -754,6 +755,9 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
     else if(about==""){
       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Enter About"));
     }
+    else if(about.length<19){
+      _scaffolkey.currentState.showSnackBar(APIClient.errorToast("About should be minimum 2500 character"));
+    }
     else if(_image==null){
       _scaffolkey.currentState.showSnackBar(APIClient.errorToast("Select Profile Image"));
     }
@@ -840,20 +844,21 @@ class _WorkerSaveInfoState extends State<WorkerSaveInfo> {
   }
   String fetchusername="";
   String fetchage="",fetchGender="";
-
+  String shareno="";
   fetchInfo()async{
     SharedPreferences pref= await SharedPreferences.getInstance();
     String id= pref.getString("id");
     final res= await APIClient().fetchWorkerInfo(id);
     if(res["status"]=="success"){
-     // print(result);
+      print(res);
       if(mounted){
         setState(() {
-
+          shareno = res["data"][0]["shareableno"].toString();
           age=res["data"][0]["age"].toString();
           //interset=res["data"][0]["interested"];
           about=res["data"][0]["about"];
-          //gender=res["data"][0]["gender"];
+          address=res["data"][0]["address"];
+          username=res["data"][0]["username"];
           h=res["data"][0]["height"].toString();
           w=res["data"][0]["weight"].toString();
           c=res["data"][0]["color"];

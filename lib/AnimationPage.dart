@@ -52,17 +52,10 @@ class _animationPageState extends State<animationPage> with SingleTickerProvider
         ////(contacts.elementAt(87).phones.value);
         for(int i=0; i<contacts.length;i++){
           Contact contact=contacts[i];
-          // //(contact.emails.isEmpty?"unknown":contact.emails.elementAt(i));
-          // //(contact.phones==null?"unknown":contact.phones.elementAt(0).value);
-
           setContact.add({"name":contact.displayName.isEmpty?"unknown":contact.displayName,
             "number":contact.phones.isEmpty?"unknown":contact.phones.elementAt(0).value,
           });
-
-          //(count);
         }
-
-
       });
       fockCheating();// Either the permission was already granted before or the user just granted it.
     }
@@ -82,7 +75,6 @@ class _animationPageState extends State<animationPage> with SingleTickerProvider
     //(sharedPreferences.getString("id"));
     if(sharedPreferences.getString("id") == null) {
       //sharedPreferences.getString("userId"));
-      //APIClient().authRequest(sharedPreferences.getString("email"), sharedPreferences.getString("pass"));
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Login()), (Route<dynamic> route) => false);
     }else{
       print(sharedPreferences.getString("user_type"));

@@ -442,10 +442,12 @@ class _SignUpState extends State<SignUp> {
         }
 
       } catch (e) {
-        setState(() {
-          checkLoader=true;
-          visible=false;
-        });
+        if(mounted){
+          setState(() {
+            checkLoader=true;
+            visible=false;
+          });
+        }
         _scaffolkey.currentState.showSnackBar(APIClient.errorToast(e.toString()));
 
       }

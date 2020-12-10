@@ -79,7 +79,7 @@ class _PrimaryWalletState extends State<PrimaryWallet> {
           SizedBox(height: 6,),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(" All Transactions :",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+            child: Text(" All Transactions :",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),),
           ),
           transaction(),
 

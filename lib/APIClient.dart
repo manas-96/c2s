@@ -137,13 +137,12 @@ class APIClient{
     }
   }
   fetchWorkerInfo(String id) async {
-
     final header=await _buildHeaderWithAuth();
     final response = await http.get("https://www.call2sex.com/api/WorkerApi/FetchInfo?user_id=$id",headers: header  );
-    //(response.statusCode);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final resData =await  json.decode(response.body);
-      //(resData);
+      print(resData);
       return resData;
     } else {
       throw Exception('Failed to accept booking');

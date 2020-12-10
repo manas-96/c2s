@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     secureScreen();
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'C2S Mob',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.

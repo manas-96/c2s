@@ -7,6 +7,7 @@ import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'APIClient.dart';
 import 'KYC.dart';
 import 'Login.dart';
 
@@ -32,6 +33,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
   @override
   void initState() {
     // TODO: implement initState
+    fetchInfo();
     SharedPreferences.getInstance().then((SharedPreferences sp) {
       sharedPreferences = sp;
      // //(sharedPreferences.getString("contact"));
@@ -87,17 +89,12 @@ class _WorkerProfileState extends State<WorkerProfile> {
                     children: <Widget>[
 
                       SizedBox(height: 10,),
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.white,
-                        child: widget.img==null?Icon(Icons.person,color: Colors.pink[900],):
-                        Container(height: 90,width: 90,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: NetworkImage("https://www.call2sex.com/${widget.img.toString() }"),fit: BoxFit.fill
-                            )
-                          ),
+                      Container(height: 110,width: 110,
+                        decoration: BoxDecoration(color: Colors.white,
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: image==null?AssetImage("images/female.png"):NetworkImage("https://www.call2sex.com/${image.toString()}"),fit: BoxFit.fill
+                          )
                         ),
                       ),
                       SizedBox(height: 7,),
@@ -243,6 +240,20 @@ class _WorkerProfileState extends State<WorkerProfile> {
           forceWebView: false);
     } else {
       throw 'Could not launch $url';
+    }
+  }
+  fetchInfo()async{
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    String id= pref.getString("id");
+    final res= await APIClient().fetchWorkerInfo(id);
+    if(res["status"]=="success"){
+      print(res);
+      if(mounted){
+        setState(() {
+          image = res["data"][0]["image"];
+        });
+        print(image);
+      }
     }
   }
 }

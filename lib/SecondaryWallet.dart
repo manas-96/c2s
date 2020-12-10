@@ -61,9 +61,14 @@ class _SecondaryWalletState extends State<SecondaryWallet> {
                   SizedBox(height: 10,),
                   Text(" Available balance",style: TextStyle(color: Colors.white,fontSize: 12),),
                   Padding(
-                    padding: EdgeInsets.only(left: 30, right: 30),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    padding: EdgeInsets.only(left: 10, right: 10,top: 8),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        Text("After RS 1000 it will automatically",
+                        style: TextStyle(color: Colors.white),overflow: TextOverflow.clip,textAlign: TextAlign.justify,),
+                        Text("transfer to your primary wallet.",
+                          style: TextStyle(color: Colors.white),overflow: TextOverflow.clip,textAlign: TextAlign.justify,),
 
                       ],
                     ),
@@ -75,7 +80,7 @@ class _SecondaryWalletState extends State<SecondaryWallet> {
           SizedBox(height: 6,),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(" All Transactions :",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+            child: Text(" All Transactions :",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),),
           ),
           transaction(),
 
